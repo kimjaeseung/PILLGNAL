@@ -12,6 +12,9 @@ import Settings from "../views/settings/Settings.vue"
 import Attention from "../views/settings/Attention.vue"
 import Service from "../views/settings/Service.vue"
 import Camera from "../views/Camera.vue"
+import Login from "../views/user/Login.vue"
+import Regist from "../views/user/Regist.vue"
+
 
 Vue.use(VueRouter);
 
@@ -93,6 +96,18 @@ const routes = [
     path: "/camera",
     name: "Camera",
     component: Camera,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/regist",
+    name: "Regist",
+    component: Regist,
     // beforeEnter: requireAuth
   },
 ];
