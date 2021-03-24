@@ -14,6 +14,9 @@ import Service from "../views/settings/Service.vue"
 import Camera from "../views/Camera.vue"
 import Login from "../views/user/Login.vue"
 import Regist from "../views/user/Regist.vue"
+import FamilyRegist from "../views/family/FamilyRegist.vue"
+import FamilyRegistList from "../views/family/FamilyRegistList.vue"
+import FamilyList from "../views/family/FamilyList.vue"
 
 
 Vue.use(VueRouter);
@@ -90,6 +93,25 @@ const routes = [
     path: "/service",
     name: "Service",
     component: Service,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/familylist",
+    name: "FamilyList",
+    component: FamilyList,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/familyregist",
+    name: "FamilyRegist",
+    component: FamilyRegist,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/familyregist/list",
+    name: "FamilyRegistList",
+    component: FamilyRegistList,
+    props: true
     // beforeEnter: requireAuth
   },
   {
