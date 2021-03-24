@@ -12,10 +12,11 @@
         >
       </v-avatar>
 
-      <!-- 사용자 이름 자리 -->
+      <!-- 유저 변경 -->
       <v-menu
-        bottom
-        right
+        :close-on-content-click="true" 
+        :nudge-width="200"
+        offset-x
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -23,25 +24,38 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon>name</v-icon>
+            Name
           </v-btn>
         </template>
 
-        <v-list>
-          <v-list-item
-            v-for="(menu, i) in menus"
-            :key="i"
-          >
-            <v-avatar>
-              <img
-                :src="menu.src"
-                :alt="menu.title"
-              >
-            </v-avatar>
-            <span class="mx-2">{{ menu.title }}</span>
-          </v-list-item>
-        </v-list>
+        <v-card>
+          <v-list>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>John Leider</v-list-item-title>
+                <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
+              </v-list-item-content>
+
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+        <!-- Family member loop -->
+          <v-list>
+            <v-list-item>
+              <v-list-item-action>
+                <v-list-item-avatar>
+                  <img
+                    src="https://cdn.vuetifyjs.com/images/john.jpg"
+                    alt="John"
+                  >
+                </v-list-item-avatar>
+              </v-list-item-action>
+              <v-list-item-title>Name</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card>
       </v-menu>
+
       <v-spacer></v-spacer>
       <v-btn 
       icon

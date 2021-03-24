@@ -20,8 +20,9 @@
       <v-list-item class="grow">
         <v-list-item-avatar color="grey darken-3">
           <v-img
+            tile
             class="elevation-6"
-            alt=""
+            :alt="item.pname"
             :src="item.img"
           >
           </v-img>
@@ -66,17 +67,17 @@ export default {
     pills: [
       {
         pname: '아스코푸정',
-        img: '@/assets/pills/아스코푸정.jpg',
+        img: require('@/assets/pills/아스코푸정.jpg'),
         cnt: 1,
       },
       {
         pname: '징카민정40mg',
-        img: '@/assets/pills/징카민정40mg.jpg',
+        img: require('@/assets/pills/징카민정40mg.jpg'),
         cnt: 2,
       },
       {
         pname: '진셀몬정',
-        img: '@/assets/pills/진셀몬정.jpg',
+        img: require('@/assets/pills/진셀몬정.jpg'),
         cnt: 3,
       },
     ]
