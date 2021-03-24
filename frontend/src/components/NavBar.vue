@@ -1,19 +1,11 @@
 <template>
   <div>
-    <v-system-bar
-      dark
-      lights-out
-    >
-      <v-spacer></v-spacer>
-      <v-icon>mdi-wifi-strength-3</v-icon>
-      <v-icon>mdi-signal-cellular-outline</v-icon>
-      <v-icon>mdi-battery</v-icon>
-      <span>12:30</span>
-    </v-system-bar>
     <v-toolbar
+      class="mt-1"
       elevation="0">
       <!-- 아바타 자리 -->
-      <v-avatar>
+      <v-avatar
+      @click="router(0)">
         <img
           src="https://cdn.vuetifyjs.com/images/john.jpg"
           alt="John"
@@ -26,15 +18,21 @@
       </v-btn>
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn 
+      icon
+      @click="router(1)">
         <v-icon>mdi-file-document-outline</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn 
+      icon
+      @click="router(2)">
         <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn 
+      icon
+      @click="router(3)">
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </v-toolbar>
@@ -43,7 +41,13 @@
 <script>
 export default {
   data: () => ({
-      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-    }),
+    items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+    path: ['mypage', 'prescription', 'notification', 'settings'],
+  }),
+  methods: {
+    router: function(n) {
+        this.$router.push(this.path[n]);
+    }
+  }
 }
 </script>
