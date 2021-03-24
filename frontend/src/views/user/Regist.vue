@@ -14,8 +14,6 @@
                 hint="Invalid e-mail."
                 label="E-mail"
                 outlined
-                flat
-                solo-inverted
               ></v-text-field>
             </v-col>
           </v-row>
@@ -32,8 +30,6 @@
                 class="input-group--focused"
                 @click:append="show = !show"
                 outlined
-                flat
-                solo-inverted
               ></v-text-field>
             </v-col>
           </v-row>
@@ -47,8 +43,6 @@
                 hint="At least 2 characters"
                 label="User name"
                 outlined
-                flat
-                solo-inverted
               ></v-text-field>
             </v-col>
           </v-row>
@@ -63,8 +57,6 @@
                 hint="Please include hyphens"
                 label="Phone number"
                 outlined
-                flat
-                solo-inverted
               ></v-text-field>
             </v-col>
           </v-row>
