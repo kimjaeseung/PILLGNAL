@@ -13,11 +13,36 @@
       </v-avatar>
 
       <!-- 사용자 이름 자리 -->
-      <v-btn text>
-        name
-      </v-btn>
-      <v-spacer></v-spacer>
+      <v-menu
+        bottom
+        right
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>name</v-icon>
+          </v-btn>
+        </template>
 
+        <v-list>
+          <v-list-item
+            v-for="(menu, i) in menus"
+            :key="i"
+          >
+            <v-avatar>
+              <img
+                :src="menu.src"
+                :alt="menu.title"
+              >
+            </v-avatar>
+            <span class="mx-2">{{ menu.title }}</span>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-spacer></v-spacer>
       <v-btn 
       icon
       @click="router(1)">
@@ -43,6 +68,12 @@ export default {
   data: () => ({
     items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
     path: ['mypage', 'prescription', 'notification', 'settings'],
+    menus: [
+        { title: 'Click Me 1', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
+        { title: 'Click Me 2', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
+        { title: 'Click Me 3', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
+        { title: 'Click Me 4', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
+      ],
   }),
   methods: {
     router: function(n) {
@@ -51,3 +82,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.flex-0 {
+  display: flex;
+}
+</style>
