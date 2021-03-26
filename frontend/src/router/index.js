@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store/index.js"
 import Tutorial from "../views/user/Tutorial.vue";
 import Home from "../views/Home.vue";
 import Detail from "../views/prescription/Detail";
@@ -17,23 +18,48 @@ import Regist from "../views/user/Regist.vue"
 import FamilyRegist from "../views/family/FamilyRegist.vue"
 import FamilyRegistList from "../views/family/FamilyRegistList.vue"
 import FamilyList from "../views/family/FamilyList.vue"
-
+import Main from "../views/Main.vue"
 
 Vue.use(VueRouter);
 
-// const requireAuth = () => (to, from, next) => {
-//   //나중에 기능추가할것
-//   console.log(to);
-//   console.log(from);
-//   console.log(next);
-// };
+const requireAuth = (to, from, next) => {
+  let user = store.getters.user;
+  if (Object.keys(user).length === 0) {
+    if (!localStorage['access-token'] || localStorage['access-token'] === '') next('/');
+    else {
+      // 유효한 토큰 체크
+      // 나중에 axios then 쓸것
+      if (localStorage['access-token'] === 'test') {
+        store.dispatch('getUserByToken');
+        requireAuth();
+      } else {
+        store.dispatch('logout');
+        next();
+      }
+    }
+  } else {
+    console.log('토큰 갱신');
+    next();
+  }
+};
 
 const routes = [
+  {
+    path: "",
+    name: "Main",
+    component: Main,
+    beforeEnter: (to, from, next) => {
+      let user = store.getters.user;
+      if (Object.keys(user).length !== 0) {
+        next({ name: 'Home' });
+      } else next();
+    }
+  },
   {
     path: "/tutorial",
     name: "Tutorial",
     component: Tutorial,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth
   },
   {
     path: "/home",
