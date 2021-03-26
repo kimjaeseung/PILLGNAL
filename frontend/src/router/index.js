@@ -23,26 +23,26 @@ import Auth from "../views/user/Auth.vue"
 
 Vue.use(VueRouter);
 
-const requireAuth = (to, from, next) => {
-  let user = store.getters.user;
-  if (Object.keys(user).length === 0) {
-    if (!localStorage['access-token'] || localStorage['access-token'] === '') next('/');
-    else {
-      // 유효한 토큰 체크
-      // 나중에 axios then 쓸것
-      if (localStorage['access-token'] === 'test') {
-        store.dispatch('getUserByToken');
-        requireAuth();
-      } else {
-        store.dispatch('logout');
-        next();
-      }
-    }
-  } else {
-    console.log('토큰 갱신');
-    next();
-  }
-};
+// const requireAuth = (to, from, next) => {
+//   let user = store.getters.user;
+//   if (Object.keys(user).length === 0) {
+//     if (!localStorage['access-token'] || localStorage['access-token'] === '') next('/');
+//     else {
+//       // 유효한 토큰 체크
+//       // 나중에 axios then 쓸것
+//       if (localStorage['access-token'] === 'test') {
+//         store.dispatch('getUserByToken');
+//         requireAuth();
+//       } else {
+//         store.dispatch('logout');
+//         next();
+//       }
+//     }
+//   } else {
+//     console.log('토큰 갱신');
+//     next();
+//   }
+// };
 
 const routes = [
   {
@@ -65,7 +65,7 @@ const routes = [
     path: "/tutorial",
     name: "Tutorial",
     component: Tutorial,
-    beforeEnter: requireAuth
+    // beforeEnter: requireAuth
   },
   {
     path: "/home",
