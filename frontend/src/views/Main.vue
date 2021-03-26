@@ -5,7 +5,7 @@
         <v-row class="mb-16">
           <v-col></v-col>
           <v-col cols="9">
-            <v-img src="@/assets//pillgnal_logo.png"></v-img>
+            <v-img src="@/assets/pillgnal_logo.png"></v-img>
           </v-col>
           <v-col></v-col>
         </v-row>
@@ -29,7 +29,6 @@
               x-large
               block
               color="#FEE500"
-              style="color: #4f4a13"
               @click="loginWithKakao"
               >카카오 로그인</v-btn
             >
@@ -53,19 +52,7 @@
 </template>
 
 <script>
-import { emailRules, passwordRules } from '@/api/valid.js';
-
 export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      show: false,
-      valid: false,
-      emailRules: emailRules,
-      passwordRules: passwordRules,
-    };
-  },
   methods: {
     toLoginPage() {
       this.$router.push({ name: 'Login' });
