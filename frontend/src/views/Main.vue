@@ -30,6 +30,7 @@
               block
               color="#FEE500"
               style="color: #4f4a13"
+              @click="loginWithKakao"
               >카카오 로그인</v-btn
             >
           </v-col>
@@ -71,6 +72,12 @@ export default {
     },
     toRegistPage() {
       this.$router.push({ name: 'Regist' });
+    },
+    loginWithKakao() {
+      const params = {
+        redirectUri: 'http://localhost:8080/auth',
+      };
+      window.Kakao.Auth.authorize(params);
     },
   },
 };
