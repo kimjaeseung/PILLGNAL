@@ -121,7 +121,7 @@ Keras의 ImageDataGenerator클래스 사용
 
 :warning:**이슈 발생**
 
-![dataset](README.assets/dataset.png)
+<img src="Readme.assets/dataset.png" alt="dataset" style="zoom:80%;" />
 
 - “기타“ 이미지는 정말 생긴게 제각각이다.
 - 특정 "모양"으로 분류하기 어려워 분류기 성능을 위해 데이터 제거
@@ -132,9 +132,9 @@ Keras의 ImageDataGenerator클래스 사용
 
 - 정확도: **98%**+
 
-![model_accuracy](README.assets/model_accuracy.png)
+<img src="Readme.assets/model_accuracy.png" alt="model_accuracy" style="zoom:80%;" />
 
-![train_result](README.assets/train_result.png)
+<img src="Readme.assets/train_result.png" alt="train_result" style="zoom:80%;" />
 
 <br>
 
