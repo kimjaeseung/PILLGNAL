@@ -19,6 +19,7 @@ import FamilyRegist from "../views/family/FamilyRegist.vue"
 import FamilyRegistList from "../views/family/FamilyRegistList.vue"
 import FamilyList from "../views/family/FamilyList.vue"
 import Main from "../views/Main.vue"
+import Auth from "../views/user/Auth.vue"
 
 Vue.use(VueRouter);
 
@@ -54,6 +55,11 @@ const routes = [
         next({ name: 'Home' });
       } else next();
     }
+  },
+  {
+    path: "/auth",
+    name: "Auth",
+    component: Auth,
   },
   {
     path: "/tutorial",
