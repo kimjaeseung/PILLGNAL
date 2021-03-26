@@ -44,7 +44,7 @@
 #### 필그널 캐릭터 '필구'
 > 필구가 복약 핵심 정보를 알려줍니다.
 
-![pilgu](Readme.assets/pilgu.png)
+<img src="Readme.assets/pilgu.png" alt="pilgu" style="zoom:50%;" />
 
 <br>
 
@@ -77,23 +77,72 @@ https://www.figma.com/proto/7ax4XD2rl2tCJ1rXzvgtbX/pillgnal-prototype-ver.1?node
 ## 진행 상황
 * 기능 정의
 * 프로토타입 완성
+* 알약 구별 인공지능 기능 완성
+* 프론트엔드 UI 개발 진행
+* 백엔드 DB설계 및 API개발 진행
 
 #### 기능구현
 > OCR로 약 구분 표시(약에 적힌 글씨 ) 추출 가능
 
-![img](https://cdn.discordapp.com/attachments/813209640154038274/821968866354921532/KakaoTalk_20210318_102436639.jpg)
+<img src="https://cdn.discordapp.com/attachments/813209640154038274/821968866354921532/KakaoTalk_20210318_102436639.jpg" alt="img" style="zoom:15%;" />
 
-![img](https://cdn.discordapp.com/attachments/813209640154038274/821992600810029096/erye.PNG)
+<img src="https://cdn.discordapp.com/attachments/813209640154038274/821992600810029096/erye.PNG" alt="img" style="zoom:50%;" />
+
+
+
+:file_folder:**DataSet**
+
+- shape: 23986 x 29
+- train_set : valid_set : test_set = 8 : 1 : 1
+
+**모양별로** **11**개의 데이터 분류
+
+```markdown
+ "0": "circle",   # "0": "원형"
+ "1": "hexagon",  # "1": "육각형"
+ "2": "octagon",  # "2": "팔각형"
+ "3": "oval", # "3": "타원형"
+ "4": "pentagon",  # "4": "오각형"
+ "5": "rectangle",  # "5": "직사각형"
+ "6": "rhombus",  # "6": "마름모형"
+ "7": "semicircular",  # "7": "반원형"
+ "8": "square",  # "8": "정사각형"
+ "9": "triangle"  # "9": "삼각형“
+ “10”: “other”  # “10”: “기타”
+```
+
+Keras의 ImageDataGenerator클래스 사용
+
+분류별로 약 1000개씩 맞춤
+
+
+
+:computer:**사용 모델**: **CNN**
+
+:warning:**이슈 발생**
+
+![image-20210326105407002](README.assets/image-20210326105407002.png)
+
+- “기타“ 이미지는 정말 생긴게 제각각이다.
+- 특정 "모양"으로 분류하기 어려워 분류기 성능을 위해 데이터 제거
+
+
+
+:outbox_tray:**학습 결과**
+
+- 정확도: **98%**+
+
+![image-20210326105547607](README.assets/image-20210326105547607.png)
+
+![image-20210326105552889](README.assets/image-20210326105552889.png)
 
 <br>
 
 ## 앞으로의 계획
-* 약의 모양 (사각형/ 원형 /타원형 등) 인식  
-* 약의 색상 인식 (하양, 노랑, 주황 등)  
-* 약의 제형 (정제류 / 캡슐형)
+* 약의 모양 중 "기타(Other)" 처리 방향  
+* 처방전 데이터 인식
 
 #### 아쉬운점
-- 색상인식 까지는 어렵지 않을 것으로 보이나, 약의 모양을 인식하기 위한 충분한 Dataset을 찾아야 정확한 모델링이 가능할 것으로 보임
-  - 현재 Kaggle등의 사이트에서 비슷한 데이터를 찾았으나 다소 아쉬움.
+- 현재 모델로는 약의 모양 중 "기타(Other)" 파트에 대한 구별이 어려움
 
 
