@@ -1,8 +1,6 @@
 <template>
   <v-card
     class="mx-auto"
-    color="#26c6da"
-    dark
     max-width="400"
   >
     <v-card-title>
@@ -11,16 +9,17 @@
       >
         mdi-twitter
       </v-icon>
-      <span class="title font-weight-light"> oo일 점심에 드셔야 할 약</span>
+      <span class="title font-weight-light"> oo일 점심</span>
     </v-card-title>
     <v-card-actions 
     v-for="(item, idx) in pills"
     :key="idx"
     >
       <v-list-item class="grow">
-        <v-list-item-avatar color="grey darken-3">
+        <v-list-item-avatar 
+        rounded
+        color="grey darken-3">
           <v-img
-            tile
             class="elevation-6"
             :alt="item.pname"
             :src="item.img"
@@ -45,24 +44,32 @@
     </v-card-actions>
     <v-card-actions>
       <v-list-item class="grow">
-        <v-btn>
-          복용
-        </v-btn>
+        <BtnSquare 
+          btn-color="primary" 
+          btn-text="복용"
+        />
         <v-spacer></v-spacer>
-        <v-btn>
-          건너뛰기
-        </v-btn>
+        <BtnSquare 
+          btn-color="light" 
+          btn-text="건너뛰기"
+        />
         <v-spacer></v-spacer>
-        <v-btn>
-          다시 알림
-        </v-btn>
+        <BtnSquare 
+          btn-color="warning" 
+          btn-text="30분 뒤 알림"
+        />
       </v-list-item>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import BtnSquare from "@/base_components/BtnSquare.vue";
+
 export default {
+  components: {
+    BtnSquare
+  },
   data: () => ({
     pills: [
       {
