@@ -1,6 +1,6 @@
 <template>
   <v-list three-line>
-    <template v-for="(item, index) in items">
+    <template v-for="(item, index) in notifyItems">
       <v-subheader
         v-if="item.header"
         :key="item.header"
@@ -32,7 +32,9 @@
 
 <script>
 export default {
-
+  props: {
+    notifyItems: Array,
+  }
 }
 </script>
 
