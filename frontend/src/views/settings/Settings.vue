@@ -43,7 +43,7 @@
 <script>
 export default {
   data: () => ({
-    path: ['familylist', 'none', 'tutorial', 'attention', 'service'],
+    path: ['familylist', 'time', 'tutorial', 'attention', 'service'],
   }),
   methods: {
     router: function (n) {
