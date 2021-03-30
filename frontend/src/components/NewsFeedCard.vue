@@ -108,7 +108,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .avatar-pill {
   object-fit: cover;
 }
