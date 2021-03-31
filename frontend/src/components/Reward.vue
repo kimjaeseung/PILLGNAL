@@ -26,16 +26,25 @@
         v-else
         class="elevation-0"
         >
-          <v-avatar
-          width="75"
-          height="75"
+          <v-tooltip 
+          bottom
           >
-            <v-img 
-            contain
-            
-            :src="reward[0]"
-            ></v-img>
-          </v-avatar>
+            <template v-slot:activator="{ on, attrs }">
+              <v-avatar
+              width="75"
+              height="75"
+              v-bind="attrs"
+              v-on="on"
+              >
+                <v-img 
+                contain
+                
+                :src="reward[0]"
+                ></v-img>
+              </v-avatar>
+            </template>
+            <span>{{ reward[2] }}</span>
+          </v-tooltip>
         </v-card>
       </section>
     </v-row>
@@ -63,12 +72,12 @@ export default {
   data: () => {
     return {
       rewardLists: [
-        [require('@/assets/rewards/welcome.png'), true],
-        [require('@/assets/rewards/toddler.png'), true],
-        [require('@/assets/rewards/kids.png'), false],
-        [require('@/assets/rewards/adult.png'), false],
-        [require('@/assets/rewards/pro.png'), false],
-        [require('@/assets/rewards/champion.png'), false],
+        [require('@/assets/rewards/welcome.png'), true, "첫 방문을 환영합니다!"],
+        [require('@/assets/rewards/toddler.png'), true, "하루 복약 완료!"],
+        [require('@/assets/rewards/kids.png'), false, "3일 연속 성공!"],
+        [require('@/assets/rewards/adult.png'), false, "1주일 All Clear"],
+        [require('@/assets/rewards/pro.png'), false, "올바른 습관 형성!"],
+        [require('@/assets/rewards/champion.png'), false, "건강 Champion!"],
       ]
     }
   },

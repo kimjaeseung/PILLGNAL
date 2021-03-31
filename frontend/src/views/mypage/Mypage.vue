@@ -1,18 +1,25 @@
 <template>
   <div>
+    <BackNav page-title="마이페이지" />
     <v-container>
       <!-- Profile 설정 -->
-      <v-row class="my-3">
+      <v-row class="mb-2">
         <v-list-item-content>
           <div class="d-flex justify-center">
-            <v-avatar
-              width="75"
-              height="75"
-              color="brown"
-              class="d-flex"
-            >
-              <v-img :src="user.src"></v-img>
-            </v-avatar>
+            <v-btn-toggle
+            data-tooltip-text="프로필 변경">
+              <v-btn>
+                <v-avatar
+                  width="75"
+                  height="75"
+                  color="brown"
+                  class="d-flex"
+                  @click="toProfileImage()"
+                >
+                  <v-img :src="user.src"></v-img>
+                </v-avatar>
+              </v-btn>
+            </v-btn-toggle>
             <div class="d-flex mx-5 flex-column text-center my-auto">
               <h3>{{ user.fullName }}</h3>
               <p class="caption mt-1 mb-0">
@@ -64,10 +71,17 @@
 
 <script>
 import Reward from '@/components/Reward.vue';
+import BackNav from '@/base_components/BackNav.vue';
 
 export default {
   components: {
     Reward,
+    BackNav
+  },
+  methods: {
+    toProfileImage() {
+      this.$router.push({ name: 'ProfileImage' });
+    },
   },
   data: () => ({
     user: {
@@ -100,7 +114,32 @@ export default {
   max-width: 38px;
   padding: 0 !important;
 }
-.v-data-table__wrapper {
+.v-data-table >>> .v-data-table__wrapper {
   overflow-x: hidden !important;
+}
+.v-btn-toggle .v-btn {
+  border: none !important;
+  background-color: #fff !important;
+  height: 75px !important;
+}
+.v-btn-toggle:active {
+  border: 0 !important;
+  transform: translateY(4px);
+}
+[data-tooltip-text]:hover {
+	position: relative;
+}
+[data-tooltip-text]:hover:after {
+	content: attr(data-tooltip-text);
+
+  position: absolute;
+	top: 100%;
+	left: 0;
+
+  background-color: rgba(0, 0, 0, 0.8);
+	color: #FFFFFF;
+	font-size: 12px;
+
+	z-index: 9999;
 }
 </style>
