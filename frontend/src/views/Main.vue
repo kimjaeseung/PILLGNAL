@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #565ca9">
+  <v-app>
     <v-layout fill-height align-center>
       <v-container>
         <v-row class="mb-16">
@@ -15,7 +15,7 @@
               class="white--text font-weight-black"
               x-large
               block
-              color="#1b2253"
+              color="main_dark"
               @click="toLoginPage"
             >
               로그인</v-btn
@@ -25,10 +25,10 @@
         <v-row class="mt-10">
           <v-col class="pa-0">
             <v-btn
-              class="font-weight-black"
+              class="font-weight-black kakaoBtn"
               x-large
               block
-              color="#FEE500"
+              color="kakao_yellow"
               @click="loginWithKakao"
               >카카오 로그인</v-btn
             >
@@ -37,10 +37,9 @@
         <v-row class="mt-10">
           <v-col class="pa-0">
             <v-btn
-              class="font-weight-black"
+              class="font-weight-black registBtn"
               x-large
               block
-              style="color: #4a509f"
               @click="toRegistPage"
               >회원가입</v-btn
             >
@@ -71,6 +70,15 @@ export default {
 </script>
 
 <style scoped>
+.v-application {
+  background-color: #565ca9;
+}
+.kakaoBtn {
+  color: #4f4a13;
+}
+.registBtn {
+  color: #4a509f;
+}
 .container {
   max-width: 450px;
   width: 70%;

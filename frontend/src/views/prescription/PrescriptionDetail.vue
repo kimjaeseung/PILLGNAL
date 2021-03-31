@@ -18,9 +18,8 @@
                   <v-card
                     width="100%"
                     flat
-                    class="rounded-pill text-center mt-1"
+                    class="rounded-pill text-center mt-1 white--text"
                     color="green"
-                    style="color: white"
                     >주의
                   </v-card>
                 </v-row>
@@ -33,7 +32,7 @@
                         <div class="ellipsis">광동플레리토로마이신정25</div>
                       </v-row>
                       <v-row class="caption">
-                        <div style="color: #9c9c9c">20.03.20 ~ 20.04.20</div>
+                        <div class="date">20.03.20 ~ 20.04.20</div>
                         <div class="ml-1 font-weight-medium">| 총 30일</div>
                       </v-row>
                       <v-row class="caption font-weight-medium">
@@ -43,19 +42,19 @@
                         <v-card
                           flat
                           class="mr-2 px-2 font-weight-bold"
-                          color="#DFDFDF"
+                          color="medicine_cycle_grey"
                           >아침</v-card
                         >
                         <v-card
                           flat
                           class="mr-2 px-2 font-weight-bold"
-                          color="#DFDFDF"
+                          color="medicine_cycle_grey"
                           >점심</v-card
                         >
                         <v-card
                           flat
                           class="mr-2 px-2 font-weight-bold"
-                          color="#DFDFDF"
+                          color="medicine_cycle_grey"
                           >저녁</v-card
                         >
                       </v-row>
@@ -89,5 +88,8 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.date {
+  color: #9c9c9c;
 }
 </style>
