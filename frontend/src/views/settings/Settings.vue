@@ -16,7 +16,7 @@
         <v-col>
           <v-card @click="router(2)" outlined class="text-center mb-10">
             <v-avatar class="mt-7" tile><img src="@/assets/settings/help.svg" /></v-avatar>
-            <v-card-subtitle>Pillgnal 도움말 보기</v-card-subtitle></v-card
+            <v-card-subtitle>Pillgnal 도움말보기</v-card-subtitle></v-card
           >
           <v-card @click="router(3)" outlined class="text-center">
             <v-avatar class="mt-7" tile><img src="@/assets/settings/attention.svg" /></v-avatar>
