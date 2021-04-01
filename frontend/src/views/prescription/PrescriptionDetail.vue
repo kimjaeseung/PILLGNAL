@@ -82,7 +82,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .ellipsis {
   width: 100%;
   white-space: nowrap;
