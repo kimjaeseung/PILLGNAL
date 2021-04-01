@@ -65,12 +65,12 @@
         />
         <v-spacer></v-spacer>
         <BtnCircle 
-          btn-color="light" 
+          btn-color="sub" 
           btn-text="건너뛰기"
         />
         <v-spacer></v-spacer>
         <BtnCircle 
-          btn-color="warning" 
+          btn-color="test"
           btn-text="30분 뒤 알림"
         />
       </v-list-item>
@@ -108,7 +108,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .avatar-pill {
   object-fit: cover;
 }
