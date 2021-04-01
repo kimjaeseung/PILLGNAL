@@ -7,8 +7,7 @@ import com.pillgnal.backend.dto.ExampleSaveRequestDto;
 import com.pillgnal.backend.dto.ExampleUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -61,5 +60,20 @@ public class ExampleService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
 
         return new ExampleResponseDto(entity);
+    }
+
+    /**
+     * 삭제 처리
+     *
+     * @param id
+     *
+     * @author Eomjaewoong
+     */
+    @Transactional
+    public void delete(Long id) {
+        Example example = exampleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. Id=" + id));
+
+        exampleRepository.delete(example);
     }
 }

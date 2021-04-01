@@ -50,4 +50,17 @@ public class ExampleController {
     public ExampleResponseDto findById(@PathVariable Long id) {
         return exampleService.findById(id);
     }
+
+    /**
+     * 삭제 요청 처리
+     *
+     * @param id
+     *
+     * @author Eomjaewoong
+     */
+    @DeleteMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id) {
+        exampleService.delete(id);
+        return id;
+    }
 }
