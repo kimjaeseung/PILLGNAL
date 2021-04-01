@@ -20,6 +20,8 @@ import FamilyRegistList from "../views/family/FamilyRegistList.vue"
 import FamilyList from "../views/family/FamilyList.vue"
 import Main from "../views/Main.vue"
 import Auth from "../views/user/Auth.vue"
+import Time from "../views/settings/Time.vue"
+import PillMethod from "../views/PillMethod.vue"
 
 Vue.use(VueRouter);
 
@@ -116,6 +118,12 @@ const routes = [
     // beforeEnter: requireAuth
   },
   {
+    path: "/time",
+    name: "Time",
+    component: Time,
+    // beforeEnter: requireAuth
+  },
+  {
     path: "/attention",
     name: "Attention",
     component: Attention,
@@ -150,6 +158,12 @@ const routes = [
     path: "/camera",
     name: "Camera",
     component: Camera,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/pillmethod",
+    name: "PillMethod",
+    component: PillMethod,
     // beforeEnter: requireAuth
   },
   {

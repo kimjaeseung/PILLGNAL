@@ -1,8 +1,6 @@
 <template>
   <v-card
     class="mx-auto"
-    color="#26c6da"
-    dark
     max-width="400"
   >
     <v-card-title>
@@ -11,58 +9,82 @@
       >
         mdi-twitter
       </v-icon>
-      <span class="title font-weight-light"> oo일 점심에 드셔야 할 약</span>
+      <span class="title font-weight-light"> oo일 점심 드실 약</span>
     </v-card-title>
-    <v-card-actions 
-    v-for="(item, idx) in pills"
-    :key="idx"
+    <v-container>
+      <v-row>
+        <v-checkbox
+          v-model="v0"
+          label="더보기"
+          style="margin: 0 auto"
+        ></v-checkbox>
+      </v-row>
+    </v-container>
+    <v-banner
+      v-model="v0"
+      transition="slide-y-transition"
     >
-      <v-list-item class="grow">
-        <v-list-item-avatar color="grey darken-3">
-          <v-img
-            tile
-            class="elevation-6"
-            :alt="item.pname"
-            :src="item.img"
+      <v-card-actions 
+      v-for="(item, idx) in pills"
+      :key="idx"
+      >
+        <v-list-item class="grow">
+          <v-list-item-avatar 
+          rounded
+          width="65px"
           >
-          </v-img>
-        </v-list-item-avatar>
+            <v-img
+              class="elevation-6 avatar-pill"
+              :alt="item.pname"
+              :src="item.img"
+            >
+            </v-img>
+          </v-list-item-avatar>
 
-        <v-list-item-content>
-          <v-list-item-title>{{item.pname}}</v-list-item-title>
-        </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title>{{item.pname}}</v-list-item-title>
+          </v-list-item-content>
 
-        <v-row
-          align="center"
-          justify="end"
-        >
-          <v-icon class="mr-1">
-            mdi-pill
-          </v-icon>
-          <span class="subheading">{{ item.cnt }}</span>
-        </v-row>
-      </v-list-item>
-    </v-card-actions>
+          <v-row
+            align="center"
+            justify="end"
+          >
+            <v-icon class="mr-2" color="red">
+              💊
+            </v-icon>
+            <span class="subheading">{{ item.cnt }}</span>
+          </v-row>
+        </v-list-item>
+      </v-card-actions>
+    </v-banner>
     <v-card-actions>
       <v-list-item class="grow">
-        <v-btn>
-          복용
-        </v-btn>
+        <BtnCircle 
+          btn-color="primary" 
+          btn-text="복용"
+        />
         <v-spacer></v-spacer>
-        <v-btn>
-          건너뛰기
-        </v-btn>
+        <BtnCircle 
+          btn-color="sub" 
+          btn-text="건너뛰기"
+        />
         <v-spacer></v-spacer>
-        <v-btn>
-          다시 알림
-        </v-btn>
+        <BtnCircle 
+          btn-color="test"
+          btn-text="30분 뒤 알림"
+        />
       </v-list-item>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import BtnCircle from "@/base_components/BtnCircle.vue";
+
 export default {
+  components: {
+    BtnCircle
+  },
   data: () => ({
     pills: [
       {
@@ -80,11 +102,20 @@ export default {
         img: require('@/assets/pills/진셀몬정.jpg'),
         cnt: 3,
       },
-    ]
+    ],
+    v0: false,
   }),
 }
 </script>
 
-<style>
-
+<style scoped>
+.avatar-pill {
+  object-fit: cover;
+}
+.v-input--selection-controls {
+  margin-top: 0 !important;
+}
+.v-messages {
+  min-height: 0 !important;
+}
 </style>
