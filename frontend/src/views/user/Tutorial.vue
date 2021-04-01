@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #565ca9">
+  <v-app>
     <v-layout fill-height align-center>
       <v-container>
         <v-row class="ma-0">
@@ -39,10 +39,9 @@
             >
               <v-btn
                 x-large
-                class="font-weight-black"
+                class="font-weight-black white--text"
                 width="90%"
-                color="#565CA9"
-                style="color: #ffffff"
+                color="main"
                 @click="toHome"
                 >시작하기</v-btn
               >
@@ -91,6 +90,9 @@ export default {
 </script>
 
 <style scoped>
+.v-application {
+  background-color: #565ca9;
+}
 .container {
   max-width: 500px;
 }

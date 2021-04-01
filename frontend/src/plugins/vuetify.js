@@ -10,6 +10,10 @@ export default new Vuetify({
                 primary: '#1b2253',
                 main: '#565CA9',
                 sub: '#F4F4F4',
+                main_dark: '#1b2253',
+                kakao_yellow: '#FEE500',
+                remove_pink: '#FE8F83',
+                medicine_cycle_grey: '#DFDFDF',
                 test: '#d8ac9c'
             }
         }
