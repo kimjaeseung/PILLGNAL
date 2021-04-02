@@ -22,24 +22,14 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row justify="center" class="mt-12">
-          <v-col cols="9" md="5">
-            <v-btn @click="confirm()" block elevation="0" large color="main" class="textcolor"
-              >확인</v-btn
-            >
-          </v-col></v-row
-        >
-        <v-row justify="center">
-          <v-col cols="9" md="5">
-            <v-btn block outlined large color="main">취소</v-btn>
-          </v-col>
-        </v-row>
+        <confirm-cancel-btn @cancel="cancel" @confirm="confirm" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import ConfirmCancelBtn from '@/components/ConfirmCancelBtn.vue';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 export default {
@@ -48,10 +38,14 @@ export default {
   }),
   components: {
     VuePhoneNumberInput,
+    ConfirmCancelBtn,
   },
   methods: {
     confirm: function () {
       this.$router.push({ name: 'FamilyRegistList', params: { phoneNumber: this.phoneNumber } });
+    },
+    cancel: function () {
+      this.$router.go(-1);
     },
   },
 };
