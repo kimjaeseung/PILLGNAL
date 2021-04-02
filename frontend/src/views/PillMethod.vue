@@ -8,17 +8,11 @@
 <script>
 import HowtoEatCard from '../components/HowtoEatCard.vue';
 export default {
-  data: () => ({
-    path: ['familylist', 'time', 'tutorial', 'attention', 'service'],
-  }),
+  data: () => ({}),
   components: {
     HowtoEatCard,
   },
-  methods: {
-    router: function (n) {
-      this.$router.push(this.path[n]);
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped>
