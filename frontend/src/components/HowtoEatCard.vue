@@ -27,6 +27,7 @@
             chips
             large-chips
             label="복용 시간"
+            placeholder="언제 복용하시나요?"
             multiple
             color="main"
           ></v-autocomplete>
@@ -37,6 +38,7 @@
             v-model="time"
             :items="times"
             :label="time"
+            placeholder="몇 시에 복용하시나요?"
             color="main"
           ></v-autocomplete>
           <v-btn elevation="0" color="main" class="white--text" @click="showTimer()"

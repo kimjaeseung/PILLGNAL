@@ -8,3 +8,9 @@ export default {
   name: 'App',
 };
 </script>
+<style>
+.max-container {
+  max-width: 400px !important;
+  margin: 0 auto;
+}
+</style>

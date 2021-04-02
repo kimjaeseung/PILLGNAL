@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center" class="mt-12">
       <v-col cols="10">
-        <v-btn @click="familyAdd()" block elevation="0" large color="sub">가족 추가</v-btn>
+        <v-btn @click="AttentionAdd()" block elevation="0" large color="sub">주의 성분 추가</v-btn>
       </v-col></v-row
     ></v-container
   >
@@ -12,8 +12,8 @@ export default {
   data: () => ({}),
   components: {},
   methods: {
-    familyAdd: function () {
-      this.$router.push('/familyregist');
+    AttentionAdd: function () {
+      this.$router.push('/attentionregist');
     },
   },
 };

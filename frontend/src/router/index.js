@@ -10,7 +10,7 @@ import Notification from "../views/Notification.vue";
 import Mypage from "../views/mypage/Mypage.vue";
 import ProfileImage from "../views/mypage/ProfileImage.vue";
 import Settings from "../views/settings/Settings.vue"
-import Attention from "../views/settings/Attention.vue"
+import Attention from "../views/settings/attention/Attention.vue"
 import Service from "../views/settings/Service.vue"
 import Camera from "../views/Camera.vue"
 import Login from "../views/user/Login.vue"
@@ -22,6 +22,7 @@ import Main from "../views/Main.vue"
 import Auth from "../views/user/Auth.vue"
 import Time from "../views/settings/Time.vue"
 import PillMethod from "../views/PillMethod.vue"
+import AttentionRegist from "../views/settings/attention/AttentionRegist.vue"
 
 Vue.use(VueRouter);
 
@@ -127,6 +128,12 @@ const routes = [
     path: "/attention",
     name: "Attention",
     component: Attention,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/attentionregist",
+    name: "AttentionRegist",
+    component: AttentionRegist,
     // beforeEnter: requireAuth
   },
   {

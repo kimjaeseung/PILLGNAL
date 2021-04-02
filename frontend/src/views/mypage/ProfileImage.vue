@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <BackNav page-title="프로필 이미지" />
+  <div class="max-container">
+    <BackNav page-title="ProfileImage" />
     <v-container>
-      <h3 class="my-5">프로필 이미지</h3>
       <v-row>
         <section
         v-for="(avatar, idx) in avatarLists"
@@ -88,12 +87,23 @@
                 x-large
                 block
                 color="main"
-                @click="[fileSave(), dialog = false]"
+                @click="[albumFileSave(), dialog = false]"
                 >
                 저장하기</v-btn>
             </v-container>
           </v-card>
         </v-dialog>
+      </v-row>
+      <v-row class="mt-10">
+        <v-col class="pa-0">
+          <v-btn
+            class="white--text font-weight-black"
+            x-large
+            block
+            color="remove_pink"
+            @click="fileSave()"
+            >저장하기</v-btn>
+        </v-col>
       </v-row>
       <v-row class="mt-10">
         <v-col class="pa-0">
@@ -107,16 +117,24 @@
         </v-col>
       </v-row>
       </v-container>
+      <!-- <Snackbar 
+      v-if="this.noImg === true"
+      /> -->
     </v-container>
   </div>
 </template>
 
 <script>
 import BackNav from '@/base_components/BackNav.vue';
+// import Snackbar from '@/components/Snackbar.vue';
 
 export default {
   components: {
     BackNav,
+    // Snackbar
+  },
+  watch: {
+
   },
   data: () => {
     return {
@@ -130,20 +148,36 @@ export default {
       ],
       selectedImg: 0,
       value: 0,
-      file: '',
+      file: null,
       dialog: false,
       notifications: false,
       sound: true,
       widgets: false,
+      noImg: true,
     }
   },
   methods: {
-    fileSave: function () {
+    albumFileSave: function () {
       console.log(this.file);
     },
-    filePost: function () {
-      // file이나 value의 존재하는 idx값을 프로필 이미지의 값으로 저장
-    },
+    fileSave: function () {
+      let profile = '';
+      if (this.file !== null) {
+        profile = this.file;
+      } else if (this.value !== 0) {
+        profile = `@/assets/avatars/${this.value}`;
+      }
+      console.log(profile);
+      /* axios 저장 API
+
+      */
+      if (profile.length !== 0) {
+        this.$router.go(-1);
+      } else {
+        const alertMsg = '프로필 이미지가 선택되지 않았습니다.';
+        window.alert(alertMsg);
+      }
+    }, 
     routeBack: function () {
       this.$router.go(-1);
     }

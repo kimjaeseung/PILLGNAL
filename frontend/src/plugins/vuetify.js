@@ -14,7 +14,7 @@ export default new Vuetify({
                 kakao_yellow: '#FEE500',
                 remove_pink: '#FE8F83',
                 medicine_cycle_grey: '#DFDFDF',
-                test: '#d8ac9c'
+                test: '#46443E'
             }
         }
     }
