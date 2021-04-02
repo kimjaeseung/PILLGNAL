@@ -11,7 +11,6 @@
               prepend-inner-icon="mdi-pill"
               color="main"
             ></v-autocomplete>
-
             <v-btn elevation="0" color="main" class="white--text" @click="attentionlistAdd()"
               ><v-icon>mdi-plus</v-icon></v-btn
             ></v-col
@@ -29,7 +28,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import ConfirmCancelBtn from '@/components/ConfirmCancelBtn.vue';
 export default {
