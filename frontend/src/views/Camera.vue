@@ -56,23 +56,24 @@
               </a>
             </div>
           </div>
-        </v-col></v-row
-      >
+          <camera-mode /> </v-col
+      ></v-row>
     </v-container>
   </v-app>
 </template>
 <script>
+import CameraMode from '@/components/CameraMode.vue';
 export default {
-  data() {
-    return {
-      isCameraOpen: false,
-      isPhotoTaken: false,
-      isShotPhoto: false,
-      isLoading: false,
-      link: '#',
-    };
+  data: () => ({
+    isCameraOpen: false,
+    isPhotoTaken: false,
+    isShotPhoto: false,
+    isLoading: false,
+    link: '#',
+  }),
+  components: {
+    CameraMode,
   },
-
   methods: {
     toggleCamera() {
       if (this.isCameraOpen) {
