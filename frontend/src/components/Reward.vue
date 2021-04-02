@@ -38,7 +38,6 @@
               >
                 <v-img 
                 contain
-                
                 :src="reward[0]"
                 ></v-img>
               </v-avatar>
@@ -54,26 +53,12 @@
 <script>
 export default {
   computed: {
-    myBestReward: () => {
-      const Lists = this.rewardLists;
-      console.log(Lists);
-      let best = '';
-      for (let index = 0; index < Lists.length; index++) {
-        const elem = Lists[index];
-        if (elem[1] === true) {
-          best = index;
-        } else {
-          break
-        }
-      }
-      return best
-    }
   },
   data: () => {
     return {
       rewardLists: [
         [require('@/assets/rewards/welcome.png'), true, "첫 방문을 환영합니다!"],
-        [require('@/assets/rewards/toddler.png'), true, "하루 복약 완료!"],
+        [require('@/assets/rewards/toddler.png'), true, "첫 복약 완료!"],
         [require('@/assets/rewards/kids.png'), false, "3일 연속 성공!"],
         [require('@/assets/rewards/adult.png'), false, "1주일 All Clear"],
         [require('@/assets/rewards/pro.png'), false, "올바른 습관 형성!"],

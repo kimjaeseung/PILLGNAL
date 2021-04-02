@@ -1,7 +1,7 @@
 <template>
   <div>
-    <BackNav page-title="마이페이지" />
-    <v-container>
+    <BackNav page-title="MyPage" />
+    <v-container class="max-container">
       <!-- Profile 설정 -->
       <v-row class="mb-2">
         <v-list-item-content>
@@ -31,7 +31,8 @@
       </v-row>
       <!-- WeekMission -->
       <v-container>
-        <h3 class="mb-5">이번주 미션</h3>
+        <h3 class="mb-5">WeekMission</h3>
+        <!-- <div class="text-h3 mb-5">이번주 미션</div> -->
         <v-simple-table
           dense
           max-width="350"
@@ -56,6 +57,18 @@
               >
                 <v-avatar>
                   <v-img 
+                  v-if="weekday.cnt >= 2"
+                  class="good"
+                  :src="weekday.img"></v-img>
+
+                  <v-img 
+                  v-else-if="weekday.cnt >= 1"
+                  class="medium"
+                  :src="weekday.img"></v-img>
+
+                  <v-img 
+                  v-if="weekday.cnt === 0"
+                  class="bad"
                   :src="weekday.img"></v-img>
                 </v-avatar>
               </td>
@@ -141,5 +154,17 @@ export default {
 	font-size: 12px;
 
 	z-index: 9999;
+}
+.bad {
+  opacity: 0.3;
+}
+.medium {
+  /* opacity: 0.6; */
+  -webkit-filter: opacity(1) drop-shadow(0 0 0 #565CA9);
+  filter: opacity(.5) drop-shadow(0 0 0 #565CA9);
+}
+.good {
+  -webkit-filter: opacity(1) drop-shadow(0 0 0 #565CA9);
+  filter: opacity(.7) drop-shadow(0 0 0 blue);
 }
 </style>

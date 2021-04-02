@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-container">
     <v-toolbar
       class="mt-1"
       elevation="0">
@@ -10,7 +10,7 @@
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
       <v-spacer></v-spacer>      
-        <h3> {{ pageTitle }} </h3>
+        <h4 class="my-auto"> {{ pageTitle }} </h4>
       <v-spacer></v-spacer>      
     </v-toolbar>
   </div>
@@ -34,5 +34,4 @@ export default {
 </script>
 
 <style>
-
 </style>
