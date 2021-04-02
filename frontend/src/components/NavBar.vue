@@ -1,17 +1,18 @@
 <template>
-  <div>
+  <div class="max-container">
     <v-toolbar
       class="mt-1"
       elevation="0">
       <!-- 아바타 자리 -->
-      <v-avatar
-      @click="router(0)">
-        <img
-          src="https://cdn.vuetifyjs.com/images/john.jpg"
-          alt="John"
-        >
-      </v-avatar>
-
+      <v-btn icon>
+        <v-avatar
+        @click="router(0)">
+          <img
+            src="https://cdn.vuetifyjs.com/images/john.jpg"
+            alt="John"
+          >
+        </v-avatar>
+      </v-btn>
       <!-- 유저 변경 -->
       <v-menu
         :close-on-content-click="true" 
@@ -29,28 +30,21 @@
         </template>
 
         <v-card>
-          <v-list>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>John Leider</v-list-item-title>
-                <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
-              </v-list-item-content>
-
-            </v-list-item>
-          </v-list>
-          <v-divider></v-divider>
         <!-- Family member loop -->
           <v-list>
-            <v-list-item>
+            <v-list-item 
+            v-for="(member, idx) in familyMembers"
+            :key="idx"
+            >
               <v-list-item-action>
                 <v-list-item-avatar>
                   <img
-                    src="https://cdn.vuetifyjs.com/images/john.jpg"
-                    alt="John"
+                    :src="member.src"
+                    :alt="member.name"
                   >
                 </v-list-item-avatar>
               </v-list-item-action>
-              <v-list-item-title>Name</v-list-item-title>
+              <v-list-item-title>{{ member.name }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-card>
@@ -82,12 +76,18 @@ export default {
   data: () => ({
     items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
     path: ['mypage', 'prescription', 'notification', 'settings'],
-    menus: [
-        { title: 'Click Me 1', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
-        { title: 'Click Me 2', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
-        { title: 'Click Me 3', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
-        { title: 'Click Me 4', src: "https://cdn.vuetifyjs.com/images/john.jpg" },
-      ],
+    familyMembers: [
+      {
+        src: 'https://cdn.vuetifyjs.com/images/john.jpg',
+        name: 'John Doe',
+        email: 'john.doe@doe.com',
+      },
+      {
+        src: 'https://cdn.vuetifyjs.com/images/john.jpg',
+        name: 'John Doe2',
+        email: 'john2.doe@doe.com',
+      },
+    ]
   }),
   methods: {
     router: function(n) {
@@ -99,5 +99,9 @@ export default {
 <style scoped>
 .flex-0 {
   display: flex;
+}
+
+.v-toolbar__content > .v-btn.v-btn--icon:first-child {
+  margin-left: 0 !important;
 }
 </style>
