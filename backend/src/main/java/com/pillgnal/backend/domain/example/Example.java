@@ -2,6 +2,7 @@ package com.pillgnal.backend.domain.example;
 
 import com.pillgnal.backend.domain.BaseTimeEntity;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -13,4 +13,5 @@ public class ExampleUpdateRequestDto {
         this.title = title;
         this.content = content;
     }
+
 }

@@ -5,6 +5,8 @@ import com.pillgnal.backend.domain.example.ExampleRepository;
 import com.pillgnal.backend.dto.ExampleResponseDto;
 import com.pillgnal.backend.dto.ExampleSaveRequestDto;
 import com.pillgnal.backend.dto.ExampleUpdateRequestDto;
+
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,7 @@ import javax.transaction.Transactional;
 @Service
 public class ExampleService {
     private final ExampleRepository exampleRepository;
-
+    
     /**
      * 등록 처리
      *
@@ -47,7 +49,7 @@ public class ExampleService {
 
         return id;
     }
-
+    
     /**
      * 찾기 처리
      *
@@ -59,7 +61,9 @@ public class ExampleService {
     public ExampleResponseDto findById(Long id) {
         Example entity = exampleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
-
         return new ExampleResponseDto(entity);
     }
+    
+    
+    
 }
