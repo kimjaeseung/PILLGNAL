@@ -1,7 +1,5 @@
 <template>
-  <v-btn
-    :color="btnColor"
-  >
+  <v-btn :color="btnColor" elevation="0">
     {{ btnText }}
   </v-btn>
 </template>
@@ -13,12 +11,9 @@ export default {
     btnText: String,
   },
   data: () => {
-    return {
-    }
-  }
-}
+    return {};
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
