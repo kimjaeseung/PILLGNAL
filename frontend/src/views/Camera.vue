@@ -4,7 +4,7 @@
       <v-row>
         <v-col>
           <div class="web-camera-container">
-            <div class="camera-button">
+            <!-- <div class="camera-button">
               <v-btn
                 type="button"
                 class="button is-rounded"
@@ -14,7 +14,7 @@
                 <span v-if="!isCameraOpen">Open Camera</span>
                 <span v-else>Close Camera</span>
               </v-btn>
-            </div>
+            </div> -->
 
             <div v-show="isCameraOpen && isLoading" class="camera-loading">
               <ul class="loader-circle">
@@ -23,6 +23,7 @@
                 <li></li>
               </ul>
             </div>
+
             <v-col>
               <div
                 v-if="isCameraOpen"
@@ -30,6 +31,15 @@
                 class="camera-box"
                 :class="{ flash: isShotPhoto }"
               >
+                <v-col class="mb-2">
+                  <v-card flat class="text-caption text-center card-padding textarea">
+                    <v-avatar tile class="mt-5"><img src="@/assets/prescription.svg" /></v-avatar>
+                    <v-card-subtitle>
+                      <strong>{{ cameraMode }}</strong
+                      >사진을 찍어주세요.
+                    </v-card-subtitle>
+                  </v-card>
+                </v-col>
                 <div class="camera-shutter" :class="{ flash: isShotPhoto }"></div>
 
                 <video v-show="!isPhotoTaken" class="video" ref="camera" autoplay></video>
@@ -40,8 +50,9 @@
 
             <div v-if="isCameraOpen && !isLoading" class="camera-shoot">
               <v-btn class="button" @click="takePhoto" outlined color="main"
-                ><v-icon>mdi-camera</v-icon></v-btn
-              >
+                ><v-icon v-if="!isPhotoTaken">mdi-camera</v-icon>
+                <v-icon v-if="isPhotoTaken">mdi-backup-restore</v-icon>
+              </v-btn>
             </div>
 
             <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
@@ -56,23 +67,25 @@
               </a>
             </div>
           </div>
-          <camera-mode /> </v-col
-      ></v-row>
+        </v-col></v-row
+      >
     </v-container>
   </v-app>
 </template>
 <script>
-import CameraMode from '@/components/CameraMode.vue';
 export default {
   data: () => ({
-    isCameraOpen: false,
+    isCameraOpen: true,
     isPhotoTaken: false,
     isShotPhoto: false,
-    isLoading: false,
+    isLoading: true,
     link: '#',
   }),
-  components: {
-    CameraMode,
+  props: ['cameraMode'],
+  components: {},
+  created() {
+    this.createCameraElement();
+    console.log(this.cameraMode);
   },
   methods: {
     toggleCamera() {
@@ -165,13 +178,14 @@ body {
 .web-camera-container {
   margin-top: 2rem;
   margin-bottom: 2rem;
-  padding: 2rem;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 4px;
+  height: auto;
 
   .camera-button {
     margin-bottom: 2rem;

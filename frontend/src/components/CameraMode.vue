@@ -17,7 +17,7 @@
               />
             </v-avatar>
           </v-list-item-avatar> -->
-          <v-list-item-title>{{ tile.title }}</v-list-item-title>
+          <v-list-item-title @click="mode(tile.mode)">{{ tile.title }}</v-list-item-title>
         </v-list-item>
         <v-col>
           <v-btn @click="cancel()" block elevation="0" large color="sub">취소</v-btn>
@@ -31,13 +31,16 @@ export default {
   data: () => ({
     sheet: false,
     tiles: [
-      { img: 'keep.png', title: '알약 찍기💊' },
-      { img: 'inbox.png', title: '처방전, 약 봉투 찍기📃' },
+      { img: 'keep.png', mode: '알약', title: '알약 찍기💊' },
+      { img: 'inbox.png', mode: '처방전', title: '처방전, 약 봉투 찍기📃' },
     ],
   }),
   methods: {
     cancel() {
       this.sheet = false;
+    },
+    mode(n) {
+      this.$router.push({ name: 'Camera', params: { cameraMode: n } });
     },
   },
 };
