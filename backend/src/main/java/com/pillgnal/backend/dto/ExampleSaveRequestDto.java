@@ -18,7 +18,7 @@ public class ExampleSaveRequestDto {
         this.content = content;
         this.author = author;
     }
-
+    
     public Example toEntity() {
         return Example.builder()
                 .title(title)
