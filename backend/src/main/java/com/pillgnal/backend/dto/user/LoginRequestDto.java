@@ -1,10 +1,14 @@
-package com.pillgnal.backend.dto;
+package com.pillgnal.backend.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Getter
-public class LoginRequestDto {
+@NoArgsConstructor
+public class LoginRequestDto implements Serializable {
     public String email;
     public String password;
 

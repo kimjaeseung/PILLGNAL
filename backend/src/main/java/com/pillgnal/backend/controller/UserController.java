@@ -1,20 +1,29 @@
 package com.pillgnal.backend.controller;
 
-import com.pillgnal.backend.config.auth.CustomUserDetailService;
-import com.pillgnal.backend.config.auth.jwt.JwtTokenProvider;
+import com.pillgnal.backend.config.oauth2.CustomUserDetailService;
+import com.pillgnal.backend.config.oauth2.jwt.JwtTokenProvider;
+import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
-import com.pillgnal.backend.dto.LoginRequestDto;
-import com.pillgnal.backend.dto.UserSaveRequestDto;
+import com.pillgnal.backend.domain.user.UserRepository;
+import com.pillgnal.backend.dto.ResponseDto;
+import com.pillgnal.backend.dto.user.LoginRequestDto;
+import com.pillgnal.backend.dto.user.SignupRequestDto;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 회원 관련 Controller
@@ -25,15 +34,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    // private final UserService userService;
     private final CustomUserDetailService userService;
+    private final UserRepository userRepository;
 
     /**
      * 회원가입 요청 처리
      *
-     * @param requestDto
+     * @param signupRequest
      * @return id(Long)
      *
      * @author Eomjaewoong
@@ -45,15 +55,29 @@ public class UserController {
     })
     @PostMapping(value = "/signup", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Long signup(@RequestBody UserSaveRequestDto requestDto) {
-            return userService.signup(requestDto);
+    public ResponseDto signup(@RequestBody SignupRequestDto signupRequest) {
+        if(userRepository.existsByEmail(signupRequest.getEmail())) {
+            return ResponseDto.builder()
+                    .success(false)
+                    .error("가입 된 이메일 입니다")
+                    .build();
+        }
+
+        // Creating user's account
+        User user = signupRequest.toEntity();
+        user.updatePassword(passwordEncoder.encode(user.getPassword()));
+        User result = userRepository.save(user);
+        return ResponseDto.builder()
+                    .success(true)
+                    .data("회원 가입 완료")
+                    .build();
     }
 
 
     /**
      * 로그인 요청 처리
      *
-     * @param requestDto
+     * @param loginRequest
      * @return jwt
      *
      * @author Eomjaewoong
@@ -65,15 +89,19 @@ public class UserController {
     })
     @PostMapping(value = "/login", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public String login(@RequestBody LoginRequestDto requestDto) {
-        User user = (User)userService.loadUserByUsername(requestDto.getEmail());
+    public ResponseDto login(@RequestBody LoginRequestDto loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
 
-        if (!requestDto.getPassword().equals(user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-        }
-
-        List<String> role = new ArrayList<String>();
-        role.add(user.getRolekey());
-        return jwtTokenProvider.createToken(user.getName(), role);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtTokenProvider.createAccessToken(authentication);
+        return ResponseDto.builder()
+                .success(true)
+                .data(token)
+                .build();
     }
 }
