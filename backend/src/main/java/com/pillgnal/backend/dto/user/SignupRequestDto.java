@@ -1,6 +1,5 @@
-package com.pillgnal.backend.dto;
+package com.pillgnal.backend.dto.user;
 
-import com.pillgnal.backend.domain.user.Role;
 import com.pillgnal.backend.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,20 +7,18 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserSaveRequestDto {
+public class SignupRequestDto {
     private String email;
     private String password;
     private String name;
     private String phone;
-    private Role role;
 
     @Builder
-    public UserSaveRequestDto(String email, String password, String name, String phone) {
+    public SignupRequestDto(String email, String password, String name, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
-        this.role = Role.USER;
     }
 
     public User toEntity() {
@@ -30,7 +27,6 @@ public class UserSaveRequestDto {
                 .password(password)
                 .name(name)
                 .phone(phone)
-                .role(role)
                 .build();
     }
 }
