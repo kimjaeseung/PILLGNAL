@@ -1,13 +1,15 @@
 package com.pillgnal.backend.controller;
 
-import com.pillgnal.backend.config.oauth2.CustomUserDetailService;
 import com.pillgnal.backend.config.oauth2.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
 import com.pillgnal.backend.dto.ResponseDto;
+import com.pillgnal.backend.dto.user.FindPhoneRequestDto;
 import com.pillgnal.backend.dto.user.LoginRequestDto;
 import com.pillgnal.backend.dto.user.SignupRequestDto;
+import com.pillgnal.backend.dto.user.UserDataDto;
+import com.pillgnal.backend.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 
@@ -19,11 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 회원 관련 Controller
@@ -33,11 +30,12 @@ import java.util.Map;
 @Api(value = "회원 관련")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailService userService;
+    private final UserService userService;
     private final UserRepository userRepository;
 
     /**
@@ -66,6 +64,7 @@ public class UserController {
         // Creating user's account
         User user = signupRequest.toEntity();
         user.updatePassword(passwordEncoder.encode(user.getPassword()));
+        user.updateRole(AuthProvider.local);
         User result = userRepository.save(user);
         return ResponseDto.builder()
                     .success(true)
@@ -103,5 +102,25 @@ public class UserController {
                 .success(true)
                 .data(token)
                 .build();
+    }
+
+    /**
+     * 전화번호로 사용자 검색 요청 처리
+     *
+     * @param phoneRequest
+     * @return ResponseEntity
+     *
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "전화번호로 사용자 찾기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK - 찾기 성공"),
+            @ApiResponse(code = 400, message = "찾기 실패")
+    })
+    @PostMapping(value = "/phone", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserDataDto> onFindUserByPhone(@RequestBody FindPhoneRequestDto phoneRequest) {
+        UserDataDto dto = userService.doFindUserByPhone(phoneRequest);
+        return new ResponseEntity(dto, dto!=null? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }
