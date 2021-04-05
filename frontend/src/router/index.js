@@ -165,6 +165,7 @@ const routes = [
     path: "/camera",
     name: "Camera",
     component: Camera,
+    props: true
     // beforeEnter: requireAuth
   },
   {
