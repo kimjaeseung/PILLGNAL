@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store/index.js"
 import Tutorial from "../views/user/Tutorial.vue";
 import Home from "../views/Home.vue";
 import Detail from "../views/prescription/Detail";
@@ -9,20 +10,60 @@ import Notification from "../views/Notification.vue";
 import Mypage from "../views/mypage/Mypage.vue";
 import ProfileImage from "../views/mypage/ProfileImage.vue";
 import Settings from "../views/settings/Settings.vue"
-import Attention from "../views/settings/Attention.vue"
+import Attention from "../views/settings/attention/Attention.vue"
 import Service from "../views/settings/Service.vue"
 import Camera from "../views/Camera.vue"
+import Login from "../views/user/Login.vue"
+import Regist from "../views/user/Regist.vue"
+import FamilyRegist from "../views/family/FamilyRegist.vue"
+import FamilyRegistList from "../views/family/FamilyRegistList.vue"
+import FamilyList from "../views/family/FamilyList.vue"
+import Main from "../views/Main.vue"
+import Auth from "../views/user/Auth.vue"
+import Time from "../views/settings/Time.vue"
+import PillMethod from "../views/PillMethod.vue"
+import AttentionRegist from "../views/settings/attention/AttentionRegist.vue"
 
 Vue.use(VueRouter);
 
-// const requireAuth = () => (to, from, next) => {
-//   //나중에 기능추가할것
-//   console.log(to);
-//   console.log(from);
-//   console.log(next);
+// const requireAuth = (to, from, next) => {
+//   let user = store.getters.user;
+//   if (Object.keys(user).length === 0) {
+//     if (!localStorage['access-token'] || localStorage['access-token'] === '') next('/');
+//     else {
+//       // 유효한 토큰 체크
+//       // 나중에 axios then 쓸것
+//       if (localStorage['access-token'] === 'test') {
+//         store.dispatch('getUserByToken');
+//         requireAuth();
+//       } else {
+//         store.dispatch('logout');
+//         next();
+//       }
+//     }
+//   } else {
+//     console.log('토큰 갱신');
+//     next();
+//   }
 // };
 
 const routes = [
+  {
+    path: "",
+    name: "Main",
+    component: Main,
+    beforeEnter: (to, from, next) => {
+      let user = store.getters.user;
+      if (Object.keys(user).length !== 0) {
+        next({ name: 'Home' });
+      } else next();
+    }
+  },
+  {
+    path: "/auth",
+    name: "Auth",
+    component: Auth,
+  },
   {
     path: "/tutorial",
     name: "Tutorial",
@@ -78,9 +119,21 @@ const routes = [
     // beforeEnter: requireAuth
   },
   {
+    path: "/time",
+    name: "Time",
+    component: Time,
+    // beforeEnter: requireAuth
+  },
+  {
     path: "/attention",
     name: "Attention",
     component: Attention,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/attentionregist",
+    name: "AttentionRegist",
+    component: AttentionRegist,
     // beforeEnter: requireAuth
   },
   {
@@ -90,9 +143,47 @@ const routes = [
     // beforeEnter: requireAuth
   },
   {
+    path: "/familylist",
+    name: "FamilyList",
+    component: FamilyList,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/familyregist",
+    name: "FamilyRegist",
+    component: FamilyRegist,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/familyregist/list",
+    name: "FamilyRegistList",
+    component: FamilyRegistList,
+    props: true
+    // beforeEnter: requireAuth
+  },
+  {
     path: "/camera",
     name: "Camera",
     component: Camera,
+    props: true
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/pillmethod",
+    name: "PillMethod",
+    component: PillMethod,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    // beforeEnter: requireAuth
+  },
+  {
+    path: "/regist",
+    name: "Regist",
+    component: Regist,
     // beforeEnter: requireAuth
   },
 ];

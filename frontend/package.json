@@ -8,11 +8,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
+    "vue-phone-number-input": "^1.1.10",
     "vue-router": "^3.2.0",
-    "vuetify": "^2.4.0",
-    "vuex": "^3.4.0"
+    "vuetify": "^2.4.9",
+    "vuetify-phone-number-input": "^1.0.0",
+    "vuex": "^3.4.0",
+    "webcam-easy": "^1.0.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
