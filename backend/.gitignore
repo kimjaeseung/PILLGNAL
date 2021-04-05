@@ -9,6 +9,9 @@ build/
 application.properties
 application-oauth.properties
 
+### profile ###
+profile/
+
 ### STS ###
 .apt_generated
 .classpath
