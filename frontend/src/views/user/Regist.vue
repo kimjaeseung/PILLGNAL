@@ -9,7 +9,7 @@
           <v-row>
             <v-col class="pa-0">
               <v-text-field
-                v-model="email"
+                v-model="user.email"
                 :rules="[emailRules.required, emailRules.email]"
                 hint="Invalid e-mail."
                 label="E-mail"
@@ -20,7 +20,7 @@
           <v-row>
             <v-col class="pa-0">
               <v-text-field
-                v-model="password"
+                v-model="user.password"
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[passwordRules.required, passwordRules.min]"
                 :type="show ? 'text' : 'password'"
@@ -36,7 +36,7 @@
           <v-row>
             <v-col class="pa-0">
               <v-text-field
-                v-model="name"
+                v-model="user.name"
                 :rules="[nameRules.required, nameRules.min]"
                 counter
                 maxlength="25"
@@ -49,7 +49,7 @@
           <v-row>
             <v-col class="pa-0">
               <v-text-field
-                v-model="phoneNumber"
+                v-model="user.phone"
                 :rules="[
                   phoneNumberRules.required,
                   phoneNumberRules.phoneNumber,
@@ -76,7 +76,12 @@
         </v-row>
       </v-container>
     </v-layout>
-    <v-btn x-large tile color="primary" :disabled="!valid || !termsCheck"
+    <v-btn
+      x-large
+      tile
+      color="primary"
+      :disabled="!valid || !termsCheck"
+      @click="regist(user)"
       >가입하기</v-btn
     >
   </v-app>
@@ -90,14 +95,17 @@ import {
   phoneNumberRules,
   terms,
 } from '@/api/valid.js';
+import { regist } from '@/api/user.js';
 
 export default {
   data() {
     return {
-      email: '',
-      password: '',
-      name: '',
-      phoneNumber: '',
+      user: {
+        email: '',
+        password: '',
+        name: '',
+        phone: '',
+      },
       termsCheck: false,
       show: false,
       valid: false,
@@ -107,6 +115,9 @@ export default {
       phoneNumberRules: phoneNumberRules,
       terms: terms,
     };
+  },
+  methods: {
+    regist: regist,
   },
 };
 </script>
