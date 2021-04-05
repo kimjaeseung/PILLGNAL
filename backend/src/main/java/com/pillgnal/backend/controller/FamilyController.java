@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/family")
-@CrossOrigin("*")
 public class FamilyController {
     private final FamilyService familyService;
 
@@ -36,8 +35,8 @@ public class FamilyController {
      */
     @ApiOperation(value = "가족 연결 요청")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "CREATED - 가족 연결 성공"),
-            @ApiResponse(code = 400, message = "연결 실패")
+        @ApiResponse(code = 201, message = "CREATED - 가족 연결 성공"),
+        @ApiResponse(code = 400, message = "연결 실패")
     })
     @PostMapping(value = "/connect", consumes = "application/json")
     public ResponseEntity<ConnectResponseDto> onConnectFamily(@RequestBody ConnectRequestDto connectRequest) {

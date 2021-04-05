@@ -2,6 +2,7 @@ package com.pillgnal.backend.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pillgnal.backend.domain.BaseTimeEntity;
+import com.pillgnal.backend.domain.badge.UserBadge;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -68,4 +69,7 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "uidTo")
     private List<Family> familyTo = new ArrayList<>();
+
+    @OneToMany(mappedBy = "uid")
+    private List<UserBadge> userBadge = new ArrayList<>();
 }
