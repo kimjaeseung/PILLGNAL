@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Eomjaewoong
  */
+@CrossOrigin("*")
 @Api(value = "회원 관련")
 @RequiredArgsConstructor
 @RestController
