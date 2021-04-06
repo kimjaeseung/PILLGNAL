@@ -13,6 +13,7 @@ const instance = axios.create({
 });
 
 export const regist = async (user) => {
+  console.log(JSON.stringify(user));
   let resp = '';
   await instance
     .post('user/signup', JSON.stringify(user))
