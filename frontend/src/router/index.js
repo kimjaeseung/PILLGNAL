@@ -24,28 +24,29 @@ import Time from '../views/settings/Time.vue';
 import PillMethod from '../views/PillMethod.vue';
 import AttentionRegist from '../views/settings/attention/AttentionRegist.vue';
 
+import { refreshToken, getUser } from '@/api/auth.js';
+
 Vue.use(VueRouter);
 
-// const requireAuth = (to, from, next) => {
-//   let user = store.getters.user;
-//   if (Object.keys(user).length === 0) {
-//     if (!localStorage['access-token'] || localStorage['access-token'] === '') next('/');
-//     else {
-//       // 유효한 토큰 체크
-//       // 나중에 axios then 쓸것
-//       if (localStorage['access-token'] === 'test') {
-//         store.dispatch('getUserByToken');
-//         requireAuth();
-//       } else {
-//         store.dispatch('logout');
-//         next();
-//       }
-//     }
-//   } else {
-//     console.log('토큰 갱신');
-//     next();
-//   }
-// };
+const requireAuth = async (to, from, next) => {
+  let user = store.getters.user;
+  if (Object.keys(user).length === 0) {
+    if (!localStorage['access-token'] || localStorage['access-token'] === '')
+      next('/');
+    else {
+      await refreshToken();
+      if (!localStorage['access-token'] || localStorage['access-token'] === '')
+        next('/');
+      else {
+        await getUser();
+        next();
+      }
+    }
+  } else {
+    console.log('토큰 갱신');
+    next();
+  }
+};
 
 const routes = [
   {
@@ -88,7 +89,7 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/detail/:pillNo',

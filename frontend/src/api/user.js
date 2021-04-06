@@ -33,7 +33,7 @@ export const login = async (user) => {
   await instance
     .post('user/login', JSON.stringify(user))
     .then((resp) => {
-      console.log(resp.data.data);
+      localStorage.setItem('access-token', resp.data.data);
       router.push('/home');
     })
     .catch((e) => {
