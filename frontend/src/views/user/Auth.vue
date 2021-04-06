@@ -70,6 +70,7 @@ export default {
       console.log(this.user);
       const resp = await regist(this.user);
       if (resp === 'true') this.$router.push('/');
+      await login(this.user);
     },
     async getUserInfo() {
       const code = this.$route.query.code;
@@ -83,7 +84,7 @@ export default {
 </script>
 
 <style scoped>
-.v-application {
+.layout {
   background-color: #565ca9 !important;
 }
 .container {
