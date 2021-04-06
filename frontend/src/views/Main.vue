@@ -1,51 +1,53 @@
 <template>
   <v-app>
     <v-layout fill-height align-center>
-      <v-container>
-        <v-row class="mb-16">
-          <v-col></v-col>
-          <v-col cols="9">
-            <v-img src="@/assets/pillgnal_logo.png"></v-img>
-          </v-col>
-          <v-col></v-col>
-        </v-row>
-        <v-row class="mt-10">
-          <v-col class="pa-0">
-            <v-btn
-              class="white--text font-weight-black"
-              x-large
-              block
-              color="main_dark"
-              @click="toLoginPage"
-            >
-              로그인</v-btn
-            >
-          </v-col>
-        </v-row>
-        <v-row class="mt-10">
-          <v-col class="pa-0">
-            <v-btn
-              class="font-weight-black kakaoBtn"
-              x-large
-              block
-              color="kakao_yellow"
-              @click="loginWithKakao"
-              >카카오 로그인</v-btn
-            >
-          </v-col>
-        </v-row>
-        <v-row class="mt-10">
-          <v-col class="pa-0">
-            <v-btn
-              class="font-weight-black registBtn"
-              x-large
-              block
-              @click="toRegistPage"
-              >회원가입</v-btn
-            >
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-card>
+        <v-container>
+          <v-row class="mb-16">
+            <v-col></v-col>
+            <v-col cols="9">
+              <v-img src="@/assets/pillgnal_logo.png"></v-img>
+            </v-col>
+            <v-col></v-col>
+          </v-row>
+          <v-row class="mt-10">
+            <v-col class="pa-0">
+              <v-btn
+                class="white--text font-weight-black"
+                x-large
+                block
+                color="main_dark"
+                @click="toLoginPage"
+              >
+                로그인</v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-row class="mt-10">
+            <v-col class="pa-0">
+              <v-btn
+                class="font-weight-black kakaoBtn"
+                x-large
+                block
+                color="kakao_yellow"
+                @click="loginWithKakao"
+                >카카오 로그인</v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-row class="mt-10">
+            <v-col class="pa-0">
+              <v-btn
+                class="font-weight-black registBtn"
+                x-large
+                block
+                @click="toRegistPage"
+                >회원가입</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
     </v-layout>
   </v-app>
 </template>
