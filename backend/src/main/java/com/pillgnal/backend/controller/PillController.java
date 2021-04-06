@@ -30,8 +30,7 @@ import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.cloud.vision.v1.ImageSource;
-import com.pillgnal.backend.domain.pill.Pill;
-import com.pillgnal.backend.domain.pill.PillListResponseDto;
+import com.pillgnal.backend.dto.pill.PillListResponseDto;
 import com.pillgnal.backend.domain.pill.PillRepository;
 import com.pillgnal.backend.service.PillService;
 

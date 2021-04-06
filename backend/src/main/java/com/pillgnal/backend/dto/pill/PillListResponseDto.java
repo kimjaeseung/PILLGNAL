@@ -1,7 +1,8 @@
-package com.pillgnal.backend.domain.pill;
+package com.pillgnal.backend.dto.pill;
 
 import java.util.List;
 
+import com.pillgnal.backend.domain.pill.Pill;
 import lombok.Builder;
 import lombok.Getter;
 
