@@ -32,9 +32,14 @@ export const login = async (user) => {
   let resp = 0;
   await instance
     .post('user/login', JSON.stringify(user))
-    .then((resp) => {
-      console.log(resp.data.data);
-      router.push('/home');
+    .then((response) => {
+      localStorage.setItem('access-token', response.data.data);
+      if (!localStorage['first-login'] || localStorage['first-login'] === '') {
+        localStorage.setItem('first-login', 'true');
+        router.push('/tutorial');
+      } else {
+        router.push('/home');
+      }
     })
     .catch((e) => {
       if (e.response === undefined) resp = 0;
