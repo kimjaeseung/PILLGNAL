@@ -5,6 +5,8 @@ import com.pillgnal.backend.config.oauth2.dto.OAuth2UserInfoFactory;
 import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
+
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
