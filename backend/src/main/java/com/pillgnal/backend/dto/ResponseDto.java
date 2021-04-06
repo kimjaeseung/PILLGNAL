@@ -15,4 +15,7 @@ public class ResponseDto {
         this.data = data;
         this.error = error;
     }
+    
+    
+    
 }

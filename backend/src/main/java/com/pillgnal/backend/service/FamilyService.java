@@ -37,7 +37,7 @@ public class FamilyService {
                     .success(false)
                     .error("[f001]가족 연결: 구성원이 존재하지 않습니다")
                     .build();
-
+        
         Optional<Family> f = familyRepository.findByUidFromAndUidTo(me.get(), other.get());
         if(f.isPresent())
             return ConnectResponseDto.builder()
@@ -85,7 +85,7 @@ public class FamilyService {
                         .imageUrl(u.get().getImageUrl())
                         .build());
         });
-
+        
         return ListResponseDto.builder()
                 .success(true)
                 .data(dataList)
