@@ -1,7 +1,13 @@
 <template>
   <v-app>
     <v-layout fill-height align-center justify-center>
-      <v-card flat class="pb-10" width="90%" min-width="350" max-width="500">
+      <v-card
+        flat
+        class="pb-10 my-5"
+        width="90%"
+        min-width="350"
+        max-width="500"
+      >
         <v-card-text class="pa-0">
           <v-container class="pa-0">
             <v-row class="mt-5">
