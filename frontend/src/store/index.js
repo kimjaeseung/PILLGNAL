@@ -21,7 +21,7 @@ export default new Vuex.Store({
       commit('SET_USER', user);
     },
     logout({ commit }) {
-      localStorage.clear();
+      localStorage.removeItem('access-token');
       commit('SET_USER', null);
     },
   },

@@ -30,7 +30,7 @@ Vue.use(VueRouter);
 
 const requireAuth = async (to, from, next) => {
   let user = store.getters.user;
-  if (Object.keys(user).length === 0) {
+  if (user === undefined || user === null || Object.keys(user).length === 0) {
     if (!localStorage['access-token'] || localStorage['access-token'] === '')
       next('/');
     else {
@@ -43,8 +43,10 @@ const requireAuth = async (to, from, next) => {
       }
     }
   } else {
-    console.log('토큰 갱신');
-    next();
+    await refreshToken();
+    if (!localStorage['access-token'] || localStorage['access-token'] === '')
+      next('/');
+    else next();
   }
 };
 
@@ -54,23 +56,20 @@ const routes = [
     name: 'Main',
     component: Main,
     beforeEnter: (to, from, next) => {
-      let user = store.getters.user;
-      if (Object.keys(user).length !== 0) {
-        next({ name: 'Home' });
-      } else next();
+      if (!localStorage['access-token'] || localStorage['access-token'] === '')
+        next();
+      else next('/home');
     },
     children: [
       {
         path: '',
         name: 'Login',
         component: Login,
-        // beforeEnter: requireAuth
       },
       {
         path: '/regist',
         name: 'Regist',
         component: Regist,
-        // beforeEnter: requireAuth
       },
     ],
   },
@@ -83,7 +82,7 @@ const routes = [
     path: '/tutorial',
     name: 'Tutorial',
     component: Tutorial,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/home',
@@ -95,99 +94,99 @@ const routes = [
     path: '/detail/:pillNo',
     name: 'Detail',
     component: Detail,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/prescription',
     name: 'PrescriptionList',
     component: PrescriptionList,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/prescription/:presNo',
     name: 'PrescriptionDetail',
     component: PrescriptionDetail,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/notification',
     name: 'Notification',
     component: Notification,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/mypage',
     name: 'Mypage',
     component: Mypage,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/mypage/image',
     name: 'ProfileImage',
     component: ProfileImage,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/settings',
     name: 'Settings',
     component: Settings,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/time',
     name: 'Time',
     component: Time,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/attention',
     name: 'Attention',
     component: Attention,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/attentionregist',
     name: 'AttentionRegist',
     component: AttentionRegist,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/service',
     name: 'Service',
     component: Service,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/familylist',
     name: 'FamilyList',
     component: FamilyList,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/familyregist',
     name: 'FamilyRegist',
     component: FamilyRegist,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/familyregist/list',
     name: 'FamilyRegistList',
     component: FamilyRegistList,
     props: true,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/camera',
     name: 'Camera',
     component: Camera,
     props: true,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
     path: '/pillmethod',
     name: 'PillMethod',
     component: PillMethod,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
 ];
 
