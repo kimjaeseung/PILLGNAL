@@ -32,7 +32,8 @@ export const login = async (user) => {
   let resp = 0;
   await instance
     .post('user/login', JSON.stringify(user))
-    .then(() => {
+    .then((resp) => {
+      console.log(resp.data.data);
       router.push('/home');
     })
     .catch((e) => {
