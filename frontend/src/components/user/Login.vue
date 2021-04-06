@@ -1,7 +1,13 @@
 <template>
   <v-container>
     <v-row>
-      <v-col> <v-img src="@/assets/pillgnal_logo.png"></v-img></v-col>
+      <v-col>
+        <v-img
+          width="100%"
+          aspect-ratio="1"
+          src="@/assets/pillgnal_logo.png"
+        ></v-img
+      ></v-col>
     </v-row>
     <v-row>
       <v-col class="pl-0 mb-2 font-weight-bold"> Sign in </v-col>
@@ -62,16 +68,32 @@
         ></v-col
       >
     </v-row>
-    <v-snackbar v-model="snackbar">gg</v-snackbar>
+    <v-snackbar v-model="snackbar"
+      >{{ snackbarMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template></v-snackbar
+    >
   </v-container>
 </template>
 
 <script>
 import { emailRules, passwordRules } from '@/api/valid.js';
+import { login } from '@/api/user.js';
 export default {
   methods: {
-    loginBtn() {
-      if (!this.valid) this.snackbar = true;
+    async loginBtn() {
+      if (!this.valid) {
+        this.snackbar = true;
+        this.snackbarMessage = '아이디 혹은 비밀번호를 확인해주세요.';
+      } else {
+        if ((await login(this.user)) == 500)
+          this.snackbarMessage = '이메일 또는 비밀번호가 틀렸습니다.';
+        else this.snackbarMessage = '통신 오류입니다.';
+        this.snackbar = true;
+      }
     },
     loginWithKakao() {
       const params = {
@@ -88,6 +110,7 @@ export default {
       emailRules: emailRules,
       passwordRules: passwordRules,
       snackbar: false,
+      snackbarMessage: '',
     };
   },
 };

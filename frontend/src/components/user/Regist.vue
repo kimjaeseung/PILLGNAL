@@ -77,11 +77,19 @@
             block
             color="primary"
             :disabled="!valid || !termsCheck"
-            @click="regist(user)"
+            @click="registBtn(user)"
             >가입하기</v-btn
           ></v-col
         >
       </v-row>
+      <v-snackbar v-model="snackbar"
+        >{{ snackbarMessage }}.
+        <template v-slot:action="{ attrs }">
+          <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+            Close
+          </v-btn>
+        </template></v-snackbar
+      >
     </v-container>
   </div>
 </template>
@@ -113,10 +121,19 @@ export default {
       nameRules: nameRules,
       phoneNumberRules: phoneNumberRules,
       terms: terms,
+      snackbar: false,
+      snackbarMessage: '',
     };
   },
   methods: {
-    regist: regist,
+    async registBtn() {
+      const resp = await regist(this.user);
+      if (resp === 'true') this.$router.push('/');
+      else {
+        this.snackbarMessage = resp;
+        this.snackbar = true;
+      }
+    },
   },
 };
 </script>
