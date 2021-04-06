@@ -12,7 +12,8 @@ export default {
   methods: {
     async getUserInfo() {
       const code = this.$route.query.code;
-      await getKakaoToken(code);
+      const token = await getKakaoToken(code);
+      window.Kakao.Auth.setAccessToken(token.data.access_token, true);
       const kakaoUserData = await getKakaoUserInfo();
       console.log(kakaoUserData);
     },
