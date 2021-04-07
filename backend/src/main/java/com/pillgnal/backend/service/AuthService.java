@@ -1,7 +1,6 @@
 package com.pillgnal.backend.service;
 
-import com.pillgnal.backend.config.oauth2.UserPrincipal;
-import com.pillgnal.backend.config.oauth2.jwt.JwtTokenProvider;
+import com.pillgnal.backend.config.security.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
 import com.pillgnal.backend.dto.token.TokenDto;

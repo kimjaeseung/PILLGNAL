@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pillgnal.backend.dto.ResponseDto;
+import com.pillgnal.backend.dto.pill.PillDetailRequestDto;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -102,61 +106,6 @@ public class PillController {
 		return new ResponseEntity(response, response.isSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 	
-	@ApiOperation(value = "처방전 ocr", notes = "처방전 ocr 후 알약 이름만 반환", response = Map.class)
-	@PostMapping(value = "/api/v1/prescription")
-	public ResponseEntity<PillListResponseDto> ocrtest(
-			@ApiParam(value = "filePath", required = true) @RequestBody MultipartFile file) throws IOException {
-		Map<String, String> map = new HashMap<>();
-		HttpStatus status = null;
-		List<String> list = new ArrayList<String>();
-		pill_list = null;
-		uploadFile(file);
-		
-		String temp = "https://storage.googleapis.com/ocrtestttt/";
-		String publicurl = temp + file.getOriginalFilename();
-		String temp2 = "gs://ocrtestttt/";
-		String gsutilurl = temp2 + file.getOriginalFilename();
-		try {
-			detectTextGcs(gsutilurl, map);
-			status = HttpStatus.ACCEPTED;
-		} catch (IOException e) {
-			e.printStackTrace();
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		try (Socket client = new Socket()) {
-			InetSocketAddress ipep = new InetSocketAddress("127.0.0.1", 9999);
-			client.connect(ipep);
-			try (OutputStream sender = client.getOutputStream(); InputStream receiver = client.getInputStream();) {
-				String msg = pill_list;
-				byte[] data = msg.getBytes();
-				ByteBuffer b = ByteBuffer.allocate(4);
-				b.order(ByteOrder.LITTLE_ENDIAN);
-				b.putInt(data.length);
-				sender.write(b.array(), 0, 4);
-				// 데이터 전송
-				sender.write(data);
-				data = new byte[4];
-				receiver.read(data, 0, 4);
-				ByteBuffer c = ByteBuffer.wrap(data);
-				c.order(ByteOrder.LITTLE_ENDIAN);
-				int length = c.getInt();
-				data = new byte[length];
-				receiver.read(data, 0, length);
-				msg = new String(data, "UTF-8");
-				System.out.println(msg);
-				String [] splitstr = msg.split("/");
-				for (int i = 0; i < splitstr.length; i++) {
-					list.add(splitstr[i]);
-				}
-				map.put("처방전에서 인식한 알약:", msg);
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		PillListResponseDto response = pillService.doFindPillByPre(list);
-		return new ResponseEntity(response, response.isSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-	}
-	
 	@ApiOperation(value = "구글비전 ocr test", notes = "이미지 넣으면 ocr 테스트해줌", response = Map.class)
 	@GetMapping(value = "/api/v1/google_vision_ocr_api_test")
 	public ResponseEntity<Map<String, String>> ocrtest(
@@ -197,6 +146,24 @@ public class PillController {
 			}
 		}
 	}
+
+	/**
+	 * 처방전 세부내역 만들기 요청
+	 * @param createRequest
+	 * @return ResponseEntity
+	 * @author Eomjaewoong
+	 */
+	@ApiOperation(value = "처방전 세부내역 만들기 요청")
+	@ApiResponses({
+			@ApiResponse(code = 201, message = "CREATED - 처방전 세부내역 만들기 성공"),
+			@ApiResponse(code = 400, message = "생성 실패")
+	})
+	@PostMapping(value = "/create", consumes = "application/json")
+	public ResponseEntity<ResponseDto> onCreateDetailPrescription(@RequestBody PillDetailRequestDto createRequest) {
+		ResponseDto response = pillService.doCreateDetailPrescription(createRequest);
+		return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+	}
+
 	/*
 	@ApiOperation(value = "파이썬 소켓 통신 알약 모양, 문자 확인", notes = "socket 열고 python 통신해서 image 받아옴", response = Map.class)
 	@PostMapping(value = "/api/v1/pill")

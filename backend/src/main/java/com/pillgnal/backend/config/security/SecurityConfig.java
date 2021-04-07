@@ -1,6 +1,6 @@
-package com.pillgnal.backend.config.oauth2;
+package com.pillgnal.backend.config.security;
 
-import com.pillgnal.backend.config.oauth2.jwt.JwtAuthenticationFilter;
+import com.pillgnal.backend.config.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
