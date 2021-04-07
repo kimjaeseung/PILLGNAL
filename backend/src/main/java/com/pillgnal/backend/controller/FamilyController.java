@@ -1,5 +1,6 @@
 package com.pillgnal.backend.controller;
 
+import com.pillgnal.backend.dto.ResponseDto;
 import com.pillgnal.backend.dto.family.ConnectRequestDto;
 import com.pillgnal.backend.dto.family.ConnectResponseDto;
 import com.pillgnal.backend.dto.family.ListResponseDto;
@@ -56,6 +57,21 @@ public class FamilyController {
     @GetMapping(value = "/{email}/")
     public ResponseEntity<ListResponseDto> onListFamily(@PathVariable String email) {
         ListResponseDto response = familyService.doListFamily(email);
+        return new ResponseEntity(response, response.isSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 가족 삭제 요청 처리
+     *
+     * @param connectRequest
+     * @return ResponseEntity
+     *
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "가족 삭제 요청")
+    @PostMapping(value = "/disconnect")
+    public ResponseEntity<ListResponseDto> onListFamily(@RequestBody ConnectRequestDto connectRequest) {
+        ResponseDto response = familyService.doDisconnectFamily(connectRequest);
         return new ResponseEntity(response, response.isSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }
