@@ -1,5 +1,6 @@
 package com.pillgnal.backend.controller;
 
+import com.pillgnal.backend.dto.ResponseDto;
 import com.pillgnal.backend.dto.family.ConnectRequestDto;
 import com.pillgnal.backend.dto.family.ConnectResponseDto;
 import com.pillgnal.backend.dto.family.ListResponseDto;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/family")
-@CrossOrigin("*")
 public class FamilyController {
     private final FamilyService familyService;
 
@@ -36,8 +36,8 @@ public class FamilyController {
      */
     @ApiOperation(value = "가족 연결 요청")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "CREATED - 가족 연결 성공"),
-            @ApiResponse(code = 400, message = "연결 실패")
+        @ApiResponse(code = 201, message = "CREATED - 가족 연결 성공"),
+        @ApiResponse(code = 400, message = "연결 실패")
     })
     @PostMapping(value = "/connect", consumes = "application/json")
     public ResponseEntity<ConnectResponseDto> onConnectFamily(@RequestBody ConnectRequestDto connectRequest) {
@@ -57,6 +57,21 @@ public class FamilyController {
     @GetMapping(value = "/{email}/")
     public ResponseEntity<ListResponseDto> onListFamily(@PathVariable String email) {
         ListResponseDto response = familyService.doListFamily(email);
+        return new ResponseEntity(response, response.isSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 가족 삭제 요청 처리
+     *
+     * @param connectRequest
+     * @return ResponseEntity
+     *
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "가족 삭제 요청")
+    @PostMapping(value = "/disconnect")
+    public ResponseEntity<ListResponseDto> onListFamily(@RequestBody ConnectRequestDto connectRequest) {
+        ResponseDto response = familyService.doDisconnectFamily(connectRequest);
         return new ResponseEntity(response, response.isSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

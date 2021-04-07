@@ -61,9 +61,9 @@ public class UserService {
      * @author Eomjaewoong
      */
     @Transactional
-    public boolean doChangeProfile(String email, MultipartFile file) {
+    public String doChangeProfile(String email, MultipartFile file) {
         Optional<User> user = userRepository.findByEmail(email);
-        if(file.isEmpty() || !user.isPresent())  return false;
+        if(file.isEmpty() || !user.isPresent())  return null;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss_SSS");
         String name = file.getOriginalFilename();
@@ -79,24 +79,23 @@ public class UserService {
         } else if(contentType.contains("image/gif")) {
             fileName += ".gif";
         } else {
-            return false;
+            return null;
         }
-
+        
         File f = new File(absolutePath + uploadPath + "\\" + fileName);
         if(!f.exists()) {
             f.mkdirs();
         }
 
         user.get().updateImageUrl(absolutePath + uploadPath+"\\"+fileName);
-        System.out.println(user.get().getImageUrl());
 
         try {
             file.transferTo(f);
         } catch (IOException e){
             e.printStackTrace();
-            return false;
+            return null;
         }
 
-        return true;
+        return user.get().getImageUrl();
     }
 }
