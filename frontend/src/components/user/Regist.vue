@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="my-5">
       <v-row class="mb-3">
         <v-col class="pl-0 caption"> Sign up </v-col>
       </v-row>
