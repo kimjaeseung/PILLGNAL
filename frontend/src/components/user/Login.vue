@@ -89,9 +89,14 @@ export default {
         this.snackbar = true;
         this.snackbarMessage = '아이디 혹은 비밀번호를 확인해주세요.';
       } else {
-        if ((await login(this.user)) == 500)
+        let resp = await login(this.user);
+        if (resp == 500) {
           this.snackbarMessage = '이메일 또는 비밀번호가 틀렸습니다.';
-        else this.snackbarMessage = '통신 오류입니다.';
+        } else if (resp == 1) {
+          this.snackbarMessage = '로그인 성공!';
+        } else {
+          this.snackbarMessage = '통신 오류입니다.';
+        }
         this.snackbar = true;
       }
     },
