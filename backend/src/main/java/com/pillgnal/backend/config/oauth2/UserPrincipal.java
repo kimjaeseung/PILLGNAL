@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class UserPrincipal implements OAuth2User, UserDetails {
+public class UserPrincipal implements UserDetails {
     private Long id;
     private String email;
     private String password;
@@ -68,17 +68,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return email;
     }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
-
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
-    }
-
-    @Override
-    public String getName() {
-        return String.valueOf(id);
     }
 }

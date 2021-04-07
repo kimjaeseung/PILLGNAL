@@ -11,11 +11,9 @@ import com.pillgnal.backend.dto.user.LoginRequestDto;
 import com.pillgnal.backend.dto.user.SignupRequestDto;
 import com.pillgnal.backend.dto.user.UserDataDto;
 import com.pillgnal.backend.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,15 +21,24 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 회원 관련 Controller
  *
  * @author Eomjaewoong
  */
-@CrossOrigin("*")
 @Api(value = "회원 관련")
 @RequiredArgsConstructor
 @RestController
@@ -102,7 +109,7 @@ public class UserController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.createAccessToken((UserPrincipal)authentication.getPrincipal());
+        String token = jwtTokenProvider.createAccessToken(authentication);
 
         return ResponseDto.builder()
                 .success(true)
