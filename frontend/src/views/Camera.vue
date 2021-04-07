@@ -165,15 +165,32 @@ export default {
         },
       });
 
-      instance
-        .post('api/v1/prescription', formData)
-        .then((res) => {
-          console.log(res);
-          this.data = res;
-        })
-        .catch((err) => {
-          console.log('실패', err);
-        });
+      if (this.cameraMode == '처방전') {
+        instance
+          .post('api/v1/prescription', formData)
+          .then((res) => {
+            console.log(res);
+            this.data = res;
+          })
+          .catch((err) => {
+            console.log('실패', err);
+          });
+      }
+      if (this.cameraMode == '알약') {
+        instance
+          .post('api/v1/pill', formData)
+          .then((res) => {
+            console.log(res);
+            this.data = res;
+          })
+          .catch((err) => {
+            console.log('실패', err);
+          });
+      }
+      if (this.cameraMode == undefined) {
+        alert('카메라 모드를 선택해주세요.');
+        this.$router.push('/home');
+      }
     },
 
     imgSave() {
