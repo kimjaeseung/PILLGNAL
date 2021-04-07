@@ -10,7 +10,7 @@
       ></v-col>
     </v-row>
     <v-row>
-      <v-col class="pl-0 mb-2 font-weight-bold"> Sign in </v-col>
+      <v-col class="pl-0 mb-2 caption"> Sign in </v-col>
     </v-row>
     <v-form v-model="valid">
       <v-row>

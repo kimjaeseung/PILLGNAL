@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <v-row class="mb-3">
-        <v-col class="pl-0 my-4 font-weight-bold text-h5"> Sign up </v-col>
+        <v-col class="pl-0 caption"> Sign up </v-col>
       </v-row>
       <v-form v-model="valid" class="mb-10">
         <v-row>
