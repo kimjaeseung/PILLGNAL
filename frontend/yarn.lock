@@ -8516,6 +8516,11 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
+webcam-easy@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/webcam-easy/-/webcam-easy-1.0.5.tgz#67b4f20848317ab0e9b8513878b8fe31163cdc91"
+  integrity sha512-YSXB21kfnwdrlPX/u1O5r8pbHxCaw3bsxhmvS1S9ixK/8n8LzxOduylqwVUSjYGSVJRhopJUN77SOh3Z0QgaIQ==
+
 webpack-bundle-analyzer@^3.8.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.9.0.tgz#f6f94db108fb574e415ad313de41a2707d33ef3c"

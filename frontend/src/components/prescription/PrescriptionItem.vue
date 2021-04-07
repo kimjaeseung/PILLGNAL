@@ -2,11 +2,11 @@
   <div>
     <v-card>
       <v-card-title class="font-weight-bold">
-        환절기 피부질환 외1<v-spacer></v-spacer
+        {{ info.title }}<v-spacer></v-spacer
         ><v-icon @click="expand = !expand">mdi-chevron-down</v-icon>
       </v-card-title>
 
-      <v-card-subtitle class="pb-0">2020.05.30</v-card-subtitle>
+      <v-card-subtitle class="pb-0">{{ info.date }}</v-card-subtitle>
       <v-card-actions>
         <v-row class="ma-0">
           <v-col class="d-flex align-center" cols="9">
@@ -56,7 +56,7 @@
 
 <script>
 export default {
-  props: {},
+  props: { info: Object },
   data() {
     return {
       expand: false,
