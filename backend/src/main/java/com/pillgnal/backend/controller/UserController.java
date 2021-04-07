@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*")
 public class UserController {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;

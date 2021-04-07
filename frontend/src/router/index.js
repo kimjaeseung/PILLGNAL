@@ -190,6 +190,12 @@ const routes = [
     props: true,
     beforeEnter: requireAuth,
   },
+  {
+    path: "/voice",
+    name: "voice",
+    component: Voice,
+    // beforeEnter: requireAuth
+  },
 ];
 
 const router = new VueRouter({

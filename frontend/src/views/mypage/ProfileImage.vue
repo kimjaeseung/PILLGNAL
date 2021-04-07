@@ -1,6 +1,7 @@
 <template>
   <div class="max-container">
     <BackNav page-title="ProfileImage" />
+    <notifications />
     <v-container>
       <v-row>
         <section
@@ -117,16 +118,31 @@
         </v-col>
       </v-row>
       </v-container>
-      <!-- <Snackbar 
-      v-if="this.noImg === true"
-      /> -->
     </v-container>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import BackNav from '@/base_components/BackNav.vue';
 // import Snackbar from '@/components/Snackbar.vue';
+const API_URL = 'http://localhost:8080';
+const email = 'test@gmail.com'
+
+const dataURLtoFile = (dataurl, fileName) => {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], fileName, {type:mime});
+}
 
 export default {
   components: {
@@ -139,15 +155,16 @@ export default {
   data: () => {
     return {
       avatarLists: [
-        require('@/assets/avatars/p1.svg'),
-        require('@/assets/avatars/p2.svg'),
-        require('@/assets/avatars/p3.svg'), 
-        require('@/assets/avatars/p1.svg'),
-        require('@/assets/avatars/p2.svg'),
-        require('@/assets/avatars/p3.svg'), 
+        require('@/assets/avatars/woman2.png'),
+        require('@/assets/avatars/woman.png'),
+        require('@/assets/avatars/profilelady.png'), 
+        require('@/assets/avatars/profileman.png'),
+        require('@/assets/avatars/hacker.png'),
+        require('@/assets/avatars/man.png'), 
+        // man
       ],
       selectedImg: 0,
-      value: 0,
+      value: '',
       file: null,
       dialog: false,
       notifications: false,
@@ -157,22 +174,39 @@ export default {
     }
   },
   methods: {
-    albumFileSave: function () {
-      console.log(this.file);
-    },
     fileSave: function () {
       let profile = '';
       if (this.file !== null) {
         profile = this.file;
       } else if (this.value !== 0) {
-        profile = `@/assets/avatars/${this.value}`;
+        profile = this.avatarLists[this.value];
+        var tmp_profile = dataURLtoFile(profile,'new_profile_img');
+        profile = tmp_profile;
       }
       console.log(profile);
-      /* axios 저장 API
-
-      */
+      /* axios 저장 API */
       if (profile.length !== 0) {
-        this.$router.go(-1);
+        axios.post(
+          `${API_URL}/user/profile?email=${email}`,
+          {file: profile },
+          {
+            headers: 
+              {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Credentials": true,
+                "Content-Type": 'multipart/form-data',
+              }
+          }
+        ).then((res)=>{
+          console.log(res)
+          this.$notify({ type: 'success', text: '프로필 이미지 변경'});
+          this.$router.go(-1);
+        })
+        .catch((err) =>{
+          console.log(err)
+          this.$notify({ type: 'warn', text: '프로필 이미지 변경 실패'});
+        })
       } else {
         const alertMsg = '프로필 이미지가 선택되지 않았습니다.';
         window.alert(alertMsg);
