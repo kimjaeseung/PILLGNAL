@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="my-5">
       <v-row class="mb-3">
-        <v-col class="pl-0 my-2 font-weight-bold text-h5"> Sign up </v-col>
+        <v-col class="pl-0 caption"> Sign up </v-col>
       </v-row>
-      <v-form v-model="valid">
+      <v-form v-model="valid" class="mb-10">
         <v-row>
           <v-col class="pa-0">
             <v-text-field
@@ -13,6 +13,7 @@
               hint="Invalid e-mail."
               label="E-mail"
               outlined
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -29,6 +30,7 @@
               class="input-group--focused"
               @click:append="show = !show"
               outlined
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -42,18 +44,16 @@
               hint="At least 2 characters"
               label="User name"
               outlined
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col class="pa-0">
-            <v-text-field
+            <VuePhoneNumberInput
               v-model="user.phone"
-              :rules="[phoneNumberRules.required, phoneNumberRules.phoneNumber]"
-              hint="Please include hyphens"
-              label="Phone number"
-              outlined
-            ></v-text-field>
+              @update="updatePhoneNumber"
+            ></VuePhoneNumberInput>
           </v-col>
         </v-row>
       </v-form>
@@ -70,27 +70,24 @@
           ><v-checkbox v-model="termsCheck" label="동의합니다."></v-checkbox
         ></v-col>
       </v-row>
-      <v-row>
-        <v-col class="px-0"
-          ><v-btn
-            x-large
-            block
-            color="primary"
-            :disabled="!valid || !termsCheck"
-            @click="registBtn(user)"
-            >가입하기</v-btn
-          ></v-col
-        >
-      </v-row>
-      <v-snackbar v-model="snackbar"
-        >{{ snackbarMessage }}.
-        <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-            Close
-          </v-btn>
-        </template></v-snackbar
-      >
     </v-container>
+    <v-btn
+      x-large
+      block
+      tile
+      color="primary"
+      :disabled="!valid || !termsCheck || !phoneIsValid"
+      @click="registBtn(user)"
+      >가입하기</v-btn
+    >
+    <v-snackbar v-model="snackbar"
+      >{{ snackbarMessage }}.
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template></v-snackbar
+    >
   </div>
 </template>
 
@@ -103,8 +100,13 @@ import {
   terms,
 } from '@/api/valid.js';
 import { regist } from '@/api/user.js';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
+  components: {
+    VuePhoneNumberInput,
+  },
   data() {
     return {
       user: {
@@ -113,6 +115,7 @@ export default {
         name: '',
         phone: '',
       },
+      phoneIsValid: false,
       termsCheck: false,
       show: false,
       valid: false,
@@ -134,6 +137,9 @@ export default {
         this.snackbar = true;
       }
     },
+    updatePhoneNumber(data) {
+      this.phoneIsValid = data.isValid;
+    },
   },
 };
 </script>
@@ -145,5 +151,10 @@ export default {
 .container {
   max-width: 500px;
   width: 80%;
+}
+.theme--light.v-text-field--outline:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot:hover {
+  border-color: silver;
 }
 </style>

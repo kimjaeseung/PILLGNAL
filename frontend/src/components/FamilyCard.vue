@@ -9,7 +9,7 @@
               <v-list-item-title
                 ><strong>{{ user.name }}</strong
                 ><br />
-                {{ phoneNumber }}</v-list-item-title
+                {{ user.phoneNumber }}</v-list-item-title
               >
               <v-card-actions>
                 <v-col class="text-right">
@@ -33,39 +33,69 @@
   >
 </template>
 <script>
+import axios from 'axios';
+import { API_BASE_URL } from '@/config';
 export default {
   data: () => ({
     isNone: true,
     users: [
       {
-        name: '김싸피',
-        phoneNumber: '010-6666-6666',
-        isNone: true,
-      },
-      {
-        name: '이지은',
-        phoneNumber: '010-3333-3333',
-        isNone: true,
-      },
-      {
-        name: '임지호',
-        phoneNumber: '010-5555-5555',
+        name: '',
+        phoneNumber: '',
+        email: '',
         isNone: true,
       },
     ],
   }),
   created: function () {
-    for (var i = 0; i < this.users.length; i++) {
-      if (this.users[i].phoneNumber == this.phoneNumber) {
-        this.users[i].isNone = false;
+    const instance = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json',
+      },
+    });
+    instance
+      .post('user/phone', { phone: this.phoneNumber })
+      .then((res) => {
+        var temp = res.data;
+        this.users[0].name = temp.name;
+        this.users[0].phoneNumber = temp.phone;
+        this.users[0].email = temp.email;
+        this.users[0].isNone = false;
         this.isNone = false;
-      }
-    }
+      })
+      .catch((err) => {
+        console.log('찾기 실패', err);
+      });
   },
   methods: {
     familyRequest: function () {
-      alert('요청되었습니다.');
-      this.$router.push('/familyList');
+      var email = this.$store.getters.user.email;
+      const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json',
+        },
+      });
+      instance
+        .post('family/connect', {
+          myEmail: email,
+          otherEmail: this.users[0].email,
+        })
+        .then((res) => {
+          console.log(res);
+          alert('요청되었습니다.');
+          this.$router.push('/familylist');
+        })
+        .catch((err) => {
+          console.log('실패', err);
+        });
     },
   },
   props: ['phoneNumber'],

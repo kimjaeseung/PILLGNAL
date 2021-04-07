@@ -41,6 +41,7 @@ export const login = async (user) => {
       } else {
         router.push('/home');
       }
+      resp = 1;
     })
     .catch((e) => {
       if (e.response === undefined) resp = 0;

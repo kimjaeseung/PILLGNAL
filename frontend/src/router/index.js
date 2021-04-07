@@ -101,7 +101,7 @@ const routes = [
     path: '/prescription',
     name: 'PrescriptionList',
     component: PrescriptionList,
-    
+
     beforeEnter: requireAuth,
   },
   {
@@ -192,8 +192,8 @@ const routes = [
     beforeEnter: requireAuth,
   },
   {
-    path: "/voice",
-    name: "voice",
+    path: '/voice',
+    name: 'voice',
     component: Voice,
     // beforeEnter: requireAuth
   },

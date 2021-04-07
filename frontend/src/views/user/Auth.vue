@@ -1,39 +1,29 @@
 <template>
   <v-layout fill-height align-center justify-center>
-    <v-card
-      flat
-      class="pa-10 my-5"
-      width="100%"
-      min-width="350"
-      max-width="500"
-    >
+    <v-card class="my-5" width="100%" min-width="350" max-width="500">
       <v-container>
+        <v-row class="mt-3">
+          <v-col class="pl-0 caption"> Sign up </v-col>
+        </v-row>
         <v-row>
-          <v-col class="pa-0">
-            <v-form v-model="valid">
-              <v-text-field
-                v-model="phone"
-                :rules="[
-                  phoneNumberRules.required,
-                  phoneNumberRules.phoneNumber,
-                ]"
-                hint="Please include hyphens"
-                label="Phone number"
-                outlined
-              ></v-text-field>
-            </v-form>
+          <v-col class="pa-0 mx-0">
+            <VuePhoneNumberInput
+              size="lg"
+              v-model="phone"
+              @update="updatePhoneNumber"
+            ></VuePhoneNumberInput>
           </v-col>
         </v-row>
-        <v-row class="mt-5">
-          <v-col class="pa-0">
+        <v-row class="mt-10">
+          <v-col class="pa-0 mx-0">
             <v-btn
-              class="font-weight-black kakaoBtn"
-              x-large
+              class="font-weight-black mb-8"
+              large
               block
               color="kakao_yellow"
-              :disabled="!valid"
+              :disabled="!phoneIsValid"
               @click="registBtn"
-              >카카오 회원가입</v-btn
+              >카카오로 회원가입</v-btn
             >
           </v-col>
         </v-row>
@@ -43,26 +33,32 @@
 </template>
 
 <script>
-import { phoneNumberRules } from '@/api/valid.js';
 import { getKakaoToken, getKakaoUserInfo } from '@/api/kakaoLogin.js';
 import { regist, login } from '@/api/user.js';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
+  components: {
+    VuePhoneNumberInput,
+  },
+
   data() {
     return {
       user: {},
       phone: '',
-      valid: false,
-      phoneNumberRules: phoneNumberRules,
+      phoneIsValid: false,
     };
   },
   async created() {
     let kakaoData = await this.getUserInfo();
-    this.user.email = kakaoData.kakao_account.email;
-    this.user.password = String(kakaoData.id);
-
-    await login(this.user);
-    this.user.name = kakaoData.kakao_account.profile.nickname;
+    if (kakaoData === false) this.$router.push('/');
+    else {
+      this.user.email = kakaoData.kakao_account.email;
+      this.user.password = String(kakaoData.id);
+      await login(this.user);
+      this.user.name = kakaoData.kakao_account.profile.nickname;
+    }
   },
   methods: {
     async registBtn() {
@@ -75,9 +71,15 @@ export default {
     async getUserInfo() {
       const code = this.$route.query.code;
       const token = await getKakaoToken(code);
+      if (token.data === undefined) {
+        return false;
+      }
       window.Kakao.Auth.setAccessToken(token.data.access_token, true);
       const kakaoUserData = await getKakaoUserInfo();
       return kakaoUserData;
+    },
+    updatePhoneNumber(data) {
+      this.phoneIsValid = data.isValid;
     },
   },
 };
