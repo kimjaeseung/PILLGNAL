@@ -1,16 +1,15 @@
 package com.pillgnal.backend.domain.pill;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.pillgnal.backend.domain.BaseTimeEntity;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -33,7 +32,10 @@ public class Pill extends BaseTimeEntity{
 	private String pmanual;
 	private String pclass;
 	private String ptype;
-	
+
+	@OneToMany(mappedBy = "pid")
+	private List<PrescriptionPill> prescriptionPills = new ArrayList<>();
+
 	@Builder
 	public Pill(String pnum, String pname, String pcompany, String pimage, String pwritingfront,
 				String pwritingback, String pshape, String pcolor, String pmanual, String pclass, String ptype) {

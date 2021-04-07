@@ -28,18 +28,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailService customUserDetailService;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
     public JwtAuthenticationFilter tokenAuthenticationFilter() {
         return new JwtAuthenticationFilter();
-    }
-
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
     @Override
@@ -120,22 +112,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/signup", "/login")
                         .permitAll()
                     .anyRequest()
-                        .permitAll()
+                        .permitAll();
                         //.authenticated()
-                .and()
-                    .oauth2Login()
-                        .authorizationEndpoint()
-                            .baseUri("/login/oauth2/code/kakao")
-                            .authorizationRequestRepository(cookieAuthorizationRequestRepository())
-                        .and()
-                        .redirectionEndpoint()
-                            .baseUri("/login/oauth2/code/kakao")
-                        .and()
-                        .userInfoEndpoint()
-                            .userService(customOAuth2UserService)
-                        .and()
-                        .successHandler(oAuth2AuthenticationSuccessHandler)
-                        .failureHandler(oAuth2AuthenticationFailureHandler);
 
         // jwt token filter
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -150,7 +128,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedOriginPattern("*");
-        // configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
