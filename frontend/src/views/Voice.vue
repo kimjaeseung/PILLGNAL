@@ -18,7 +18,7 @@
         </v-icon>
       </v-btn>
       <div id="sound-clips" class="mt-4"></div>
-      <v-btn class="my-2 white--text" color="main" @click="sendAudio(audioSrc)" block x-large>
+      <v-btn class="my-2 white--text" color="main" @click="sendAudio(voiceFile)" block x-large>
       <span class="text-center my-auto">저장하기</span>
         <v-icon medium>
           mdi-bookmark
@@ -30,21 +30,34 @@
 
 <script>
 import BackNav from '@/base_components/BackNav.vue';
-import axios from 'axios';
+import firebase from 'firebase';
+
+const blobToFile = function blobToFile(theBlob, fileName){
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    theBlob.lastModifiedDate = new Date();
+    theBlob.name = fileName;
+    return theBlob;
+}
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDgivPuUhGVB6JnyCBc_HaChKkD0X3-nog",
+  authDomain: "pillgnal.firebaseapp.com",
+  projectId: "pillgnal",
+  storageBucket: "pillgnal.appspot.com",
+  messagingSenderId: "179166848786",
+  appId: "1:179166848786:web:221fb20c7efd38c65b35cb",
+  measurementId: "G-1NBGW7E5W6"
+};
+
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 export default {
   name: 'voice',
   components: {
     BackNav,
   },
-  data: () => {
-    return {
-      // media_recorder: Object,
-      mediaRecord: Object,
-      flag: false,
-      audioSrc: '',
-    }
-  }, 
+  
   methods: {
     recordStart(arg) {
       if (navigator.mediaDevices) {
@@ -102,6 +115,10 @@ export default {
               audio.src = audioURL
               this.audioSrc = audioURL
 
+              const voiceFile = blobToFile(blob,'voice.mp3');
+              this.voiceFile = voiceFile
+              console.log('변환: ',voiceFile)
+
               deleteButton.onclick = e => {
                 let evtTgt = e.target
                 evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode)
@@ -117,31 +134,39 @@ export default {
         })
       } 
     },
-    sendAudio:function(audioSrc) {
-      axios.post(
-          ``,
-          {src: audioSrc },
-          {
-            headers: 
-              {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Credentials": true,
-                "Content-Type": 'multipart/form-data',
-              }
-          }
-        ).then((res)=>{
-          console.log(res)
-          console.log('저장완료')
-          this.$router.go(-1);
-        })
-        .catch((err) =>{
-          console.log(err)
-        })
-    }
+    sendAudio:function(voiceFile) {
+      // console.log('목소리 저장하기', voiceFile)
+      const email = 'test@gmail.com'
+      // console.log('email: ', email)
+      const storageRef = firebase.storage().ref(`${email}_Voices`);
+      const task = storageRef.put(voiceFile);
+      task.on("state_changed", (s) => {
+        console.log((s.bytesTransferred/s.totalBytes)*100);
+      })
+      this.getAudio();
+    },
+    getAudio: function () {
+      const email = 'test@gmail.com'
+      const getAudioURL = `https://firebasestorage.googleapis.com/v0/b/pillgnal.appspot.com/o/${email}_Voices?alt=media`
+      this.voice = getAudioURL
+      this.$store.dispatch('SAVE_VOICE', getAudioURL)
+    },
+    getUser: function () {
+      this.user = this.$store.getters.user;
+    },
   },
-  mounted: function () {
-    // this.start();
+  data: function () {
+      return {// media_recorder: Object,
+        mediaRecord: Object,
+        flag: false,
+        audioSrc: '',
+        voiceFile: Object,
+        user: Object,
+        voice: ''
+      }
+    }, 
+  created: function () {
+    this.getUser();
   }
 }
 

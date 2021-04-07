@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="max-container">
+      <BackNav page-title="Settings"/>
       <div class="text-h4 mt-5">설정</div>
       <v-row class="mt-12">
         <v-col>
@@ -35,9 +36,12 @@
       <v-row>
         <v-col>
           <v-card @click="router(4)" outlined class="card-list"
-            >Pillgnal 이용약관</v-card
+            >알림 목소리 녹음하기</v-card
           >
           <v-card @click="router(5)" outlined class="card-list mt-2"
+            >Pillgnal 이용약관</v-card
+          >
+          <v-card @click="router(6)" outlined class="card-list mt-2"
             >버전 정보 v.0.0.1
           </v-card>
         </v-col>
@@ -59,9 +63,14 @@
   </div>
 </template>
 <script>
+import BackNav from '@/base_components/BackNav.vue';
+
 export default {
+  components: {
+    BackNav,
+  },
   data: () => ({
-    path: ['familylist', 'time', 'tutorial', 'attention', 'service'],
+    path: ['familylist', 'time', 'tutorial', 'attention', 'voice', 'service'],
   }),
   methods: {
     router: function (n) {

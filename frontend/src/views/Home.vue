@@ -9,12 +9,6 @@
         <div class="d-flex flex-row mx-auto">
         <!-- 카메라 -->
           <camera-mode class="mx-2"/>
-        <!-- 녹음 -->
-          <v-btn color="remove_pink" class="mx-2 white--text text-center" rounded large
-          @click="toVoice()">
-            <v-icon class="picture">mdi-record</v-icon>
-            녹음
-          </v-btn>
         </div>
       </v-row>
     </v-container>
@@ -25,7 +19,6 @@
 import NavBar from '../components/NavBar.vue';
 import NewsFeedCard from '@/components/NewsFeedCard.vue';
 import CameraMode from '@/components/CameraMode.vue';
-// import Voice from '@/components/Voice.vue';
 
 export default {
   name: 'Home',
@@ -33,10 +26,10 @@ export default {
     NavBar,
     NewsFeedCard,
     CameraMode,
-    // Voice
   },
   data: function () {
     return {
+      voice: '',
       pillLists: [
         {
           date: '2021-03-31 12:00',
@@ -105,10 +98,10 @@ export default {
     };
   },
   methods: {
-    toVoice() {
-      this.$router.push({ name: 'voice' });
+    getPillList() {
+      
     },
-  }
+  },
 };
 </script>
 

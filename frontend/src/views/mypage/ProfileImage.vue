@@ -88,7 +88,7 @@
                 x-large
                 block
                 color="main"
-                @click="[albumFileSave(), dialog = false]"
+                @click="[fileSave(), dialog = false]"
                 >
                 저장하기</v-btn>
             </v-container>
@@ -126,22 +126,20 @@
 import axios from 'axios';
 import BackNav from '@/base_components/BackNav.vue';
 // import Snackbar from '@/components/Snackbar.vue';
-const API_URL = 'http://localhost:8080';
+const API_BASE_URL = 'http://localhost:8080/';
 const email = 'test@gmail.com'
 
 const dataURLtoFile = (dataurl, fileName) => {
- 
-    var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
-        u8arr = new Uint8Array(n);
-        
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    
-    return new File([u8arr], fileName, {type:mime});
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), 
+    n = bstr.length, 
+    u8arr = new Uint8Array(n);
+      
+  while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], fileName, {type:mime});
 }
 
 export default {
@@ -150,7 +148,6 @@ export default {
     // Snackbar
   },
   watch: {
-
   },
   data: () => {
     return {
@@ -176,30 +173,38 @@ export default {
   methods: {
     fileSave: function () {
       let profile = '';
+      var formData = new FormData();
       if (this.file !== null) {
         profile = this.file;
+        formData.append('file', profile)
       } else if (this.value !== 0) {
         profile = this.avatarLists[this.value];
-        var tmp_profile = dataURLtoFile(profile,'new_profile_img');
+        // console.log('here', this.value, profile)
+        var tmp_profile = dataURLtoFile(profile,'img.png');
+        // var formData = new FormData();
         profile = tmp_profile;
+        formData.append('file', profile)
       }
-      console.log(profile);
+      // console.log(profile);
+      // console.log('formData: ', formData.getAll('file'));
       /* axios 저장 API */
+      const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '',
+          'Access-Control-Allow-Headers': '',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'multipart/form-data',
+        }
+      })
       if (profile.length !== 0) {
-        axios.post(
-          `${API_URL}/user/profile?email=${email}`,
-          {file: profile },
-          {
-            headers: 
-              {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Credentials": true,
-                "Content-Type": 'multipart/form-data',
-              }
-          }
+        instance.post(
+          `user/profile?email=${email}`, formData
         ).then((res)=>{
           console.log(res)
+          console.log(res.data)
+          this.$store.commit('SET_USER_PROFILE')
+          // VUEX로 SET_USER의 imageUrl값 변경시키기
           this.$notify({ type: 'success', text: '프로필 이미지 변경'});
           this.$router.go(-1);
         })

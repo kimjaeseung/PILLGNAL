@@ -23,6 +23,7 @@ import Auth from '../views/user/Auth.vue';
 import Time from '../views/settings/Time.vue';
 import PillMethod from '../views/PillMethod.vue';
 import AttentionRegist from '../views/settings/attention/AttentionRegist.vue';
+import Voice from '../views/Voice.vue';
 
 import { refreshToken, getUser } from '@/api/auth.js';
 

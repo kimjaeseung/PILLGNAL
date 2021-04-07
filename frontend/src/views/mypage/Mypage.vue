@@ -16,12 +16,12 @@
                   class="d-flex"
                   @click="toProfileImage()"
                 >
-                  <v-img :src="user.src"></v-img>
+                  <v-img :src="user.imageUrl"></v-img>
                 </v-avatar>
               </v-btn>
             </v-btn-toggle>
             <div class="d-flex mx-5 flex-column text-center my-auto">
-              <h3>{{ user.fullName }}</h3>
+              <h3>{{ user.name }}</h3>
               <p class="caption mt-1 mb-0">
                 {{ user.email }}
               </p>
@@ -95,13 +95,17 @@ export default {
     toProfileImage() {
       this.$router.push({ name: 'ProfileImage' });
     },
+    getUser: function () {
+      this.user = this.$store.getters.user;
+    },
   },
   data: () => ({
-    user: {
-      src: 'https://cdn.vuetifyjs.com/images/john.jpg',
-      fullName: 'John Doe',
-      email: 'john.doe@doe.com',
-    },
+    // user: {
+    //   imageUrl: 'https://cdn.vuetifyjs.com/images/john.jpg',
+    //   name: 'John Doe',
+    //   email: 'john.doe@doe.com',
+    // },
+    user: Object,
     weekMission: [ 
       {img: require('@/assets/pillgu.png'), cnt: 3},
       {img: require('@/assets/pillgu.png'), cnt: 2},
@@ -112,6 +116,9 @@ export default {
       {img: require('@/assets/pillgu.png'), cnt: 0},
     ]
   }),
+  created: function () {
+    this.getUser();
+  }
 }
 </script>
 

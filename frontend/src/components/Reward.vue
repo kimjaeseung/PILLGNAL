@@ -58,9 +58,9 @@ export default {
     return {
       rewardLists: [
         [require('@/assets/rewards/welcome.png'), true, "첫 방문을 환영합니다!"],
-        [require('@/assets/rewards/toddler.png'), true, "첫 복약 완료!"],
-        [require('@/assets/rewards/kids.png'), false, "3일 연속 성공!"],
-        [require('@/assets/rewards/adult.png'), false, "1주일 All Clear"],
+        [require('@/assets/rewards/toddler.png'), false, "첫 복약 완료!"],
+        [require('@/assets/rewards/kids.png'), false, "3회 복약 성공!"],
+        [require('@/assets/rewards/adult.png'), false, "7회 mission Clear"],
         [require('@/assets/rewards/pro.png'), false, "올바른 습관 형성!"],
         [require('@/assets/rewards/champion.png'), false, "건강 Champion!"],
       ]

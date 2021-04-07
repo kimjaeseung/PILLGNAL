@@ -40,6 +40,9 @@
       <v-expand-transition>
         <div v-show="show">
           <v-card-text>
+            <audio controls>
+              <source :src="getVoice.src" type="audio/ogg">
+            </audio>
             <v-card-actions v-for="(item, idx) in pillData.pills" :key="idx">
               <v-list-item-avatar rounded width="65px">
                 <v-img class="elevation-6 avatar-pill" :alt="item.pname" :src="item.img"> </v-img>
@@ -100,9 +103,22 @@ export default {
   props: {
     pillData: Object,
   },
+  methods: {
+  },
+  computed: {
+    getVoice() {
+      return this.$store.getters.getVoice;
+    },
+    getUser() {
+      return this.$store.getters.getUser;
+    }
+  },
   data: () => ({
     show: false,
+    voice: ''
   }),
+  created: function () {
+  }
 };
 </script>
 
