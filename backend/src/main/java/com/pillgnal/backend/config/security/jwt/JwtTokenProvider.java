@@ -1,9 +1,10 @@
-package com.pillgnal.backend.config.oauth2.jwt;
+package com.pillgnal.backend.config.security.jwt;
 
-import com.pillgnal.backend.config.oauth2.UserPrincipal;
+import com.pillgnal.backend.config.security.UserPrincipal;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,8 +22,8 @@ public class JwtTokenProvider {
     String refrashTokenExpirationMsec;
 
     // JWT 토큰 생성
-    public String createAccessToken(UserPrincipal userPrincipal) {
-        // UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public String createAccessToken(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() +
                 Integer.valueOf(tokenExpirationMsec));

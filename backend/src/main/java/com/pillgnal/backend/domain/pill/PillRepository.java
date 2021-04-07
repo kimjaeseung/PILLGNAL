@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PillRepository extends JpaRepository<Pill, Long>{
-	List<Pill> findByPNameIn(List<String> nameList);
-	List<Pill> findAllByPWritingfrontAndPShape(String pWritingfront, String pShape);
+	Optional<Pill> findByPname(String name);
+	List<Pill> findByPnameIn(List<String> nameList);
+	List<Pill> findAllByPwritingfrontAndPshape(String pWritingfront, String pShape);
 }

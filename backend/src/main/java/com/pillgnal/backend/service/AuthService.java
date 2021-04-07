@@ -1,13 +1,13 @@
 package com.pillgnal.backend.service;
 
-import com.pillgnal.backend.config.oauth2.UserPrincipal;
-import com.pillgnal.backend.config.oauth2.jwt.JwtTokenProvider;
+import com.pillgnal.backend.config.security.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
 import com.pillgnal.backend.dto.token.TokenDto;
 import com.pillgnal.backend.dto.token.TokenUserDto;
 import com.pillgnal.backend.dto.user.UserDataDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +35,9 @@ public class AuthService {
                     .build();
 
         Optional<User> user = userRepository.findById(jwtTokenProvider.getUserIdFromToken(token));
-
         return TokenDto.builder()
                 .success(true)
-                .authToken(jwtTokenProvider.createAccessToken(UserPrincipal.create(user.get())))
+                .authToken(jwtTokenProvider.createAccessToken(SecurityContextHolder.getContext().getAuthentication()))
                 .build();
 
     }
