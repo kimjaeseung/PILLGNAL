@@ -1,7 +1,10 @@
 <template>
   <v-layout fill-height align-center justify-center>
-    <v-card class="pt-10 my-5" width="100%" min-width="350" max-width="500">
+    <v-card class="my-5" width="100%" min-width="350" max-width="500">
       <v-container>
+        <v-row class="mt-3">
+          <v-col class="pl-0 caption"> Sign up </v-col>
+        </v-row>
         <v-row>
           <v-col class="pa-0 mx-0">
             <VuePhoneNumberInput
