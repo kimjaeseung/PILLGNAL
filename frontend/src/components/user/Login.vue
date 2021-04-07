@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="my-3">
     <v-row>
       <v-col>
         <v-img
