@@ -23,6 +23,7 @@ import Auth from '../views/user/Auth.vue';
 import Time from '../views/settings/Time.vue';
 import PillMethod from '../views/PillMethod.vue';
 import AttentionRegist from '../views/settings/attention/AttentionRegist.vue';
+import Voice from '../views/Voice.vue';
 
 import { refreshToken, getUser } from '@/api/auth.js';
 
@@ -100,7 +101,7 @@ const routes = [
     path: '/prescription',
     name: 'PrescriptionList',
     component: PrescriptionList,
-    
+
     beforeEnter: requireAuth,
   },
   {
@@ -191,8 +192,8 @@ const routes = [
     beforeEnter: requireAuth,
   },
   {
-    path: "/voice",
-    name: "voice",
+    path: '/voice',
+    name: 'voice',
     component: Voice,
     // beforeEnter: requireAuth
   },
