@@ -1,8 +1,6 @@
-package com.pillgnal.backend.config.oauth2.jwt;
+package com.pillgnal.backend.config.security.jwt;
 
-import com.pillgnal.backend.config.oauth2.CustomUserDetailService;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.pillgnal.backend.config.security.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,11 +1,11 @@
-package com.pillgnal.backend.config.oauth2;
+package com.pillgnal.backend.config.security;
 
 import com.pillgnal.backend.domain.user.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

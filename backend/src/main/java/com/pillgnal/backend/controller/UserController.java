@@ -1,7 +1,6 @@
 package com.pillgnal.backend.controller;
 
-import com.pillgnal.backend.config.oauth2.UserPrincipal;
-import com.pillgnal.backend.config.oauth2.jwt.JwtTokenProvider;
+import com.pillgnal.backend.config.security.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
@@ -154,11 +153,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResponseDto> onChangeProfile(@RequestParam String email,
                                                        @RequestParam("file") MultipartFile file) {
-
-        if(userService.doChangeProfile(email, file))
+        String result = userService.doChangeProfile(email, file);
+        if(null != result)
             return new ResponseEntity(ResponseDto.builder()
                     .success(true)
-                    .data("OK")
+                    .data(result)
                     .build(), HttpStatus.OK);
         else
             return new ResponseEntity(ResponseDto.builder()

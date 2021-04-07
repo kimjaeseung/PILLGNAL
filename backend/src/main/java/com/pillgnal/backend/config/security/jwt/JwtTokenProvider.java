@@ -1,6 +1,6 @@
-package com.pillgnal.backend.config.oauth2.jwt;
+package com.pillgnal.backend.config.security.jwt;
 
-import com.pillgnal.backend.config.oauth2.UserPrincipal;
+import com.pillgnal.backend.config.security.UserPrincipal;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
