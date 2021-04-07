@@ -100,6 +100,7 @@ const routes = [
     path: '/prescription',
     name: 'PrescriptionList',
     component: PrescriptionList,
+    
     beforeEnter: requireAuth,
   },
   {
@@ -186,6 +187,7 @@ const routes = [
     path: '/pillmethod',
     name: 'PillMethod',
     component: PillMethod,
+    props: true,
     beforeEnter: requireAuth,
   },
 ];

@@ -54,18 +54,11 @@
                 <v-icon v-if="isPhotoTaken">mdi-backup-restore</v-icon>
               </v-btn>
             </div>
-
-            <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
-              <a
-                id="downloadPhoto"
-                download="my-photo.jpg"
-                class="button"
-                role="button"
-                @click="downloadImage"
-              >
-                Download
-              </a>
-            </div>
+          </div>
+          <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
+            <v-btn @click="imgSave()" color="main" elevation="0" block class="white--text"
+              >저장하기</v-btn
+            >
           </div>
         </v-col></v-row
       >
@@ -83,6 +76,7 @@ export default {
     isShotPhoto: false,
     isLoading: true,
     link: '#',
+    data: '',
   }),
   props: ['cameraMode'],
   components: {},
@@ -175,19 +169,15 @@ export default {
         .post('api/v1/prescription', formData)
         .then((res) => {
           console.log(res);
+          this.data = res;
         })
         .catch((err) => {
           console.log('실패', err);
         });
     },
 
-    downloadImage() {
-      const download = document.getElementById('downloadPhoto');
-      const canvas = document
-        .getElementById('photoTaken')
-        .toDataURL('image/jpeg')
-        .replace('image/jpeg', 'image/octet-stream');
-      download.setAttribute('href', canvas);
+    imgSave() {
+      this.$router.push({ name: 'PillMethod', params: { prescription: this.data } });
     },
     dataURLtoFile(dataurl, fileName) {
       var arr = dataurl.split(','),
