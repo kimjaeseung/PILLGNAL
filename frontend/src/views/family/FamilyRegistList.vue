@@ -11,12 +11,14 @@
 <script>
 import FamilyAddBtn from '../../components/FamilyAddBtn.vue';
 import FamilyCard from '../../components/FamilyCard.vue';
+
 export default {
   data: () => ({}),
   components: {
     FamilyAddBtn,
     FamilyCard,
   },
+  created() {},
   props: ['phoneNumber'],
 };
 </script>
