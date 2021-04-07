@@ -3,7 +3,17 @@
     <v-col cols="12">
       <v-card class="mt-4" outlined>
         <v-card-title>
-          <span class="title font-weight-bold">처방전 이름</span>
+          <v-col cols="10">
+            <!-- <span class="title font-weight-bold">처방전 이름</span> -->
+            <v-text-field
+              placeholder="처방전 이름"
+              class="prescriptionName"
+              single-line
+              clearable
+              :disabled="disabled"
+            ></v-text-field>
+          </v-col>
+          <v-icon @click="edit()" v-show="show">mdi-pencil</v-icon>
         </v-card-title>
         <v-col>
           <v-card outlined>
@@ -22,6 +32,7 @@
         </v-col>
         <v-col cols="12">
           <v-autocomplete
+            single-line
             v-model="value"
             :items="items"
             chips
@@ -34,7 +45,7 @@
         </v-col>
         <v-col class="d-flex justify-space-between align-center">
           <v-autocomplete
-            id="time"
+            class="time"
             v-model="time"
             :items="times"
             :label="time"
@@ -82,6 +93,8 @@ export default {
     times: ['식후 30분', '식전 30분', '식후 바로'],
     time: null,
     value: null,
+    disabled: true,
+    show: true,
   }),
   methods: {
     confirm() {
@@ -97,10 +110,18 @@ export default {
       this.time = value;
       console.log(this.time);
     },
+    edit() {
+      this.disabled = false;
+      this.show = false;
+    },
   },
 };
 </script>
+
 <style scoped>
+.prescriptionName.v-input >>> input {
+  font-size: 1.5em;
+}
 .mdi:before,
 .mdi-set {
   color: #565ca9;
@@ -109,8 +130,13 @@ export default {
   color: #565ca9;
   caret-color: #565ca9;
 }
-.v-text-field >>> .v-input__control {
+.time.v-text-field >>> .v-input__control {
   color: inherit;
   padding-right: 12px;
+}
+.v-card__subtitle,
+.v-card__text,
+.v-card__title {
+  padding: 8px;
 }
 </style>
