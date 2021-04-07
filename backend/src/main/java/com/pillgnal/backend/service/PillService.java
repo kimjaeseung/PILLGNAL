@@ -1,7 +1,6 @@
 package com.pillgnal.backend.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.pillgnal.backend.domain.pill.PrescriptionPill;
 import com.pillgnal.backend.domain.pill.PrescriptionPillRepository;
