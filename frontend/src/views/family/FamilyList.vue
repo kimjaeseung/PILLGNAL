@@ -77,7 +77,9 @@ export default {
         for (var i = 0; i < res.data.data.length; i++) {
           this.family.push(res.data.data[i]);
         }
-        this.isNone = false;
+        if (this.family.length != 0) {
+          this.isNone = false;
+        }
       })
       .catch((err) => {
         console.log('실패', err);
