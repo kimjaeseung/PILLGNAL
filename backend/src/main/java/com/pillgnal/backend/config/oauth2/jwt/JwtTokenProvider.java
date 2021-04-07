@@ -4,15 +4,15 @@ import com.pillgnal.backend.config.oauth2.UserPrincipal;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
 public class JwtTokenProvider {
     @Value("${auth.tokenSecret}")
-    String authToken;
+    String authTokenKey;
 
     @Value("${auth.tokenExpirationMsec}")
     String tokenExpirationMsec;
@@ -21,8 +21,8 @@ public class JwtTokenProvider {
     String refrashTokenExpirationMsec;
 
     // JWT 토큰 생성
-    public String createAccessToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public String createAccessToken(UserPrincipal userPrincipal) {
+        // UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() +
                 Integer.valueOf(tokenExpirationMsec));
@@ -30,7 +30,7 @@ public class JwtTokenProvider {
                 .setSubject(Long.toString(userPrincipal.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, authToken)
+                .signWith(SignatureAlgorithm.HS512, authTokenKey)
                 .compact();
     }
 
@@ -45,13 +45,13 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS512, authToken)
+                .signWith(SignatureAlgorithm.HS512, authTokenKey)
                 .compact();
     }
 
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(authToken)
+                .setSigningKey(authTokenKey)
                 .parseClaimsJws(token)
                 .getBody();
         return Long.parseLong(claims.getSubject());
@@ -59,10 +59,18 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(authToken).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(authTokenKey).parseClaimsJws(authToken);
             return true;
-        } catch (Exception ex) {
-            return false;
+        } catch (MalformedJwtException e) {
+            System.out.println("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            System.out.println("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            System.out.println("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("JWT 토큰이 잘못되었습니다.");
         }
+
+        return false;
     }
 }

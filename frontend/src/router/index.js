@@ -1,195 +1,205 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "../store/index.js"
-import Tutorial from "../views/user/Tutorial.vue";
-import Home from "../views/Home.vue";
-import Detail from "../views/prescription/Detail";
-import PrescriptionList from "../views/prescription/PrescriptionList.vue";
-import PrescriptionDetail from "../views/prescription/PrescriptionDetail.vue";
-import Notification from "../views/Notification.vue";
-import Mypage from "../views/mypage/Mypage.vue";
-import ProfileImage from "../views/mypage/ProfileImage.vue";
-import Settings from "../views/settings/Settings.vue"
-import Attention from "../views/settings/attention/Attention.vue"
-import Service from "../views/settings/Service.vue"
-import Camera from "../views/Camera.vue"
-import Login from "../views/user/Login.vue"
-import Regist from "../views/user/Regist.vue"
-import FamilyRegist from "../views/family/FamilyRegist.vue"
-import FamilyRegistList from "../views/family/FamilyRegistList.vue"
-import FamilyList from "../views/family/FamilyList.vue"
-import Main from "../views/Main.vue"
-import Auth from "../views/user/Auth.vue"
-import Time from "../views/settings/Time.vue"
-import PillMethod from "../views/PillMethod.vue"
-import AttentionRegist from "../views/settings/attention/AttentionRegist.vue"
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from '../store/index.js';
+import Tutorial from '../views/user/Tutorial.vue';
+import Home from '../views/Home.vue';
+import Detail from '../views/prescription/Detail';
+import PrescriptionList from '../views/prescription/PrescriptionList.vue';
+import PrescriptionDetail from '../views/prescription/PrescriptionDetail.vue';
+import Notification from '../views/Notification.vue';
+import Mypage from '../views/mypage/Mypage.vue';
+import ProfileImage from '../views/mypage/ProfileImage.vue';
+import Settings from '../views/settings/Settings.vue';
+import Attention from '../views/settings/attention/Attention.vue';
+import Service from '../views/settings/Service.vue';
+import Camera from '../views/Camera.vue';
+import Login from '../components/user/Login.vue';
+import Regist from '../components/user/Regist.vue';
+import FamilyRegist from '../views/family/FamilyRegist.vue';
+import FamilyRegistList from '../views/family/FamilyRegistList.vue';
+import FamilyList from '../views/family/FamilyList.vue';
+import Main from '../views/Main.vue';
+import Auth from '../views/user/Auth.vue';
+import Time from '../views/settings/Time.vue';
+import PillMethod from '../views/PillMethod.vue';
+import AttentionRegist from '../views/settings/attention/AttentionRegist.vue';
+
+import { refreshToken, getUser } from '@/api/auth.js';
 
 Vue.use(VueRouter);
 
-// const requireAuth = (to, from, next) => {
-//   let user = store.getters.user;
-//   if (Object.keys(user).length === 0) {
-//     if (!localStorage['access-token'] || localStorage['access-token'] === '') next('/');
-//     else {
-//       // 유효한 토큰 체크
-//       // 나중에 axios then 쓸것
-//       if (localStorage['access-token'] === 'test') {
-//         store.dispatch('getUserByToken');
-//         requireAuth();
-//       } else {
-//         store.dispatch('logout');
-//         next();
-//       }
-//     }
-//   } else {
-//     console.log('토큰 갱신');
-//     next();
-//   }
-// };
+const requireAuth = async (to, from, next) => {
+  let user = store.getters.user;
+  if (user === undefined || user === null || Object.keys(user).length === 0) {
+    if (!localStorage['access-token'] || localStorage['access-token'] === '')
+      next('/');
+    else {
+      await refreshToken();
+      if (!localStorage['access-token'] || localStorage['access-token'] === '')
+        next('/');
+      else {
+        await getUser();
+        next();
+      }
+    }
+  } else {
+    await refreshToken();
+    if (!localStorage['access-token'] || localStorage['access-token'] === '')
+      next('/');
+    else next();
+  }
+};
 
 const routes = [
   {
-    path: "",
-    name: "Main",
+    path: '',
+    name: 'Main',
     component: Main,
     beforeEnter: (to, from, next) => {
-      let user = store.getters.user;
-      if (Object.keys(user).length !== 0) {
-        next({ name: 'Home' });
-      } else next();
-    }
+      if (!localStorage['access-token'] || localStorage['access-token'] === '')
+        next();
+      else next('/home');
+    },
+    children: [
+      {
+        path: '',
+        name: 'Login',
+        component: Login,
+      },
+      {
+        path: '/regist',
+        name: 'Regist',
+        component: Regist,
+      },
+    ],
   },
   {
-    path: "/auth",
-    name: "Auth",
+    path: '/auth',
+    name: 'Auth',
     component: Auth,
   },
   {
-    path: "/tutorial",
-    name: "Tutorial",
+    path: '/tutorial',
+    name: 'Tutorial',
     component: Tutorial,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/home",
-    name: "Home",
+    path: '/home',
+    name: 'Home',
     component: Home,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/detail/:pillNo",
-    name: "Detail",
+    path: '/detail/:pillNo',
+    name: 'Detail',
     component: Detail,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/prescription",
-    name: "PrescriptionList",
+    path: '/prescription',
+    name: 'PrescriptionList',
     component: PrescriptionList,
-    // beforeEnter: requireAuth
+    
+    beforeEnter: requireAuth,
   },
   {
-    path: "/prescription/:presNo",
-    name: "PrescriptionDetail",
+    path: '/prescription/:presNo',
+    name: 'PrescriptionDetail',
     component: PrescriptionDetail,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/notification",
-    name: "Notification",
+    path: '/notification',
+    name: 'Notification',
     component: Notification,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/mypage",
-    name: "Mypage",
+    path: '/mypage',
+    name: 'Mypage',
     component: Mypage,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/mypage/image",
-    name: "ProfileImage",
+    path: '/mypage/image',
+    name: 'ProfileImage',
     component: ProfileImage,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/settings",
-    name: "Settings",
+    path: '/settings',
+    name: 'Settings',
     component: Settings,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/time",
-    name: "Time",
+    path: '/time',
+    name: 'Time',
     component: Time,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/attention",
-    name: "Attention",
+    path: '/attention',
+    name: 'Attention',
     component: Attention,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/attentionregist",
-    name: "AttentionRegist",
+    path: '/attentionregist',
+    name: 'AttentionRegist',
     component: AttentionRegist,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/service",
-    name: "Service",
+    path: '/service',
+    name: 'Service',
     component: Service,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/familylist",
-    name: "FamilyList",
+    path: '/familylist',
+    name: 'FamilyList',
     component: FamilyList,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/familyregist",
-    name: "FamilyRegist",
+    path: '/familyregist',
+    name: 'FamilyRegist',
     component: FamilyRegist,
-    // beforeEnter: requireAuth
+    beforeEnter: requireAuth,
   },
   {
-    path: "/familyregist/list",
-    name: "FamilyRegistList",
+    path: '/familyregist/list',
+    name: 'FamilyRegistList',
     component: FamilyRegistList,
-    props: true
-    // beforeEnter: requireAuth
+    props: true,
+    beforeEnter: requireAuth,
   },
   {
-    path: "/camera",
-    name: "Camera",
+    path: '/camera',
+    name: 'Camera',
     component: Camera,
-    props: true
-    // beforeEnter: requireAuth
+    props: true,
+    beforeEnter: requireAuth,
   },
   {
-    path: "/pillmethod",
-    name: "PillMethod",
+    path: '/pillmethod',
+    name: 'PillMethod',
     component: PillMethod,
-    // beforeEnter: requireAuth
+    props: true,
+    beforeEnter: requireAuth,
   },
   {
-    path: "/login",
-    name: "Login",
-    component: Login,
-    // beforeEnter: requireAuth
-  },
-  {
-    path: "/regist",
-    name: "Regist",
-    component: Regist,
+    path: "/voice",
+    name: "voice",
+    component: Voice,
     // beforeEnter: requireAuth
   },
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes,
 });

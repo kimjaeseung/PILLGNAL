@@ -1,6 +1,6 @@
 import pandas as pd
-train_df = pd.read_csv("C:/pill/nsmc-master/ratings_train.txt", "\t")
-test_df = pd.read_csv("C:/pill/nsmc-master/ratings_test.txt", "\t")
+train_df = pd.read_csv("C:/Users/multicampus/Desktop/s04p23a403/ai/nsmc-master/ratings_train.txt", "\t")
+test_df = pd.read_csv("C:/Users/multicampus/Desktop/s04p23a403/ai/nsmc-master/ratings_test.txt", "\t")
 from konlpy.tag import Okt
 okt = Okt()
 def tokenize(doc):
@@ -28,7 +28,7 @@ x_test = np.asarray(x_test).astype('float32')
 y_train = np.asarray(y_train).astype('float32')
 y_test = np.asarray(y_test).astype('float32')
 import tensorflow as tf
-model2 = tf.keras.models.load_model('C:/pill/pill_prescription.h5')
+model2 = tf.keras.models.load_model('C:/Users/multicampus/Desktop/s04p23a403/ai/pill_prescription.h5')
 model2.summary()
 results = model2.evaluate(x_test, y_test)
 
@@ -83,7 +83,7 @@ class_names = {
 model_name = 'efficientnet-b0'  # b5
 image_size = EfficientNet.get_image_size(model_name)
 model = EfficientNet.from_pretrained(model_name, num_classes=10)
-PATH = "C:/python/pill_model2.pt"
+PATH = "C:/Users/multicampus/Desktop/s04p23a403/ai/pill_model.pt"
 device = torch.device('cpu')
 model.load_state_dict(torch.load(PATH, map_location=device))
 from torchvision import transforms, datasets

@@ -2,32 +2,33 @@
   <div>
     <!-- 완료 : 회색 disabled -->
     <v-card
-      class="mx-auto"
+      class="mx-auto news-card"
       max-width="400"
       v-if="pillData.isDone === 'done'"
-      color="#dfdfdf"
+      elevation="2"
       disabled
     >
-      <v-card-title class="d-flex flex-row justify-space-between px-5">
+      <v-card-title 
+      class="d-flex flex-row justify-space-between px-5"
+      >
         <v-icon left> mdi-alarm-check </v-icon>
         <span> {{ pillData.date }} 알림 </span>
         <v-btn icon @click="show = !show">
           <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
         </v-btn>
       </v-card-title>
-
       <v-card-actions>
         <v-list-item class="grow">
-          <BtnSquare btn-color="primary" btn-text="복용" />
-          <v-spacer></v-spacer>
-          <BtnSquare btn-color="sub" btn-text="건너뛰기" />
-          <v-spacer></v-spacer>
-          <BtnSquare btn-color="test" btn-text="30분 뒤 알림" class="text-white" />
+          <BtnSquareLarge btn-color="primary" btn-text="복용 완료!" class="text-white" />
         </v-list-item>
       </v-card-actions>
     </v-card>
     <!-- 대기 : 기본 -->
-    <v-card class="mx-auto" max-width="400" v-else-if="pillData.isDone === 'waiting'">
+    <v-card class="mx-auto news-card" 
+    max-width="400" 
+    v-else-if="pillData.isDone === 'waiting'"
+    elevation="2"
+    >
       <v-card-title class="d-flex flex-row justify-space-between px-5">
         <v-icon left> mdi-alarm-check </v-icon>
         <span> {{ pillData.date }} 알림 </span>
@@ -54,21 +55,19 @@
       </v-expand-transition>
 
       <v-card-actions>
-        <v-list-item class="grow">
-          <BtnSquare btn-color="main" class="white--text" btn-text="복용" />
-          <v-spacer></v-spacer>
-          <BtnSquare btn-color="sub" btn-text="건너뛰기" />
-          <v-spacer></v-spacer>
-          <BtnSquare btn-color="test" btn-text="30분 뒤 알림" class="text-white" />
+        <v-list-item class="grow d-flex flex-column">
+          <BtnSquare btn-color="main" class="white--text my-1" btn-text="복용" />
+          <BtnSquare btn-color="test" class="text-white my-1" btn-text="30분 뒤 알림" />
+          <BtnSquare btn-color="sub" class="my-1" btn-text="건너뛰기" />
         </v-list-item>
       </v-card-actions>
     </v-card>
     <!-- Skip : 붉은색 -->
     <v-card
-      class="mx-auto"
+      class="mx-auto news-card"
       max-width="400"
       v-else-if="pillData.isDone === 'skip'"
-      color="remove_pink"
+      elevation="2"
       disabled
     >
       <v-card-title class="d-flex flex-row justify-space-between px-5">
@@ -81,11 +80,7 @@
 
       <v-card-actions>
         <v-list-item class="grow">
-          <BtnSquare btn-color="primary" btn-text="복용" />
-          <v-spacer></v-spacer>
-          <BtnSquare btn-color="sub" btn-text="건너뛰기" />
-          <v-spacer></v-spacer>
-          <BtnSquare btn-color="test" btn-text="30분 뒤 알림" class="text-white" />
+          <BtnSquareLarge btn-color="remove_pink" btn-text="Skip!" class="text-white"/>
         </v-list-item>
       </v-card-actions>
     </v-card>
@@ -94,11 +89,13 @@
 
 <script>
 import BtnSquare from '@/base_components/BtnSquare.vue';
+import BtnSquareLarge from '@/base_components/BtnSquareLarge.vue';
 
 export default {
   name: 'NewsFeedCard',
   components: {
     BtnSquare,
+    BtnSquareLarge
   },
   props: {
     pillData: Object,
@@ -110,6 +107,9 @@ export default {
 </script>
 
 <style scoped>
+.news-card {
+  border-radius: 25px;
+}
 .avatar-pill {
   object-fit: cover;
 }
@@ -118,5 +118,8 @@ export default {
 }
 .v-messages {
   min-height: 0 !important;
+}
+.v-list-item {
+  min-height: 20px;
 }
 </style>
