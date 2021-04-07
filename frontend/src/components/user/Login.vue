@@ -22,6 +22,7 @@
             label="E-mail"
             outlined
             flat
+            dense
           ></v-text-field>
         </v-col>
       </v-row>
@@ -39,20 +40,21 @@
             @click:append="show = !show"
             outlined
             flat
+            dense
           ></v-text-field>
         </v-col>
       </v-row>
     </v-form>
     <v-row class="mt-5">
       <v-col class="pa-0">
-        <v-btn x-large block color="primary" @click="loginBtn">로그인</v-btn>
+        <v-btn large block color="primary" @click="loginBtn">로그인</v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col class="px-0">
         <v-btn
           class="font-weight-black kakaoBtn"
-          x-large
+          large
           block
           color="kakao_yellow"
           @click="loginWithKakao"
