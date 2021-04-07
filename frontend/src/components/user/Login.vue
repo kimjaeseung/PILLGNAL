@@ -97,7 +97,7 @@ export default {
     },
     loginWithKakao() {
       const params = {
-        redirectUri: 'http://localhost:8080/auth',
+        redirectUri: 'http://localhost:8081/auth',
       };
       window.Kakao.Auth.authorize(params);
     },

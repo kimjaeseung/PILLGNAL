@@ -1,6 +1,7 @@
 <template>
   <div class="max-container">
     <BackNav page-title="ProfileImage" />
+    <notifications />
     <v-container>
       <v-row>
         <section
@@ -87,7 +88,7 @@
                 x-large
                 block
                 color="main"
-                @click="[albumFileSave(), dialog = false]"
+                @click="[fileSave(), dialog = false]"
                 >
                 저장하기</v-btn>
             </v-container>
@@ -117,16 +118,29 @@
         </v-col>
       </v-row>
       </v-container>
-      <!-- <Snackbar 
-      v-if="this.noImg === true"
-      /> -->
     </v-container>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import BackNav from '@/base_components/BackNav.vue';
 // import Snackbar from '@/components/Snackbar.vue';
+const API_BASE_URL = 'http://localhost:8080/';
+const email = 'test@gmail.com'
+
+const dataURLtoFile = (dataurl, fileName) => {
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), 
+    n = bstr.length, 
+    u8arr = new Uint8Array(n);
+      
+  while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], fileName, {type:mime});
+}
 
 export default {
   components: {
@@ -134,20 +148,20 @@ export default {
     // Snackbar
   },
   watch: {
-
   },
   data: () => {
     return {
       avatarLists: [
-        require('@/assets/avatars/p1.svg'),
-        require('@/assets/avatars/p2.svg'),
-        require('@/assets/avatars/p3.svg'), 
-        require('@/assets/avatars/p1.svg'),
-        require('@/assets/avatars/p2.svg'),
-        require('@/assets/avatars/p3.svg'), 
+        require('@/assets/avatars/woman2.png'),
+        require('@/assets/avatars/woman.png'),
+        require('@/assets/avatars/profilelady.png'), 
+        require('@/assets/avatars/profileman.png'),
+        require('@/assets/avatars/hacker.png'),
+        require('@/assets/avatars/man.png'), 
+        // man
       ],
       selectedImg: 0,
-      value: 0,
+      value: '',
       file: null,
       dialog: false,
       notifications: false,
@@ -157,22 +171,47 @@ export default {
     }
   },
   methods: {
-    albumFileSave: function () {
-      console.log(this.file);
-    },
     fileSave: function () {
       let profile = '';
+      var formData = new FormData();
       if (this.file !== null) {
         profile = this.file;
+        formData.append('file', profile)
       } else if (this.value !== 0) {
-        profile = `@/assets/avatars/${this.value}`;
+        profile = this.avatarLists[this.value];
+        // console.log('here', this.value, profile)
+        var tmp_profile = dataURLtoFile(profile,'img.png');
+        // var formData = new FormData();
+        profile = tmp_profile;
+        formData.append('file', profile)
       }
-      console.log(profile);
-      /* axios 저장 API
-
-      */
+      // console.log(profile);
+      // console.log('formData: ', formData.getAll('file'));
+      /* axios 저장 API */
+      const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '',
+          'Access-Control-Allow-Headers': '',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'multipart/form-data',
+        }
+      })
       if (profile.length !== 0) {
-        this.$router.go(-1);
+        instance.post(
+          `user/profile?email=${email}`, formData
+        ).then((res)=>{
+          console.log(res)
+          console.log(res.data)
+          this.$store.commit('SET_USER_PROFILE')
+          // VUEX로 SET_USER의 imageUrl값 변경시키기
+          this.$notify({ type: 'success', text: '프로필 이미지 변경'});
+          this.$router.go(-1);
+        })
+        .catch((err) =>{
+          console.log(err)
+          this.$notify({ type: 'warn', text: '프로필 이미지 변경 실패'});
+        })
       } else {
         const alertMsg = '프로필 이미지가 선택되지 않았습니다.';
         window.alert(alertMsg);
