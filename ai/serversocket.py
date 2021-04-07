@@ -83,7 +83,7 @@ class_names = {
 model_name = 'efficientnet-b0'  # b5
 image_size = EfficientNet.get_image_size(model_name)
 model = EfficientNet.from_pretrained(model_name, num_classes=10)
-PATH = "C:/python/pill_model.pt"
+PATH = "C:/python/pill_model2.pt"
 device = torch.device('cpu')
 model.load_state_dict(torch.load(PATH, map_location=device))
 from torchvision import transforms, datasets

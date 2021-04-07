@@ -1,0 +1,16 @@
+package com.pillgnal.backend.service;
+
+import org.springframework.stereotype.Service;
+
+import com.pillgnal.backend.domain.example.ExampleRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class PillService {
+	private final ExampleRepository exampleRepository;
+	
+	
+	
+}

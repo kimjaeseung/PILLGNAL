@@ -1,0 +1,13 @@
+package com.pillgnal.backend.domain.pill;
+
+import javax.persistence.Entity;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@Entity
+public class Pill {
+
+}

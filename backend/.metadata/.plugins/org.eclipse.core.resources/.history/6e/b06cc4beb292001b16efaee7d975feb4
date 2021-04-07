@@ -1,0 +1,159 @@
+package com.pillgnal.backend.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.cloud.vision.v1.AnnotateImageRequest;
+import com.google.cloud.vision.v1.AnnotateImageResponse;
+import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
+import com.google.cloud.vision.v1.EntityAnnotation;
+import com.google.cloud.vision.v1.Feature;
+import com.google.cloud.vision.v1.Image;
+import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.cloud.vision.v1.ImageSource;
+import com.google.cloud.storage.BlobId;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.Storage.BlobTargetOption;
+import com.google.cloud.storage.Storage.PredefinedAcl;
+import com.google.cloud.storage.StorageOptions;
+
+@RequiredArgsConstructor
+@RestController
+@CrossOrigin
+public class PillController {
+	private static Storage storage = StorageOptions.getDefaultInstance().getService();
+
+	@ApiOperation(value = "GOOGLE VISION API OCR", notes = "이미지 넣으면 ocr 테스트해줌", response = Map.class)
+	@GetMapping(value = "/api/v1/ocrtest")
+	public ResponseEntity<Map<String, String>> ocrtest(
+			@ApiParam(value = "filePath", required = true) @RequestParam String filePath) {
+		Map<String, String> map = new HashMap<>();
+		HttpStatus status = null;
+		try {
+			detectTextGcs(filePath, map);
+			status = HttpStatus.ACCEPTED;
+		} catch (IOException e) {
+			e.printStackTrace();
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String, String>>(map, status);
+	}
+
+	public static void detectTextGcs(String gcsPath, Map<String, String> map) throws IOException {
+		List<AnnotateImageRequest> requests = new ArrayList<>();
+		System.out.println("detecttextgcs 들어옴");
+		ImageSource imgSource = ImageSource.newBuilder().setGcsImageUri(gcsPath).build();
+		Image img = Image.newBuilder().setSource(imgSource).build();
+		Feature feat = Feature.newBuilder().setType(Feature.Type.TEXT_DETECTION).build();
+		AnnotateImageRequest request = AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
+		requests.add(request);
+
+		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
+			BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
+			List<AnnotateImageResponse> responses = response.getResponsesList();
+
+			for (AnnotateImageResponse res : responses) {
+				if (res.hasError()) {
+					System.out.format("Error: %s%n", res.getError().getMessage());
+					return;
+				}
+				EntityAnnotation annotation = res.getTextAnnotations(0);
+				String temp = annotation.getDescription();
+				String pill_list = temp.replaceAll("\n", "/");
+				map.put("알약", pill_list);
+				System.out.println(annotation.getDescription());
+			}
+		}
+	}
+
+	@ApiOperation(value = "python tcp socket test", notes = "socket 열고 python 통신해서 image 받아옴", response = Map.class)
+	@GetMapping(value = "/api/v1/pill")
+	public ResponseEntity<Map<String, String>> pill(
+			@ApiParam(value = "filePath", required = true) @RequestBody MultipartFile file) {
+		Map<String, String> map = new HashMap<>();
+		HttpStatus status = null;
+		
+		uploadFile(file);
+		String temp = "https://storage.googleapis.com/ocrtestttt/";
+		String result = temp + file.getOriginalFilename();
+		String temp2 = "gs://ocrtestttt/";
+		String gsutilurl = temp2 + file.getOriginalFilename();
+		System.out.println(result);
+		try {
+			detectTextGcs(gsutilurl, map);
+			status = HttpStatus.ACCEPTED;
+		} catch (IOException e) {
+			e.printStackTrace();
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		try (Socket client = new Socket()) {
+			// 소켓에 접속하기 위한 접속 정보를 선언한다.
+			InetSocketAddress ipep = new InetSocketAddress("127.0.0.1", 9999);
+			client.connect(ipep);
+			try (OutputStream sender = client.getOutputStream(); InputStream receiver = client.getInputStream();) {
+				String msg = result;
+				byte[] data = msg.getBytes();
+				ByteBuffer b = ByteBuffer.allocate(4);
+				b.order(ByteOrder.LITTLE_ENDIAN);
+				b.putInt(data.length);
+				sender.write(b.array(), 0, 4);
+				// 데이터 전송
+				sender.write(data);
+				data = new byte[4];
+				receiver.read(data, 0, 4);
+				ByteBuffer c = ByteBuffer.wrap(data);
+				c.order(ByteOrder.LITTLE_ENDIAN);
+				int length = c.getInt();
+				data = new byte[length];
+				receiver.read(data, 0, length);
+				msg = new String(data, "UTF-8");
+				System.out.println(msg);
+				map.put("알약 모양", msg);
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Map<String, String>>(map, status);
+	}
+
+	@ApiOperation(value = "gcs에 파일 업로드", notes = "'SUCCESS' 또는 'FAIL' 문자열을 리턴", response = Map.class)
+	@PostMapping("/uploadFile")
+	public String uploadFile(@RequestBody MultipartFile file) throws IOException {
+		try {
+			System.out.println(file.getOriginalFilename());
+			BlobInfo blobInfo = storage.create(BlobInfo.newBuilder("ocrtestttt", file.getOriginalFilename()).build(), // get																					// name
+					file.getBytes(), // the file
+					BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ) // Set file permission
+			);
+			return blobInfo.getMediaLink(); // Return file url
+		} catch (IllegalStateException e) {
+			throw new RuntimeException(e);
+		}
+	}
+}
