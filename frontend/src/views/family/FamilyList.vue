@@ -22,12 +22,12 @@
                   <v-list-item-title
                     ><strong>{{ user.name }}</strong
                     ><br />
-                    {{ user.phone }}</v-list-item-title
-                  >
+                    {{ user.phone }}
+                  </v-list-item-title>
                   <v-card-actions>
                     <v-col class="text-right">
                       <v-btn
-                        @click="familyDisconnect()"
+                        @click="familyDisconnect(user.email)"
                         elevation="0"
                         small
                         color="deep-orange"
@@ -88,7 +88,32 @@ export default {
       });
   },
   methods: {
-    familyDisconnct() {},
+    familyDisconnect(user) {
+      var otherEmail = user;
+      var email = this.$store.getters.user.email;
+      const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json',
+        },
+      });
+      instance
+        .post(`family/disconnect`, {
+          myEmail: email,
+          otherEmail: otherEmail,
+        })
+        .then((res) => {
+          console.log(res);
+          alert('가족 연결을 끊었습니다.');
+          this.$router.push('/familyregist');
+        })
+        .catch((err) => {
+          console.log('실패', err);
+        });
+    },
   },
 };
 </script>
