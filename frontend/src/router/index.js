@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import store from '../store/index.js';
+import store from '../store/index.js';
 import Tutorial from '../views/user/Tutorial.vue';
 import Home from '../views/Home.vue';
 import Detail from '../views/prescription/Detail';
@@ -25,31 +25,30 @@ import PillMethod from '../views/PillMethod.vue';
 import AttentionRegist from '../views/settings/attention/AttentionRegist.vue';
 import Voice from '../views/Voice.vue';
 
-// import { refreshToken, getUser } from '@/api/auth.js';
+import { refreshToken, getUser } from '@/api/auth.js';
 
 Vue.use(VueRouter);
 
 const requireAuth = async (to, from, next) => {
-  next();
-  // let user = store.getters.user;
-  // if (user === undefined || user === null || Object.keys(user).length === 0) {
-  //   if (!localStorage['access-token'] || localStorage['access-token'] === '')
-  //     next('/');
-  //   else {
-  //     await refreshToken();
-  //     if (!localStorage['access-token'] || localStorage['access-token'] === '')
-  //       next('/');
-  //     else {
-  //       await getUser();
-  //       next();
-  //     }
-  //   }
-  // } else {
-  //   await refreshToken();
-  //   if (!localStorage['access-token'] || localStorage['access-token'] === '')
-  //     next('/');
-  //   else next();
-  // }
+  let user = store.getters.user;
+  if (user === undefined || user === null || Object.keys(user).length === 0) {
+    if (!localStorage['access-token'] || localStorage['access-token'] === '')
+      next('/');
+    else {
+      await refreshToken();
+      if (!localStorage['access-token'] || localStorage['access-token'] === '')
+        next('/');
+      else {
+        await getUser();
+        next();
+      }
+    }
+  } else {
+    await refreshToken();
+    if (!localStorage['access-token'] || localStorage['access-token'] === '')
+      next('/');
+    else next();
+  }
 };
 
 const routes = [
