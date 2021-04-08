@@ -1,23 +1,21 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card class="mt-4" outlined>
-        <v-card-title>
-          <v-col cols="10">
-            <!-- <span class="title font-weight-bold">처방전 이름</span> -->
-            <v-text-field
-              placeholder="처방전 이름"
-              class="prescriptionName"
-              single-line
-              clearable
-              :disabled="disabled"
-            ></v-text-field>
-          </v-col>
-          <v-icon @click="edit()" v-show="show">mdi-pencil</v-icon>
-        </v-card-title>
+      <v-col cols="11" class="d-flex justify-space-between align-center">
+        <v-text-field
+          placeholder="처방전 이름"
+          class="prescriptionName"
+          single-line
+          clearable
+          :disabled="disabled"
+        ></v-text-field>
+        <v-icon @click="edit()" v-show="show">mdi-pencil</v-icon>
+      </v-col>
+
+      <v-card class="mt-2" outlined v-for="(item, idx) in pills" :key="idx">
         <v-col>
           <v-card outlined>
-            <v-card-actions v-for="(item, idx) in pills" :key="idx" class="text-center">
+            <v-card-actions class="text-center">
               <v-list-item class="grow">
                 <v-list-item-avatar tile width="100px">
                   <v-img class="elevation-6" :alt="item.pname" :src="item.img"> </v-img>
@@ -112,7 +110,13 @@ export default {
     TimePicker,
   },
   data: () => ({
+    presciption: '',
     pills: [
+      {
+        pname: '아스코푸정',
+        img: require('@/assets/pills/아스코푸정.jpg'),
+        cnt: 1,
+      },
       {
         pname: '아스코푸정',
         img: require('@/assets/pills/아스코푸정.jpg'),
