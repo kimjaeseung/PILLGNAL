@@ -1,5 +1,6 @@
 package com.pillgnal.backend.controller;
 
+import com.pillgnal.backend.config.security.UserPrincipal;
 import com.pillgnal.backend.config.security.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
@@ -106,21 +107,23 @@ public class UserController {
                     .error("사용자 정보가 맞지 않습니다")
                     .build(), HttpStatus.BAD_REQUEST);
 
-        Authentication authentication = authenticationManager.authenticate(
+        Authentication authentication = null;
+        try {
+            authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
                             loginRequest.getPassword()
                     )
             );
-//        } catch(Exception e) {
-//            return new ResponseEntity<>(ResponseDto.builder()
-//                    .success(false)
-//                    .error("사용자 정보가 맞지 않습니다")
-//                    .build(), HttpStatus.BAD_REQUEST);
-//        }
+        } catch(Exception e) {
+            return new ResponseEntity<>(ResponseDto.builder()
+                    .success(false)
+                    .error("사용자 정보가 맞지 않습니다")
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.createAccessToken(authentication);
+        String token = jwtTokenProvider.createAccessToken((UserPrincipal)authentication.getPrincipal());
 
         return new ResponseEntity<>(ResponseDto.builder()
                 .success(true)
@@ -230,6 +233,25 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResponseDto> onChangeDinner(@RequestBody UserTimeRequestDto timeRequest) {
         ResponseDto response = userService.doChangeTime(timeRequest, 2);
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 시간 얻기 요청
+     *
+     * @param email
+     * @return ResponseEntity
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "사용자 시간 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK - 요청 성공"),
+            @ApiResponse(code = 400, message = "요청 실패")
+    })
+    @PostMapping(value = "/time/{email}/")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ResponseDto> onRequestTime(@PathVariable String email) {
+        TimeResponseDto response = userService.doRequestTime(email);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

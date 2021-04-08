@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="text-h4 mt-5">주의 성분 검색</div>
+    <back-Nav page-title="주의 성분 검색👀" />
     <v-row class="mt-12">
       <v-col>
         <v-row justify="center">
@@ -30,6 +30,7 @@
 </template>
 <script>
 import ConfirmCancelBtn from '@/components/ConfirmCancelBtn.vue';
+import BackNav from '@/base_components/BackNav.vue';
 export default {
   data: () => ({
     value: null,
@@ -38,6 +39,7 @@ export default {
   }),
   components: {
     ConfirmCancelBtn,
+    BackNav,
   },
   methods: {
     attentionlistAdd() {

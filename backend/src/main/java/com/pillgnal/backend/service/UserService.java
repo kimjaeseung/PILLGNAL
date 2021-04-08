@@ -4,6 +4,7 @@ import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
 import com.pillgnal.backend.dto.ResponseDto;
 import com.pillgnal.backend.dto.user.FindPhoneRequestDto;
+import com.pillgnal.backend.dto.user.TimeResponseDto;
 import com.pillgnal.backend.dto.user.UserDataDto;
 import com.pillgnal.backend.dto.user.UserTimeRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -123,6 +124,29 @@ public class UserService {
         return ResponseDto.builder()
                 .success(true)
                 .data("OK")
+                .build();
+    }
+
+    /**
+     * 아침, 점심, 저녁 시간
+     *
+     * @param email
+     * @return TimeResponseDto
+     * @author Eomjaewoong
+     */
+    public TimeResponseDto doRequestTime(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(null == user)
+            return TimeResponseDto.builder()
+                    .success(false)
+                    .error("사용자가 없습니다")
+                    .build();
+
+        return TimeResponseDto.builder()
+                .success(true)
+                .breakfast(user.get().getBreakfast())
+                .lunch(user.get().getLunch())
+                .dinner(user.get().getDinner())
                 .build();
     }
 }
