@@ -36,6 +36,10 @@ public class User extends BaseTimeEntity {
 
     private String imageUrl;
 
+    private String breakfast;
+    private String lunch;
+    private String dinner;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
@@ -43,7 +47,8 @@ public class User extends BaseTimeEntity {
     private String providerId;
 
     @Builder
-    public User(String email, String name, String password, String phone, AuthProvider provider, String providerId, String imageUrl) {
+    public User(String email, String name, String password, String phone, AuthProvider provider, String providerId, String imageUrl,
+                String breakfast, String lunch, String dinner) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -51,6 +56,9 @@ public class User extends BaseTimeEntity {
         this.provider = provider;
         this.providerId = providerId;
         this.imageUrl = imageUrl;
+        this.breakfast = breakfast;
+        this.lunch = lunch;
+        this.dinner = dinner;
     }
 
     public void updatePassword(String password) {
@@ -63,6 +71,13 @@ public class User extends BaseTimeEntity {
     }
     public void updateRole(AuthProvider provider){
         this.provider = provider;
+    }
+    public void updateTime(String time, int term) {
+        switch(term) {
+            case 0 : this.breakfast = time; break;
+            case 1 : this.lunch = time;     break;
+            case 2 : this.dinner = time;    break;
+        }
     }
 
     @OneToMany(mappedBy = "uidFrom")
