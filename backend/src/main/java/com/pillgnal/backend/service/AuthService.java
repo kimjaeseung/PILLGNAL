@@ -1,5 +1,6 @@
 package com.pillgnal.backend.service;
 
+import com.pillgnal.backend.config.security.UserPrincipal;
 import com.pillgnal.backend.config.security.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
@@ -52,24 +53,7 @@ public class AuthService {
                     .build();
         }
 
-        Authentication authentication;
-        try {
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.get().getEmail(),
-                            user.get().getPassword()
-                    )
-            );
-        } catch(Exception e) {
-            System.out.println("3");
-            return TokenDto.builder()
-                    .success(true)
-                    .error("사용자 정보가 맞지 않습니다")
-                    .build();
-        }
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accesstoken = jwtTokenProvider.createAccessToken(authentication);
+        String accesstoken = jwtTokenProvider.createAccessToken(UserPrincipal.create(user.get()));
 
         return TokenDto.builder()
                 .success(true)

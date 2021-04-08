@@ -1,5 +1,6 @@
 package com.pillgnal.backend.controller;
 
+import com.pillgnal.backend.config.security.UserPrincipal;
 import com.pillgnal.backend.config.security.jwt.JwtTokenProvider;
 import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
@@ -106,21 +107,23 @@ public class UserController {
                     .error("사용자 정보가 맞지 않습니다")
                     .build(), HttpStatus.BAD_REQUEST);
 
-        Authentication authentication = authenticationManager.authenticate(
+        Authentication authentication = null;
+        try {
+            authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
                             loginRequest.getPassword()
                     )
             );
-//        } catch(Exception e) {
-//            return new ResponseEntity<>(ResponseDto.builder()
-//                    .success(false)
-//                    .error("사용자 정보가 맞지 않습니다")
-//                    .build(), HttpStatus.BAD_REQUEST);
-//        }
+        } catch(Exception e) {
+            return new ResponseEntity<>(ResponseDto.builder()
+                    .success(false)
+                    .error("사용자 정보가 맞지 않습니다")
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.createAccessToken(authentication);
+        String token = jwtTokenProvider.createAccessToken((UserPrincipal)authentication.getPrincipal());
 
         return new ResponseEntity<>(ResponseDto.builder()
                 .success(true)
