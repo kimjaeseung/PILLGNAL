@@ -22,8 +22,8 @@ public class JwtTokenProvider {
     String refrashTokenExpirationMsec;
 
     // JWT 토큰 생성
-    public String createAccessToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public String createAccessToken(UserPrincipal userPrincipal) {
+//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() +
                 Integer.valueOf(tokenExpirationMsec));
