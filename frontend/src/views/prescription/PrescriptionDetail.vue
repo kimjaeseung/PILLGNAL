@@ -39,6 +39,9 @@
 
 <script>
 import PrescriptionDetailList from '../../components/prescription/PrescriptionDetailList.vue';
+import { API_BASE_URL } from '@/config';
+import axios from 'axios';
+
 export default {
   components: { PrescriptionDetailList },
   data() {
@@ -46,25 +49,39 @@ export default {
       infos: [],
     };
   },
-  created() {
+  async created() {
     console.log(this.$route.params.presNo);
-    //axios로 끌어오기
-    let data = [
-      {
-        morning: true,
-        afternoon: true,
-        night: true,
-        name: '광동플레리토로마이신정25',
-        count: 3,
-        daycount: 5,
-        startday: '2021-04-02',
-        endday: '2021-04-10',
-        pillUrl:
-          'https://dbscthumb-phinf.pstatic.net/3323_000_9/20171126022112845_RQZOH3G3T.jpg/A11A4290B001503.jpg?type=m250&wm=N',
+    const instance = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json',
       },
-    ];
+    });
+    let user = this.$store.getters.user;
+    await instance
+      .get('prescription/' + user.email + '/' + this.$route.params.presNo)
+      .then((response) => {
+        this.infos = response.data.data;
+      });
 
-    this.infos = data;
+    //axios로 끌어오기
+    // let data = [
+    //   {
+    //     morning: true,
+    //     afternoon: true,
+    //     night: true,
+    //     name: '광동플레리토로마이신정25',
+    //     count: 3,
+    //     daycount: 5,
+    //     startday: '2021-04-02',
+    //     endday: '2021-04-10',
+    //     pillUrl:
+    //       'https://dbscthumb-phinf.pstatic.net/3323_000_9/20171126022112845_RQZOH3G3T.jpg/A11A4290B001503.jpg?type=m250&wm=N',
+    //   },
+    // ];
   },
 };
 </script>

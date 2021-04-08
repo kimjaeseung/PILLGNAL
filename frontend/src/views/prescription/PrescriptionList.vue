@@ -41,6 +41,9 @@
 
 <script>
 import PrescriptionItem from '../../components/prescription/PrescriptionItem.vue';
+import { API_BASE_URL } from '@/config';
+import axios from 'axios';
+
 export default {
   components: { PrescriptionItem },
   data() {
@@ -50,15 +53,29 @@ export default {
     };
   },
 
-  created() {
-    console.log(this.$store.getters.user);
+  async created() {
+    const instance = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json',
+      },
+    });
+    let user = this.$store.getters.user;
+    let data = [];
+    await instance.get('prescription/' + user.email).then((response) => {
+      data = response.data.data;
+    });
+
     // 리스트 받아오는 액시오스 수행
-    let data = [
-      { id: 1, title: '처방전1', registDay: '2021-04-06' },
-      { id: 2, title: '처방전2', registDay: '2021-04-07' },
-      { id: 3, title: '처방전3', registDay: '2021-04-08' },
-      { id: 3, title: '처방전3', registDay: '2021-04-05' },
-    ];
+    // let data = [
+    //   { id: 1, title: '처방전1', registDay: '2021-04-06' },
+    //   { id: 2, title: '처방전2', registDay: '2021-04-07' },
+    //   { id: 3, title: '처방전3', registDay: '2021-04-08' },
+    //   { id: 3, title: '처방전3', registDay: '2021-04-05' },
+    // ];
 
     let today = new Date();
 
