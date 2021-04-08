@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     user: {},
     voice: {},
+    time: {}
   },
   getters: {
     user: ({ user }) => user,
@@ -26,6 +27,11 @@ export default new Vuex.Store({
     },
     SET_USER_VOICE(state, src) {
       state.voice.src = src;
+    },
+    SET_TIME(state, time) {
+      state.time.breakfast = time.breakfast
+      state.time.lunch = time.lunch
+      state.time.dinner = time.dinner
     }
   },
   actions: {
@@ -40,6 +46,9 @@ export default new Vuex.Store({
     SAVE_VOICE({ commit }, audioUrl) {
       // console.log('action>>>>>', audioUrl)
       commit('SET_USER_VOICE', audioUrl)
+    },
+    SAVE_TIME({ commit }, time) {
+      commit('SET_TIME', time)
     }
   },
   modules: {},

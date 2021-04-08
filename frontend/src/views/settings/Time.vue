@@ -20,7 +20,6 @@
             ><v-avatar tile><img src="@/assets/time/sunset.svg" /></v-avatar>저녁</v-card-subtitle
           ><v-card-title>{{ times[2] }}</v-card-title></v-card
         >
-
         <time-picker :dialog="dialog" @close="close" @value="values" />
       </v-col>
     </v-row>
@@ -30,12 +29,17 @@
 <script>
 import TimePicker from '../../components/TimePicker.vue';
 import BackNav from '@/base_components/BackNav.vue';
+import axios from 'axios';
+import { API_BASE_URL } from '@/config';
+const API_URL = API_BASE_URL;
+
 export default {
   data: () => ({
     times: ['07:00', '12:00', '19:00'],
     selected: '',
     dialog: false,
     value: null,
+    user: Object,
   }),
   methods: {
     router: function (n) {
@@ -50,13 +54,54 @@ export default {
     },
     values(value) {
       this.times[this.selected] = value;
-      console.log(value);
+      const email = this.user.email
+      //axios POST user/breakfast
+      const instance = axios.create({
+        baseURL: API_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '',
+          'Access-Control-Allow-Headers': '',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json',
+        }
+      })
+      if (this.selected === 0) {
+        instance.post(
+          'user/breakfast', { "email": email, "time": value}
+        ).then((res) => {
+          console.log(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+      } else if (this.selected === 1) {
+          instance.post(
+          'user/lunch', { "email": email, "time": value}
+        ).then((res) => {
+          console.log(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+      } else {
+          instance.post(
+          'user/dinner', { "email": email, "time": value}
+        ).then((res) => {
+          console.log(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
+    },
+    getUser() {
+      this.user = this.$store.getters.getUser;
     },
   },
   components: {
     TimePicker,
     BackNav,
   },
+  created: function () {
+    this.getUser();
+  }
 };
 </script>
 <style scoped>
