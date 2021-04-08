@@ -235,4 +235,23 @@ public class UserController {
         ResponseDto response = userService.doChangeTime(timeRequest, 2);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * 시간 얻기 요청
+     *
+     * @param email
+     * @return ResponseEntity
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "사용자 시간 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK - 요청 성공"),
+            @ApiResponse(code = 400, message = "요청 실패")
+    })
+    @PostMapping(value = "/time/{email}/")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ResponseDto> onRequestTime(@PathVariable String email) {
+        TimeResponseDto response = userService.doRequestTime(email);
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
 }
