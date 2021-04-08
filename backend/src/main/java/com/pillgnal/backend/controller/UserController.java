@@ -29,6 +29,7 @@ import javax.swing.*;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 회원 관련 Controller
@@ -58,15 +59,15 @@ public class UserController {
             @ApiResponse(code = 201, message = "CREATED - 회원가입성공"),
             @ApiResponse(code = 400, message = "중복된 이메일")
     })
-    @PostMapping(value = "/signup", consumes = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto signup(@RequestBody SignupRequestDto signupRequest) {
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            return ResponseDto.builder()
-                    .success(false)
-                    .error("가입 된 이메일 입니다")
-                    .build();
-        }
+        @PostMapping(value = "/signup", consumes = "application/json")
+        @ResponseStatus(HttpStatus.CREATED)
+        public ResponseDto signup(@RequestBody SignupRequestDto signupRequest) {
+            if (userRepository.existsByEmail(signupRequest.getEmail())) {
+                return ResponseDto.builder()
+                        .success(false)
+                        .error("가입 된 이메일 입니다")
+                        .build();
+            }
 
         // Creating user's account
         User user = signupRequest.toEntity();
@@ -97,21 +98,34 @@ public class UserController {
     })
     @PostMapping(value = "/login", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseDto login(@RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
+        Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
+        if(!user.isPresent())
+            return new ResponseEntity<>(ResponseDto.builder()
+                    .success(false)
+                    .error("사용자 정보가 맞지 않습니다")
+                    .build(), HttpStatus.BAD_REQUEST);
+
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+//        } catch(Exception e) {
+//            return new ResponseEntity<>(ResponseDto.builder()
+//                    .success(false)
+//                    .error("사용자 정보가 맞지 않습니다")
+//                    .build(), HttpStatus.BAD_REQUEST);
+//        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtTokenProvider.createAccessToken(authentication);
 
-        return ResponseDto.builder()
+        return new ResponseEntity<>(ResponseDto.builder()
                 .success(true)
                 .data(token)
-                .build();
+                .build(), HttpStatus.OK);
     }
 
     /**

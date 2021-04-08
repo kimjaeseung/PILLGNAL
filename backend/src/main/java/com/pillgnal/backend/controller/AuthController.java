@@ -39,6 +39,8 @@ public class AuthController {
     @PostMapping(value = "/refrash")
     public ResponseEntity<TokenDto> onRefrashToken(@RequestBody String token) {
         TokenDto response= authService.doRefrashToken(token);
+        System.out.println(response.getAuthToken());
+        System.out.println(response.getError());
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
