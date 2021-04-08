@@ -14,16 +14,12 @@ import java.util.Map;
 
 import com.pillgnal.backend.dto.ResponseDto;
 import com.pillgnal.backend.dto.pill.PillDetailRequestDto;
+import com.pillgnal.backend.dto.prescription.PrescriptionCreateRequestDto;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.cloud.vision.v1.AnnotateImageRequest;
@@ -50,13 +46,14 @@ import com.google.cloud.storage.StorageOptions;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin
+@RequestMapping("/pill")
 public class PillController {
 	static String pill_list;
 	private final PillRepository pillRepository;
 	private final PillService pillService;
 	
 	@ApiOperation(value = "파이썬 소켓 통신 알약 모양, 문자 확인", notes = "socket 열고 python 통신해서 image 받아옴", response = Map.class)
-	@PostMapping(value = "/api/v1/pill")
+	@PostMapping(value = "/scan")
 	public ResponseEntity<PillListResponseDto> pill(@RequestBody MultipartFile file) throws IOException {
 		pill_list = null;
 		Map<String, String> map = new HashMap<>();
@@ -107,7 +104,7 @@ public class PillController {
 	}
 	
 	@ApiOperation(value = "구글비전 ocr test", notes = "이미지 넣으면 ocr 테스트해줌", response = Map.class)
-	@GetMapping(value = "/api/v1/google_vision_ocr_api_test")
+	@GetMapping(value = "/google_vision_ocr_api_test")
 	public ResponseEntity<Map<String, String>> ocrtest(
 			@ApiParam(value = "filePath", required = true) @RequestParam String filePath) {
 		Map<String, String> map = new HashMap<>();
@@ -159,7 +156,7 @@ public class PillController {
 			@ApiResponse(code = 400, message = "생성 실패")
 	})
 	@PostMapping(value = "/create", consumes = "application/json")
-	public ResponseEntity<ResponseDto> onCreateDetailPrescription(@RequestBody PillDetailRequestDto createRequest) {
+	public ResponseEntity<ResponseDto> onCreateDetailPrescription(@RequestBody PrescriptionCreateRequestDto createRequest) {
 		ResponseDto response = pillService.doCreateDetailPrescription(createRequest);
 		return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}

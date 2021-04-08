@@ -46,23 +46,6 @@ public class PrescriptionController {
     static String pill_list = "";
 
     /**
-     * 처방전 만들기
-     * @param createRequest
-     * @return ResponseEntity
-     * @author Eomjaewoong
-     */
-    @ApiOperation(value = "처방전 만들기 요청")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "CREATED - 처방전 만들기 성공"),
-            @ApiResponse(code = 400, message = "조회 실패")
-    })
-    @PostMapping(value = "/create", consumes = "application/json")
-    public ResponseEntity<ResponseDto> onCreatePrescription(@RequestBody PrescriptionCreateRequestDto createRequest) {
-        ResponseDto response = prescriptionService.doCreatePrescription(createRequest);
-        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-    }
-
-    /**
      * 처방전 리스트 요청 처리
      *
      * @param email
