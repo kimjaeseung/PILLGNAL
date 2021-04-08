@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="lombok.Data"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.CrossOrigin"/>
+<fullyQualifiedTypeName name="io.swagger.annotations.ApiOperation"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+<fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+<fullyQualifiedTypeName name="io.swagger.annotations.ApiParam"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.AnnotateImageRequest"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.ImageSource"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.Image"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.Feature"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.ImageAnnotatorClient"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.BatchAnnotateImagesResponse"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.AnnotateImageResponse"/>
+<fullyQualifiedTypeName name="com.google.cloud.vision.v1.EntityAnnotation"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="io.grpc.netty.shaded.io.netty.channel.unix.Socket"/>
+<fullyQualifiedTypeName name="java.net.Socket"/>
+<fullyQualifiedTypeName name="java.net.InetSocketAddress"/>
+<fullyQualifiedTypeName name="antlr.ByteBuffer"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="java.io.OutputStream"/>
+<fullyQualifiedTypeName name="java.nio.ByteBuffer"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="io.grpc.Context.Storage"/>
+<fullyQualifiedTypeName name="com.google.cloud.storage.Bucket.BlobTargetOption"/>
+<fullyQualifiedTypeName name="com.google.cloud.storage.Storage.PredefinedAcl"/>
+<fullyQualifiedTypeName name="org.springframework.web.multipart.MultipartFile"/>
+<fullyQualifiedTypeName name="lombok.Getter"/>
+<fullyQualifiedTypeName name="com.pillgnal.backend.dto.PillRequestDto"/>
+</qualifiedTypeNameHistroy>

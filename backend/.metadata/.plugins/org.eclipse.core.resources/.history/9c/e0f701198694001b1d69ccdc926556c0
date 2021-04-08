@@ -1,0 +1,18 @@
+package com.pillgnal.backend.dto;
+
+import lombok.Getter;
+
+@Getter
+public class PillRequestDto {
+    private String pNum;
+    private String pName;
+    private String pCompany;
+    private String pImage;
+    private String pWritingfront;
+    private String pWritingback;
+    private String pShape;
+    private String pColor;
+    private String pManual;
+    private String pClass;
+    private String pType;
+}

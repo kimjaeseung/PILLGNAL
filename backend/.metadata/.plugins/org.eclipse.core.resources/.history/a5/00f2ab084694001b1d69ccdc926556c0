@@ -1,0 +1,5 @@
+package com.pillgnal.backend.service;
+
+public class PillService {
+
+}

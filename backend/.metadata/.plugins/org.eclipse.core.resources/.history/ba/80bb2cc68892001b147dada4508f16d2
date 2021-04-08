@@ -1,0 +1,5 @@
+package com.pillgnal.backend.domain.pill;
+
+public interface PillRepository {
+
+}
