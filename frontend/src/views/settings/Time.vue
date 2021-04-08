@@ -86,11 +86,11 @@ export default {
       instance.post(
         `user/time/${email}/`
         ).then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           this.times.breakfast = res.data.breakfast
           this.times.lunch = res.data.lunch
           this.times.dinner = res.data.dinner
-          console.log('times :',this.times)
+          // console.log('times :',this.times)
         }).catch((err) => {
           console.log(err)
         })
