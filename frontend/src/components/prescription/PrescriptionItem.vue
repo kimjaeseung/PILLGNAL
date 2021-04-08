@@ -1,25 +1,31 @@
 <template>
   <div>
-    <v-card>
+    <v-card @click="clickCard()">
       <v-card-title class="font-weight-bold">
-        {{ info.title }}<v-spacer></v-spacer
-        ><v-icon @click="expand = !expand">mdi-chevron-down</v-icon>
+        {{ info.title }}<v-spacer></v-spacer>
       </v-card-title>
-
-      <v-card-subtitle class="pb-0">{{ info.date }}</v-card-subtitle>
+      <v-card-subtitle class="pb-0">{{ info.registDay }}</v-card-subtitle>
       <v-card-actions>
         <v-row class="ma-0">
           <v-col class="d-flex align-center" cols="9">
-            <v-progress-linear value="50" color="main"></v-progress-linear>
+            <v-progress-linear
+              :value="(info.eatenTerm / info.term) * 100"
+              color="main"
+            ></v-progress-linear>
           </v-col>
           <v-col class="pa-0 d-flex">
-            <b class="ml-1 day">25일/</b>
-            <b>40일</b>
+            <div v-if="info.eatenTerm > info.term">
+              <b class="ml-1 day">완료</b>
+            </div>
+            <div v-else>
+              <b class="ml-1 day">{{ info.eatenTerm }}일/</b>
+              <b>{{ info.term }}일</b>
+            </div>
           </v-col>
         </v-row>
       </v-card-actions>
     </v-card>
-    <v-expand-transition>
+    <!-- <v-expand-transition>
       <v-layout class="mt-2" v-show="expand">
         <v-card color="main" width="49%" class="ma-auto pa-0">
           <v-container>
@@ -50,7 +56,7 @@
           </v-container>
         </v-card>
       </v-layout>
-    </v-expand-transition>
+    </v-expand-transition> -->
   </div>
 </template>
 
@@ -61,6 +67,11 @@ export default {
     return {
       expand: false,
     };
+  },
+  methods: {
+    clickCard() {
+      this.$router.push('/prescription/' + this.info.id);
+    },
   },
 };
 </script>

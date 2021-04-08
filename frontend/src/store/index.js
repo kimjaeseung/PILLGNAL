@@ -16,7 +16,10 @@ export default new Vuex.Store({
     },
     getUser: function (state) {
       return state.user;
-    }
+    },
+    getTime: function (state) {
+      return state.time;
+    },
   },
   mutations: {
     SET_USER(state, user) {
@@ -24,6 +27,7 @@ export default new Vuex.Store({
     },
     SET_USER_PROFILE(state, imageUrl) {
       state.user.imageUrl = imageUrl;
+      console.log('>>user', state.user)
     },
     SET_USER_VOICE(state, src) {
       state.voice.src = src;
