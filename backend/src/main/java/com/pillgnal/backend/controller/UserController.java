@@ -5,10 +5,7 @@ import com.pillgnal.backend.domain.user.AuthProvider;
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
 import com.pillgnal.backend.dto.ResponseDto;
-import com.pillgnal.backend.dto.user.FindPhoneRequestDto;
-import com.pillgnal.backend.dto.user.LoginRequestDto;
-import com.pillgnal.backend.dto.user.SignupRequestDto;
-import com.pillgnal.backend.dto.user.UserDataDto;
+import com.pillgnal.backend.dto.user.*;
 import com.pillgnal.backend.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +51,6 @@ public class UserController {
      *
      * @param signupRequest
      * @return id(Long)
-     *
      * @author Eomjaewoong
      */
     @ApiOperation(value = "회원 가입")
@@ -65,7 +61,7 @@ public class UserController {
     @PostMapping(value = "/signup", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto signup(@RequestBody SignupRequestDto signupRequest) {
-        if(userRepository.existsByEmail(signupRequest.getEmail())) {
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseDto.builder()
                     .success(false)
                     .error("가입 된 이메일 입니다")
@@ -76,11 +72,14 @@ public class UserController {
         User user = signupRequest.toEntity();
         user.updatePassword(passwordEncoder.encode(user.getPassword()));
         user.updateRole(AuthProvider.local);
+        user.updateTime("00:00:00", 0);
+        user.updateTime("00:00:00", 1);
+        user.updateTime("00:00:00", 2);
         User result = userRepository.save(user);
         return ResponseDto.builder()
-                    .success(true)
-                    .data("회원 가입 완료")
-                    .build();
+                .success(true)
+                .data("회원 가입 완료")
+                .build();
     }
 
 
@@ -89,7 +88,6 @@ public class UserController {
      *
      * @param loginRequest
      * @return jwt
-     *
      * @author Eomjaewoong
      */
     @ApiOperation(value = "로그인")
@@ -121,7 +119,6 @@ public class UserController {
      *
      * @param phoneRequest
      * @return ResponseEntity
-     *
      * @author Eomjaewoong
      */
     @ApiOperation(value = "전화번호로 사용자 찾기")
@@ -133,7 +130,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDataDto> onFindUserByPhone(@RequestBody FindPhoneRequestDto phoneRequest) {
         UserDataDto dto = userService.doFindUserByPhone(phoneRequest);
-        return new ResponseEntity(dto, dto!=null? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(dto, dto != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -141,7 +138,6 @@ public class UserController {
      *
      * @param email, file
      * @return ResponseEntity
-     *
      * @author Eomjaewoong
      */
     @ApiOperation(value = "사용자 프로필 변경")
@@ -154,7 +150,7 @@ public class UserController {
     public ResponseEntity<ResponseDto> onChangeProfile(@RequestParam String email,
                                                        @RequestParam("file") MultipartFile file) {
         String result = userService.doChangeProfile(email, file);
-        if(null != result)
+        if (null != result)
             return new ResponseEntity(ResponseDto.builder()
                     .success(true)
                     .data(result)
@@ -164,5 +160,62 @@ public class UserController {
                     .success(false)
                     .error("[u001]프로필 사진을 변경에 실패했습니다")
                     .build(), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 아침시간 변경 요청
+     *
+     * @param timeRequest
+     * @return ResponseEntity
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "사용자 아침시간 변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK - 변경 성공"),
+            @ApiResponse(code = 400, message = "변경 실패")
+    })
+    @PostMapping(value = "/breakfast")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ResponseDto> onChangeBreakfast(@RequestBody UserTimeRequestDto timeRequest) {
+        ResponseDto response = userService.doChangeTime(timeRequest, 0);
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 점심시간 변경 요청
+     *
+     * @param timeRequest
+     * @return ResponseEntity
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "사용자 점심시간 변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK - 변경 성공"),
+            @ApiResponse(code = 400, message = "변경 실패")
+    })
+    @PostMapping(value = "/lunch")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ResponseDto> onChangeLunch(@RequestBody UserTimeRequestDto timeRequest) {
+        ResponseDto response = userService.doChangeTime(timeRequest, 1);
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 저녁시간 변경 요청
+     *
+     * @param timeRequest
+     * @return ResponseEntity
+     * @author Eomjaewoong
+     */
+    @ApiOperation(value = "사용자 저녁시간 변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK - 변경 성공"),
+            @ApiResponse(code = 400, message = "변경 실패")
+    })
+    @PostMapping(value = "/dinner")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ResponseDto> onChangeDinner(@RequestBody UserTimeRequestDto timeRequest) {
+        ResponseDto response = userService.doChangeTime(timeRequest, 2);
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }
