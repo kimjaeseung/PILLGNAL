@@ -74,28 +74,33 @@ export default {
   methods: {
     familyRequest: function () {
       var email = this.$store.getters.user.email;
-      const instance = axios.create({
-        baseURL: API_BASE_URL,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Credentials': true,
-          'Content-Type': 'application/json',
-        },
-      });
-      instance
-        .post('family/connect', {
-          myEmail: email,
-          otherEmail: this.users[0].email,
-        })
-        .then((res) => {
-          console.log(res);
-          alert('요청되었습니다.');
-          this.$router.push('/familylist');
-        })
-        .catch((err) => {
-          console.log('실패', err);
+      if (email == this.users[0].email) {
+        alert('본인에게는 가족 요청을 맺을 수 없습니다.');
+        this.$router.push('/familyList');
+      } else {
+        const instance = axios.create({
+          baseURL: API_BASE_URL,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Credentials': true,
+            'Content-Type': 'application/json',
+          },
         });
+        instance
+          .post('family/connect', {
+            myEmail: email,
+            otherEmail: this.users[0].email,
+          })
+          .then((res) => {
+            console.log(res);
+            alert('요청되었습니다.');
+            this.$router.push('/familylist');
+          })
+          .catch((err) => {
+            console.log('실패', err);
+          });
+      }
     },
   },
   props: ['phoneNumber'],
