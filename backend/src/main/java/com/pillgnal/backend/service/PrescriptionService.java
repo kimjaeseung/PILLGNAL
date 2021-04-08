@@ -31,26 +31,18 @@ public class PrescriptionService {
      * @return ResponseDto
      * @author Eomjaewoong
      */
-    public ResponseDto doCreatePrescription(PrescriptionCreateRequestDto createRequest) {
+    public Prescription doCreatePrescription(PrescriptionCreateRequestDto createRequest) {
         Optional<User> user = userRepository.findByEmail(createRequest.getEmail());
         if(null == user)
-            return ResponseDto.builder()
-                    .success(false)
-                    .error("존재하지 않는 사용자입니다")
-                    .build();
+            return null;
 
-        prescriptionRepository.save(Prescription.builder()
+        Prescription p = Prescription.builder()
                 .title(createRequest.getTitle())
-                .hospital(createRequest.getHospital())
-                .start(createRequest.getStart())
-                .end(createRequest.getEnd())
                 .uid(user.get())
-                .build());
-
-        return ResponseDto.builder()
-                .success(true)
-                .data("OK")
                 .build();
+        prescriptionRepository.save(p);
+
+        return p;
     }
 
     /**
@@ -74,8 +66,6 @@ public class PrescriptionService {
             list.add(PrescriptionDto.builder()
                     .id(item.getId())
                     .title(item.getTitle())
-                    .start(item.getStart())
-                    .end(item.getEnd())
                     .registDay(item.getCreatedData().toLocalDate())
                     .build());
         });

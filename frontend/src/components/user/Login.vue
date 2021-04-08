@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="my-3">
     <v-row>
       <v-col>
         <v-img
@@ -10,7 +10,7 @@
       ></v-col>
     </v-row>
     <v-row>
-      <v-col class="pl-0 mb-2 font-weight-bold"> Sign in </v-col>
+      <v-col class="pl-0 mb-2 caption"> Sign in </v-col>
     </v-row>
     <v-form v-model="valid">
       <v-row>
@@ -22,6 +22,7 @@
             label="E-mail"
             outlined
             flat
+            dense
           ></v-text-field>
         </v-col>
       </v-row>
@@ -39,20 +40,21 @@
             @click:append="show = !show"
             outlined
             flat
+            dense
           ></v-text-field>
         </v-col>
       </v-row>
     </v-form>
     <v-row class="mt-5">
       <v-col class="pa-0">
-        <v-btn x-large block color="primary" @click="loginBtn">로그인</v-btn>
+        <v-btn large block color="primary" @click="loginBtn">로그인</v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col class="px-0">
         <v-btn
           class="font-weight-black kakaoBtn"
-          x-large
+          large
           block
           color="kakao_yellow"
           @click="loginWithKakao"
@@ -89,15 +91,20 @@ export default {
         this.snackbar = true;
         this.snackbarMessage = '아이디 혹은 비밀번호를 확인해주세요.';
       } else {
-        if ((await login(this.user)) == 500)
+        let resp = await login(this.user);
+        if (resp == 500) {
           this.snackbarMessage = '이메일 또는 비밀번호가 틀렸습니다.';
-        else this.snackbarMessage = '통신 오류입니다.';
+        } else if (resp == 1) {
+          this.snackbarMessage = '로그인 성공!';
+        } else {
+          this.snackbarMessage = '통신 오류입니다.';
+        }
         this.snackbar = true;
       }
     },
     loginWithKakao() {
       const params = {
-        redirectUri: 'http://localhost:8080/auth',
+        redirectUri: 'http://localhost:8081/auth',
       };
       window.Kakao.Auth.authorize(params);
     },

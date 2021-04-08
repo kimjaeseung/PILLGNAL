@@ -9,16 +9,12 @@ import java.time.LocalDate;
 public class PrescriptionDto {
     private Long id;
     private String title;
-    private LocalDate start;
-    private LocalDate end;
     private LocalDate registDay;
 
     @Builder
-    public PrescriptionDto(Long id, String title, LocalDate start, LocalDate end, LocalDate registDay) {
+    public PrescriptionDto(Long id, String title, LocalDate registDay) {
         this.id = id;
         this.title = title;
-        this.start = start;
-        this.end = end;
         this.registDay = registDay;
     }
 }

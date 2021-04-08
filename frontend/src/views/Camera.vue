@@ -54,25 +54,21 @@
                 <v-icon v-if="isPhotoTaken">mdi-backup-restore</v-icon>
               </v-btn>
             </div>
-
-            <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
-              <a
-                id="downloadPhoto"
-                download="my-photo.jpg"
-                class="button"
-                role="button"
-                @click="downloadImage"
-              >
-                Download
-              </a>
-            </div>
+          </div>
+          <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
+            <v-btn @click="imgSave()" color="main" elevation="0" block class="white--text"
+              >저장하기</v-btn
+            >
           </div>
         </v-col></v-row
       >
     </v-container>
   </v-app>
 </template>
+
 <script>
+import axios from 'axios';
+import { API_BASE_URL } from '@/config';
 export default {
   data: () => ({
     isCameraOpen: true,
@@ -80,6 +76,7 @@ export default {
     isShotPhoto: false,
     isLoading: true,
     link: '#',
+    data: '',
   }),
   props: ['cameraMode'],
   components: {},
@@ -148,21 +145,74 @@ export default {
       canvas.height = video.videoHeight;
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-      // 이미지 찍은거 데이터 URL axios로 보내면 됨!
-      console.log(document.getElementById('photoTaken').toDataURL('image/jpeg'));
+      var datas = document.getElementById('photoTaken').toDataURL('image/jpeg');
+
+      //Usage example:
+      var file = this.dataURLtoFile(datas, 'temp.jpg');
+      console.log('파일원본', file);
+
+      var formData = new FormData();
+      formData.append('file', file);
+
+      console.log(formData);
+      const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (this.cameraMode == '처방전') {
+        instance
+          .post('api/v1/prescription', formData)
+          .then((res) => {
+            console.log(res);
+            this.data = res;
+          })
+          .catch((err) => {
+            console.log('실패', err);
+          });
+      }
+      if (this.cameraMode == '알약') {
+        instance
+          .post('api/v1/pill', formData)
+          .then((res) => {
+            console.log(res);
+            this.data = res;
+          })
+          .catch((err) => {
+            console.log('실패', err);
+          });
+      }
+      if (this.cameraMode == undefined) {
+        alert('카메라 모드를 선택해주세요.');
+        this.$router.push('/home');
+      }
     },
 
-    downloadImage() {
-      const download = document.getElementById('downloadPhoto');
-      const canvas = document
-        .getElementById('photoTaken')
-        .toDataURL('image/jpeg')
-        .replace('image/jpeg', 'image/octet-stream');
-      download.setAttribute('href', canvas);
+    imgSave() {
+      this.$router.push({ name: 'PillMethod', params: { prescription: this.data } });
+    },
+    dataURLtoFile(dataurl, fileName) {
+      var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], fileName, { type: mime });
     },
   },
 };
 </script>
+
 <style lang="scss" scoped>
 body {
   display: flex;

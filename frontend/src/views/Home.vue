@@ -4,9 +4,14 @@
     <v-container v-for="(pillList, idx) in pillLists" :key="idx">
       <NewsFeedCard :pill-data="pillList" />
     </v-container>
-    <v-col>
-      <camera-mode />
-    </v-col>
+    <v-container>
+      <v-row>
+        <div class="d-flex flex-row mx-auto">
+        <!-- 카메라 -->
+          <camera-mode class="mx-2"/>
+        </div>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -24,6 +29,7 @@ export default {
   },
   data: function () {
     return {
+      voice: '',
       pillLists: [
         {
           date: '2021-03-31 12:00',
@@ -90,6 +96,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    getPillList() {
+      
+    },
   },
 };
 </script>

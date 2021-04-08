@@ -1,5 +1,5 @@
 <template>
-  <v-btn :color="btnColor" elevation="0">
+  <v-btn class="square-md" :color="btnColor" elevation="0" medium>
     {{ btnText }}
   </v-btn>
 </template>
@@ -16,4 +16,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.square-md {
+  width: 100%
+}
+</style>

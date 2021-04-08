@@ -25,11 +25,6 @@ public class Prescription extends BaseTimeEntity {
     @NotNull
     private String title;
 
-    private String hospital;
-
-    private LocalDate start;
-    private LocalDate end;
-
     @JoinColumn(name = "uid", referencedColumnName = "uid")
     @ManyToOne
     private User uid;
@@ -38,11 +33,8 @@ public class Prescription extends BaseTimeEntity {
     private List<PrescriptionPill> prescriptionPills = new ArrayList<>();
 
     @Builder
-    public Prescription(String title, String hospital, LocalDate start, LocalDate end, User uid) {
+    public Prescription(String title, User uid) {
         this.title = title;
-        this.hospital = hospital;
-        this.start = start;
-        this.end = end;
         this.uid = uid;
     }
 }

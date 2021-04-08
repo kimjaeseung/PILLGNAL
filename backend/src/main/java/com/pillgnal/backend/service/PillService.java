@@ -1,5 +1,7 @@
 package com.pillgnal.backend.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,8 +9,11 @@ import com.pillgnal.backend.domain.pill.PrescriptionPill;
 import com.pillgnal.backend.domain.pill.PrescriptionPillRepository;
 import com.pillgnal.backend.domain.prescription.Prescription;
 import com.pillgnal.backend.domain.prescription.PrescriptionRepository;
+import com.pillgnal.backend.domain.user.User;
+import com.pillgnal.backend.domain.user.UserRepository;
 import com.pillgnal.backend.dto.ResponseDto;
 import com.pillgnal.backend.dto.pill.PillDetailRequestDto;
+import com.pillgnal.backend.dto.prescription.PrescriptionCreateRequestDto;
 import com.sun.mail.iap.Response;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,8 @@ public class PillService {
 	private final PillRepository pillRepository;
 	private final PrescriptionRepository prescriptionRepository;
 	private final PrescriptionPillRepository prescriptionPillRepository;
+	private final PrescriptionService prescriptionService;
+	private final UserRepository userRepository;
 
 	/**
 	 * 찾기 처리 ( 글 & 모양 )
@@ -59,30 +66,41 @@ public class PillService {
 		return PillListResponseDto.builder().success(true).build();
 	}
 
-    public ResponseDto doCreateDetailPrescription(PillDetailRequestDto createRequest) {
-		Optional<Prescription> prescription = prescriptionRepository.findById(createRequest.getPrid());
-		if(null == prescription)
-			return ResponseDto.builder()
-					.success(false)
-					.error("처방전이 없습니다")
-					.build();
+	/**
+	 * 약 등록하기
+	 * @param createRequest
+	 * @return
+	 */
+    public ResponseDto doCreateDetailPrescription(PrescriptionCreateRequestDto createRequest) {
+		Optional<Prescription> prescription = prescriptionRepository.findByTitle(createRequest.getTitle());
+		Prescription p = null;
+		if(!prescription.isPresent()){
+			p = prescriptionService.doCreatePrescription(PrescriptionCreateRequestDto.builder()
+					.email(createRequest.getEmail())
+					.title(createRequest.getTitle())
+					.build());
+		} else {
+			p = prescription.get();
+		}
 
-		Optional<Pill> pill = pillRepository.findByPname(createRequest.getPillname());
-		prescriptionPillRepository.save(PrescriptionPill.builder()
-				.volumn(createRequest.getVolumn())
-				.count(createRequest.getCount())
-				.daycount(createRequest.getDaycount())
-				.startday(createRequest.getStartday())
-				.endday(createRequest.getEndday())
-				.morning(createRequest.isMorning())
-				.morningtime(createRequest.getMorningtime())
-				.afternoon(createRequest.isAfternoon())
-				.afternoontime(createRequest.getAfternoontime())
-				.night(createRequest.isNight())
-				.nighttime(createRequest.getNighttime())
-				.pid(pill == null? null : pill.get())
-				.prid(prescription.get())
-				.build());
+
+		for(PillDetailRequestDto dto : createRequest.getPilllist()) {
+			prescriptionPillRepository.save(PrescriptionPill.builder()
+					.volumn(dto.getVolumn())
+					.count(dto.getCount())
+					.daycount(dto.getDaycount())
+					.startday(dto.getStartday())
+					.endday(dto.getEndday())
+					.morning(dto.isMorning())
+					.morningtime(dto.getMorningtime())
+					.afternoon(dto.isAfternoon())
+					.afternoontime(dto.getAfternoontime())
+					.night(dto.isNight())
+					.nighttime(dto.getNighttime())
+					.pid(pillRepository.findByPname(dto.getPillname()).get())
+					.prid(p)
+					.build());
+		}
 
 		return ResponseDto.builder()
 				.success(true)

@@ -3,7 +3,17 @@
     <v-col cols="12">
       <v-card class="mt-4" outlined>
         <v-card-title>
-          <span class="title font-weight-bold">처방전 이름</span>
+          <v-col cols="10">
+            <!-- <span class="title font-weight-bold">처방전 이름</span> -->
+            <v-text-field
+              placeholder="처방전 이름"
+              class="prescriptionName"
+              single-line
+              clearable
+              :disabled="disabled"
+            ></v-text-field>
+          </v-col>
+          <v-icon @click="edit()" v-show="show">mdi-pencil</v-icon>
         </v-card-title>
         <v-col>
           <v-card outlined>
@@ -22,6 +32,7 @@
         </v-col>
         <v-col cols="12">
           <v-autocomplete
+            single-line
             v-model="value"
             :items="items"
             chips
@@ -34,7 +45,7 @@
         </v-col>
         <v-col class="d-flex justify-space-between align-center">
           <v-autocomplete
-            id="time"
+            class="time"
             v-model="time"
             :items="times"
             :label="time"
@@ -45,12 +56,38 @@
             >직접입력</v-btn
           >
         </v-col>
+        <time-picker :dialog="dialog" @close="close" @value="values" />
+
+        <v-col class="d-flex justify-space-between align-center">
+          <v-text-field v-model="onepill" label="1회 투약량"></v-text-field>
+          <v-text-field v-model="daypill" label="일 투여횟수"></v-text-field>
+          <v-text-field v-model="allpill" label="총 투여횟수"></v-text-field>
+        </v-col>
+        <v-col class="d-flex justify-space-between align-center">
+          <v-text-field
+            class="time"
+            v-model="dateStart"
+            label="복용 시작일"
+            disabled
+          ></v-text-field>
+          <v-btn @click="showDatePicker(0)" elevation="0" color="test" class="white--text"
+            >복용 시작일</v-btn
+          >
+        </v-col>
+        <v-col class="d-flex justify-space-between align-center">
+          <v-text-field class="time" v-model="dateEnd" label="복용 마감일" disabled></v-text-field>
+          <v-btn @click="showDatePicker(1)" elevation="0" color="test" class="white--text"
+            >복용 마감일</v-btn
+          >
+        </v-col>
       </v-card>
       <v-card class="mt-4" height="100px" outlined>
-        <v-row class="mt-6">
-          <v-col align-self="center" class="text-center">
-            <v-icon>mdi-plus</v-icon>
-          </v-col></v-row
+        <v-card-actions @click="cardAdd()">
+          <v-row class="mt-6">
+            <v-col align-self="center" class="text-center">
+              <v-icon>mdi-plus</v-icon>
+            </v-col></v-row
+          ></v-card-actions
         >
       </v-card>
     </v-col>
@@ -58,14 +95,20 @@
       ><v-btn block color="main" large elevation="0" class="white--text" @click="confirm()"
         >완료</v-btn
       >
-      <time-picker :dialog="dialog" @close="close" @value="values" /> </v-col
+      <date-picker
+        :dateDialog="dateDialog"
+        @dateClose="dateClose"
+        @dateValue="dateValues"
+      /> </v-col
   ></v-row>
 </template>
 
 <script>
+import DatePicker from '@/components/DatePicker.vue';
 import TimePicker from '@/components/TimePicker.vue';
 export default {
   components: {
+    DatePicker,
     TimePicker,
   },
   data: () => ({
@@ -77,11 +120,21 @@ export default {
       },
     ],
     dialog: false,
+    dateDialog: false,
     select: null,
     items: ['아침', '점심', '저녁'],
     times: ['식후 30분', '식전 30분', '식후 바로'],
     time: null,
     value: null,
+    disabled: true,
+    show: true,
+    dateStart: '',
+    dateEnd: '',
+    mode: '',
+    onepill: '',
+    daypill: '',
+    allpill: '',
+    realTime: '',
   }),
   methods: {
     confirm() {
@@ -90,17 +143,73 @@ export default {
     showTimer() {
       this.dialog = true;
     },
+    showDatePicker(n) {
+      this.dateDialog = true;
+      this.mode = n;
+    },
     close(isDialog) {
       this.dialog = isDialog;
     },
+    dateClose(isDialog) {
+      this.dateDialog = isDialog;
+    },
     values(value) {
       this.time = value;
-      console.log(this.time);
+      this.realTime = value;
+    },
+    dateValues(value) {
+      if (this.mode == 0) {
+        this.dateStart = value;
+      } else {
+        this.dateEnd = value;
+      }
+    },
+    edit() {
+      this.disabled = false;
+      this.show = false;
+    },
+    onContext(ctx) {
+      this.context = ctx;
+      console.log(this.context);
+    },
+    cardAdd() {
+      this.$router.push('/prescription');
+    },
+  },
+  watch: {
+    dateStart: function () {
+      if (this.dateStart > this.dateEnd) {
+        if (this.dateEnd != '') {
+          alert('마감일보다 시작일이 느릴 수 없습니다');
+          this.dateStart = '';
+          this.dateEnd = '';
+        }
+      }
+    },
+    dateEnd: function () {
+      if (this.dateStart > this.dateEnd) {
+        alert('마감일보다 시작일이 느릴 수 없습니다');
+        this.dateStart = '';
+        this.dateEnd = '';
+      }
+    },
+    time: function () {
+      if (this.time == this.times[0]) {
+        this.realTime = 30;
+      } else if (this.time == this.times[1]) {
+        this.realTime = -30;
+      } else if (this.time == this.times[2]) {
+        this.realTime = 0;
+      }
     },
   },
 };
 </script>
+
 <style scoped>
+.prescriptionName.v-input >>> input {
+  font-size: 1.5em;
+}
 .mdi:before,
 .mdi-set {
   color: #565ca9;
@@ -109,8 +218,13 @@ export default {
   color: #565ca9;
   caret-color: #565ca9;
 }
-.v-text-field >>> .v-input__control {
+.time.v-text-field >>> .v-input__control {
   color: inherit;
   padding-right: 12px;
+}
+.v-card__subtitle,
+.v-card__text,
+.v-card__title {
+  padding: 8px;
 }
 </style>
