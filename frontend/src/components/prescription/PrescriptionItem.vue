@@ -6,15 +6,23 @@
         ><v-icon @click="expand = !expand">mdi-chevron-down</v-icon>
       </v-card-title>
 
-      <v-card-subtitle class="pb-0">{{ info.date }}</v-card-subtitle>
+      <v-card-subtitle class="pb-0">{{ info.registDay }}</v-card-subtitle>
       <v-card-actions>
         <v-row class="ma-0">
           <v-col class="d-flex align-center" cols="9">
-            <v-progress-linear value="50" color="main"></v-progress-linear>
+            <v-progress-linear
+              :value="(info.eatenTerm / info.term) * 100"
+              color="main"
+            ></v-progress-linear>
           </v-col>
           <v-col class="pa-0 d-flex">
-            <b class="ml-1 day">25일/</b>
-            <b>40일</b>
+            <div v-if="info.eatenTerm > info.term">
+              <b class="ml-1 day">완료</b>
+            </div>
+            <div v-else>
+              <b class="ml-1 day">{{ info.eatenTerm }}일/</b>
+              <b>{{ info.term }}일</b>
+            </div>
           </v-col>
         </v-row>
       </v-card-actions>

@@ -18,9 +18,14 @@
             <v-row class="pillList">
               <v-col class="px-0"
                 ><v-list>
-                  <div v-for="(item, index) in 5" :key="index">
-                    <prescription-detail-list></prescription-detail-list>
-                    <v-divider v-if="index !== 4" class="mt-5"></v-divider>
+                  <div v-for="(info, index) in infos" :key="index">
+                    <prescription-detail-list
+                      :info="info"
+                    ></prescription-detail-list>
+                    <v-divider
+                      v-if="index !== infos.length - 1"
+                      class="mt-5"
+                    ></v-divider>
                   </div>
                 </v-list>
               </v-col>
@@ -37,7 +42,29 @@ import PrescriptionDetailList from '../../components/prescription/PrescriptionDe
 export default {
   components: { PrescriptionDetailList },
   data() {
-    return {};
+    return {
+      infos: [],
+    };
+  },
+  created() {
+    console.log(this.$route.params.presNo);
+    //axios로 끌어오기
+    let data = [
+      {
+        morning: true,
+        afternoon: true,
+        night: true,
+        name: '광동플레리토로마이신정25',
+        count: 3,
+        daycount: 5,
+        startday: '2021-04-02',
+        endday: '2021-04-10',
+        pillUrl:
+          'https://dbscthumb-phinf.pstatic.net/3323_000_9/20171126022112845_RQZOH3G3T.jpg/A11A4290B001503.jpg?type=m250&wm=N',
+      },
+    ];
+
+    this.infos = data;
   },
 };
 </script>

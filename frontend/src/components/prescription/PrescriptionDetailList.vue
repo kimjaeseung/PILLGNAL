@@ -8,7 +8,7 @@
               max-width="150px"
               class="rounded"
               :aspect-ratio="16 / 9"
-              src="https://dbscthumb-phinf.pstatic.net/3323_000_9/20171126022112845_RQZOH3G3T.jpg/A11A4290B001503.jpg?type=m250&wm=N"
+              :src="info.pillUrl"
             ></v-img>
           </v-row>
           <v-row>
@@ -16,8 +16,8 @@
               width="100%"
               flat
               class="rounded-pill text-center mt-1 white--text"
-              color="medicine_warning"
-              >주의
+              color="green"
+              >처방약
             </v-card>
           </v-row>
         </v-col>
@@ -26,32 +26,38 @@
             <v-row>
               <v-col class="pr-0">
                 <v-row class="font-weight-bold">
-                  <div class="ellipsis">광동플레리토로마이신정25</div>
+                  <div class="ellipsis">{{ info.name }}</div>
                 </v-row>
                 <v-row class="caption">
-                  <div class="date">20.03.20 ~ 20.04.20</div>
+                  <div class="date">
+                    {{ dateFormChange(info.startday) }} ~
+                    {{ dateFormChange(info.endday) }}
+                  </div>
                   <div class="ml-1 font-weight-medium">| 총 30일</div>
                 </v-row>
                 <v-row class="caption font-weight-medium">
-                  1정 | 하루 2번 | 매일
+                  {{ info.count }}정 | 하루 {{ info.daycount }}번 | 매일
                 </v-row>
                 <v-row class="caption mt-5">
                   <v-card
                     flat
                     class="mr-2 px-2 font-weight-bold"
                     color="medicine_cycle_grey"
+                    v-if="info.morning"
                     >아침</v-card
                   >
                   <v-card
                     flat
                     class="mr-2 px-2 font-weight-bold"
                     color="medicine_cycle_grey"
+                    v-if="info.afternoon"
                     >점심</v-card
                   >
                   <v-card
                     flat
                     class="mr-2 px-2 font-weight-bold"
                     color="medicine_cycle_grey"
+                    v-if="info.night"
                     >저녁</v-card
                   >
                 </v-row>
@@ -68,7 +74,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: { info: Object },
+  methods: {
+    dateFormChange(str) {
+      let yy = str.substr(2, 2);
+      let mm = str.substr(5, 2);
+      let dd = str.substr(8, 2);
+      return yy + '.' + mm + '.' + dd;
+    },
+  },
+};
 </script>
 
 <style></style>
