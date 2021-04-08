@@ -154,7 +154,7 @@ export default {
 
       if (this.cameraMode == '처방전') {
         instance
-          .post('api/v1/prescription', formData)
+          .post('/prescription/ocr', formData)
           .then((res) => {
             console.log(res);
             this.data = res;
@@ -165,7 +165,7 @@ export default {
       }
       if (this.cameraMode == '알약') {
         instance
-          .post('api/v1/pill', formData)
+          .post('/pill/scan', formData)
           .then((res) => {
             console.log(res);
             this.data = res;

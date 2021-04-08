@@ -7,78 +7,87 @@
           class="prescriptionName"
           single-line
           clearable
+          v-model="title"
           :disabled="disabled"
         ></v-text-field>
         <v-icon @click="edit()" v-show="show">mdi-pencil</v-icon>
       </v-col>
+      <v-col v-for="(item, idx) in pills" :key="idx" class="tt">
+        <v-card class="mt-2" outlined>
+          <v-col>
+            <v-card outlined>
+              <v-card-actions class="text-center">
+                <v-list-item class="grow">
+                  <v-list-item-avatar tile width="100px">
+                    <v-img class="elevation-6" :alt="item.pillname" :src="img"> </v-img>
+                  </v-list-item-avatar>
 
-      <v-card class="mt-2" outlined v-for="(item, idx) in pills" :key="idx">
-        <v-col>
-          <v-card outlined>
-            <v-card-actions class="text-center">
-              <v-list-item class="grow">
-                <v-list-item-avatar tile width="100px">
-                  <v-img class="elevation-6" :alt="item.pname" :src="item.img"> </v-img>
-                </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.pillname }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-autocomplete
+              single-line
+              v-model="value"
+              :items="items"
+              chips
+              large-chips
+              label="복용 시간"
+              placeholder="언제 복용하시나요?"
+              multiple
+              color="main"
+              @click="on(idx)"
+            ></v-autocomplete>
+          </v-col>
+          <v-col class="d-flex justify-space-between align-center">
+            <v-autocomplete
+              class="time"
+              v-model="time"
+              :items="times"
+              :label="time"
+              placeholder="몇 시에 복용하시나요?"
+              color="main"
+              @click="on(idx)"
+            ></v-autocomplete>
+            <v-btn elevation="0" color="main" class="white--text" @click="showTimer()"
+              >직접입력</v-btn
+            >
+          </v-col>
+          <time-picker :dialog="dialog" @close="close" @value="values" />
 
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.pname }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-        <v-col cols="12">
-          <v-autocomplete
-            single-line
-            v-model="value"
-            :items="items"
-            chips
-            large-chips
-            label="복용 시간"
-            placeholder="언제 복용하시나요?"
-            multiple
-            color="main"
-          ></v-autocomplete>
-        </v-col>
-        <v-col class="d-flex justify-space-between align-center">
-          <v-autocomplete
-            class="time"
-            v-model="time"
-            :items="times"
-            :label="time"
-            placeholder="몇 시에 복용하시나요?"
-            color="main"
-          ></v-autocomplete>
-          <v-btn elevation="0" color="main" class="white--text" @click="showTimer()"
-            >직접입력</v-btn
-          >
-        </v-col>
-        <time-picker :dialog="dialog" @close="close" @value="values" />
-
-        <v-col class="d-flex justify-space-between align-center">
-          <v-text-field v-model="onepill" label="1회 투약량"></v-text-field>
-          <v-text-field v-model="daypill" label="일 투여횟수"></v-text-field>
-          <v-text-field v-model="allpill" label="총 투여횟수"></v-text-field>
-        </v-col>
-        <v-col class="d-flex justify-space-between align-center">
-          <v-text-field
-            class="time"
-            v-model="dateStart"
-            label="복용 시작일"
-            disabled
-          ></v-text-field>
-          <v-btn @click="showDatePicker(0)" elevation="0" color="test" class="white--text"
-            >복용 시작일</v-btn
-          >
-        </v-col>
-        <v-col class="d-flex justify-space-between align-center">
-          <v-text-field class="time" v-model="dateEnd" label="복용 마감일" disabled></v-text-field>
-          <v-btn @click="showDatePicker(1)" elevation="0" color="test" class="white--text"
-            >복용 마감일</v-btn
-          >
-        </v-col>
-      </v-card>
+          <v-col class="d-flex justify-space-between align-center">
+            <v-text-field type="number" v-model="item.count" label="1회 투약량"></v-text-field>
+            <v-text-field type="number" v-model="item.daycount" label="일 투여횟수"></v-text-field>
+            <v-text-field v-model="item.volume" label="총 투여횟수"></v-text-field>
+          </v-col>
+          <v-col class="d-flex justify-space-between align-center">
+            <v-text-field
+              class="time"
+              v-model="item.startday"
+              label="복용 시작일"
+              disabled
+            ></v-text-field>
+            <v-btn @click="showDatePicker(0, idx)" elevation="0" color="test" class="white--text"
+              >복용 시작일</v-btn
+            >
+          </v-col>
+          <v-col class="d-flex justify-space-between align-center">
+            <v-text-field
+              class="time"
+              v-model="item.endday"
+              label="복용 마감일"
+              disabled
+            ></v-text-field>
+            <v-btn @click="showDatePicker(1, idx)" elevation="0" color="test" class="white--text"
+              >복용 마감일</v-btn
+            >
+          </v-col>
+        </v-card>
+      </v-col>
       <v-card class="mt-4" height="100px" outlined>
         <v-card-actions @click="cardAdd()">
           <v-row class="mt-6">
@@ -102,6 +111,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { API_BASE_URL } from '@/config';
 import DatePicker from '@/components/DatePicker.vue';
 import TimePicker from '@/components/TimePicker.vue';
 export default {
@@ -110,19 +121,12 @@ export default {
     TimePicker,
   },
   data: () => ({
-    presciption: '',
-    pills: [
-      {
-        pname: '아스코푸정',
-        img: require('@/assets/pills/아스코푸정.jpg'),
-        cnt: 1,
-      },
-      {
-        pname: '아스코푸정',
-        img: require('@/assets/pills/아스코푸정.jpg'),
-        cnt: 1,
-      },
-    ],
+    presciption: ['d', 'd'],
+    img: require('@/assets/pills/아스코푸정.jpg'),
+    title: '',
+    idx: '',
+    isChanged: false,
+    pills: [],
     dialog: false,
     dateDialog: false,
     select: null,
@@ -132,24 +136,73 @@ export default {
     value: null,
     disabled: true,
     show: true,
-    dateStart: '',
-    dateEnd: '',
     mode: '',
-    onepill: '',
-    daypill: '',
-    allpill: '',
-    realTime: '',
   }),
+  created() {
+    console.log(this.presciption[1]);
+    for (var i = 0; i < this.presciption.length; i++) {
+      this.pills.push({
+        afternoon: false,
+        afternoontime: '',
+        count: null,
+        daycount: null,
+        endday: '',
+        morning: false,
+        morningtime: '',
+        night: false,
+        nighttime: '0',
+        pillname: '',
+        startday: '',
+        volumn: '',
+      });
+      this.pills[i].pillname = this.presciption[i];
+    }
+  },
   methods: {
-    confirm() {
-      this.$router.push('/prescription');
+    on(idx) {
+      this.idx = idx;
     },
+    confirm() {
+      var email = this.$store.getters.user.email;
+      var pilllist = [];
+
+      for (var i = 0; i < this.pills.length; i++) {
+        pilllist.push(this.pills[i]);
+      }
+
+      console.log(email, pilllist, this.title);
+      const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json',
+        },
+      });
+      instance
+        .post('/pill/create', {
+          email: email,
+          pilllist: pilllist,
+          title: this.title,
+        })
+        .then((res) => {
+          console.log(res);
+          this.data = res;
+          this.$router.push('/prescription');
+        })
+        .catch((err) => {
+          console.log('실패', err);
+        });
+    },
+
     showTimer() {
       this.dialog = true;
     },
-    showDatePicker(n) {
+    showDatePicker(n, idx) {
       this.dateDialog = true;
       this.mode = n;
+      this.idx = idx;
     },
     close(isDialog) {
       this.dialog = isDialog;
@@ -163,9 +216,11 @@ export default {
     },
     dateValues(value) {
       if (this.mode == 0) {
-        this.dateStart = value;
+        this.pills[this.idx].startday = value;
+        this.isChanged = true;
       } else {
-        this.dateEnd = value;
+        this.pills[this.idx].endday = value;
+        this.isChanged = false;
       }
     },
     edit() {
@@ -181,29 +236,44 @@ export default {
     },
   },
   watch: {
-    dateStart: function () {
-      if (this.dateStart > this.dateEnd) {
-        if (this.dateEnd != '') {
+    isChanged: function () {
+      if (this.pills[this.idx].startday > this.pills[this.idx].endday) {
+        if (this.pills[this.idx].endday != '') {
           alert('마감일보다 시작일이 느릴 수 없습니다');
-          this.dateStart = '';
-          this.dateEnd = '';
+          this.pills[this.idx].startday = '';
+          this.pills[this.idx].endday = '';
         }
-      }
-    },
-    dateEnd: function () {
-      if (this.dateStart > this.dateEnd) {
-        alert('마감일보다 시작일이 느릴 수 없습니다');
-        this.dateStart = '';
-        this.dateEnd = '';
       }
     },
     time: function () {
       if (this.time == this.times[0]) {
-        this.realTime = 30;
+        this.pills[this.idx].afternoontime = '30';
+        this.pills[this.idx].morningtime = '30';
+        this.pills[this.idx].nighttime = '30';
       } else if (this.time == this.times[1]) {
-        this.realTime = -30;
+        this.pills[this.idx].afternoontime = '-30';
+        this.pills[this.idx].morningtime = '-30';
+        this.pills[this.idx].nighttime = '-30';
       } else if (this.time == this.times[2]) {
-        this.realTime = 0;
+        this.pills[this.idx].afternoontime = '0';
+        this.pills[this.idx].morningtime = '0';
+        this.pills[this.idx].nighttime = '0';
+      }
+    },
+    value: function () {
+      for (var i = 0; i < this.value.length; i++) {
+        this.pills[this.idx].morning = false;
+        this.pills[this.idx].afternoon = false;
+        this.pills[this.idx].night = false;
+        if (this.value[i] == '아침') {
+          this.pills[this.idx].morning = true;
+        }
+        if (this.value[i] == '점심') {
+          this.pills[this.idx].afternoon = true;
+        }
+        if (this.value[i] == '저녁') {
+          this.pills[this.idx].night = true;
+        }
       }
     },
   },
@@ -211,6 +281,10 @@ export default {
 </script>
 
 <style scoped>
+.tt {
+  padding-left: 2px;
+  padding-right: 2px;
+}
 .prescriptionName.v-input >>> input {
   font-size: 1.5em;
 }
