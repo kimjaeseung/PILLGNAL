@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <NavBar />
     <v-container v-for="(pillList, idx) in pillLists" :key="idx">
       <NewsFeedCard :pill-data="pillList" />
@@ -7,12 +7,12 @@
     <v-container>
       <v-row>
         <div class="d-flex flex-row mx-auto">
-        <!-- 카메라 -->
-          <camera-mode class="mx-2"/>
+          <!-- 카메라 -->
+          <camera-mode class="mx-2" />
         </div>
       </v-row>
     </v-container>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -98,11 +98,22 @@ export default {
     };
   },
   methods: {
-    getPillList() {
-      
-    },
+    getPillList() {},
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl {
+  width: 100%;
+  padding-right: 8px;
+  padding-left: 8px;
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>

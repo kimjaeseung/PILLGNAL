@@ -1,13 +1,7 @@
 <template>
   <v-container class="my-3">
     <v-row>
-      <v-col>
-        <v-img
-          width="100%"
-          aspect-ratio="1"
-          src="@/assets/pillgnal_logo.png"
-        ></v-img
-      ></v-col>
+      <v-col> <v-img width="100%" aspect-ratio="1" src="@/assets/pillgnal_logo.png"></v-img></v-col>
     </v-row>
     <v-row>
       <v-col class="pl-0 mb-2 caption"> Sign in </v-col>
@@ -73,9 +67,7 @@
     <v-snackbar v-model="snackbar"
       >{{ snackbarMessage }}
       <template v-slot:action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
       </template></v-snackbar
     >
   </v-container>
