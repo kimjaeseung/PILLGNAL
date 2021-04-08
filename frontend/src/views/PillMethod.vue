@@ -2,7 +2,7 @@
   <v-app id="back">
     <v-container>
       <div class="text-h4 mt-5">복약 용법 설정</div>
-      <howto-eat-card />
+      <howto-eat-card :prescription="prescription" />
     </v-container>
   </v-app>
 </template>
