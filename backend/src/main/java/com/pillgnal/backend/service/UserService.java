@@ -2,8 +2,10 @@ package com.pillgnal.backend.service;
 
 import com.pillgnal.backend.domain.user.User;
 import com.pillgnal.backend.domain.user.UserRepository;
+import com.pillgnal.backend.dto.ResponseDto;
 import com.pillgnal.backend.dto.user.FindPhoneRequestDto;
 import com.pillgnal.backend.dto.user.UserDataDto;
+import com.pillgnal.backend.dto.user.UserTimeRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -97,5 +99,30 @@ public class UserService {
         }
 
         return user.get().getImageUrl();
+    }
+
+    /**
+     * 아침, 점심, 저녁 시간 변경
+     *
+     * @param timeRequest
+     * @param term(0:아침, 1:점심, 2:저녁)
+     * @return ResponseDto
+     * @author Eomjaewoong
+     */
+    @Transactional
+    public ResponseDto doChangeTime(UserTimeRequestDto timeRequest, int term) {
+        Optional<User> user = userRepository.findByEmail(timeRequest.getEmail());
+        if(null == user)
+            return ResponseDto.builder()
+                .success(false)
+                .error("사용자가 없습니다")
+                .build();
+
+        user.get().updateTime(timeRequest.getTime(), term);
+
+        return ResponseDto.builder()
+                .success(true)
+                .data("OK")
+                .build();
     }
 }
