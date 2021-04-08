@@ -102,9 +102,12 @@ export default {
   props: {
     pillData: Object,
   },
-  methods: {},
+  methods: {
+
+  },
   computed: {
     getVoice() {
+      console.log(this.$store.getters.getVoice)
       return this.$store.getters.getVoice;
     },
     getUser() {
@@ -115,7 +118,8 @@ export default {
     show: false,
     voice: '',
   }),
-  created: function () {},
+  created: function () {
+  },
 };
 </script>
 
