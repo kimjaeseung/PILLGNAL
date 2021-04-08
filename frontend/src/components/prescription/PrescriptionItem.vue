@@ -1,11 +1,9 @@
 <template>
   <div>
-    <v-card>
+    <v-card @click="clickCard()">
       <v-card-title class="font-weight-bold">
-        {{ info.title }}<v-spacer></v-spacer
-        ><v-icon @click="expand = !expand">mdi-chevron-down</v-icon>
+        {{ info.title }}<v-spacer></v-spacer>
       </v-card-title>
-
       <v-card-subtitle class="pb-0">{{ info.registDay }}</v-card-subtitle>
       <v-card-actions>
         <v-row class="ma-0">
@@ -27,7 +25,7 @@
         </v-row>
       </v-card-actions>
     </v-card>
-    <v-expand-transition>
+    <!-- <v-expand-transition>
       <v-layout class="mt-2" v-show="expand">
         <v-card color="main" width="49%" class="ma-auto pa-0">
           <v-container>
@@ -58,7 +56,7 @@
           </v-container>
         </v-card>
       </v-layout>
-    </v-expand-transition>
+    </v-expand-transition> -->
   </div>
 </template>
 
@@ -69,6 +67,11 @@ export default {
     return {
       expand: false,
     };
+  },
+  methods: {
+    clickCard() {
+      this.$router.push('/prescription/' + this.info.id);
+    },
   },
 };
 </script>
