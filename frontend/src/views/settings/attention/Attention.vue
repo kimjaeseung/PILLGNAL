@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="text-h4 mt-5">주의 성분 관리</div>
+    <back-Nav page-title="주의 성분 관리🥽" />
     <v-row class="mt-12">
       <v-col>
         <v-row justify="center">
@@ -22,10 +22,12 @@
 
 <script>
 import AttentionAddBtn from '@/components/AttentionAddBtn.vue';
+import BackNav from '@/base_components/BackNav.vue';
 export default {
   data: () => ({}),
   components: {
     AttentionAddBtn,
+    BackNav,
   },
 };
 </script>

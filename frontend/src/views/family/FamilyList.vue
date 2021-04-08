@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="text-h4 mt-5">가족 관리</div>
+    <back-Nav page-title="가족 관리🥰" />
     <v-row class="mt-12">
       <v-col>
         <v-row justify="center">
@@ -49,6 +49,7 @@
 
 <script>
 import FamilyAddBtn from '../../components/FamilyAddBtn.vue';
+import BackNav from '@/base_components/BackNav.vue';
 import axios from 'axios';
 import { API_BASE_URL } from '@/config';
 export default {
@@ -58,6 +59,7 @@ export default {
   }),
   components: {
     FamilyAddBtn,
+    BackNav,
   },
   created() {
     var email = this.$store.getters.user.email;

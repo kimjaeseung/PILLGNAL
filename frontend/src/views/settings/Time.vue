@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="text-h4 mt-5">설정</div>
+    <BackNav page-title="시간 설정😊" />
     <v-row class="mt-5">
       <v-col>
         <v-card @click="showModal(0)" outlined class="card-list text-center">
@@ -29,6 +29,7 @@
 </template>
 <script>
 import TimePicker from '../../components/TimePicker.vue';
+import BackNav from '@/base_components/BackNav.vue';
 export default {
   data: () => ({
     times: ['07:00', '12:00', '19:00'],
@@ -54,6 +55,7 @@ export default {
   },
   components: {
     TimePicker,
+    BackNav,
   },
 };
 </script>

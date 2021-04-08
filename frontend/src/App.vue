@@ -1,5 +1,5 @@
 <template>
-  <v-app id="main">
+  <v-app id="main" class="max-container">
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
