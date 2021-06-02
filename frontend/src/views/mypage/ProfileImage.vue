@@ -201,9 +201,10 @@ export default {
         instance.post(
           `user/profile?email=${email}`, formData
         ).then((res)=>{
-          console.log(res)
-          console.log(res.data)
-          this.$store.commit('SET_USER_PROFILE')
+          // console.log(res)
+          // console.log(res.data)
+          // console.log(res.data.data)
+          this.$store.commit('SET_USER_PROFILE', res.data.data)
           // VUEX로 SET_USER의 imageUrl값 변경시키기
           this.$notify({ type: 'success', text: '프로필 이미지 변경'});
           this.$router.go(-1);

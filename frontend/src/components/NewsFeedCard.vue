@@ -39,7 +39,13 @@
       <v-expand-transition>
         <div v-show="show">
           <v-card-text>
-            <audio controls>
+            <!-- <audio controls v-if="this.flag === false">
+              <source :src="getVoice.src" type="audio/ogg" />
+            </audio>
+            <audio controls autoplay v-else>
+              <source :src="getVoice.src" type="audio/ogg" />
+            </audio> -->
+            <audio controls autoplay>
               <source :src="getVoice.src" type="audio/ogg" />
             </audio>
             <v-card-actions v-for="(item, idx) in pillData.pills" :key="idx">
@@ -92,6 +98,19 @@
 <script>
 import BtnSquare from '@/base_components/BtnSquare.vue';
 import BtnSquareLarge from '@/base_components/BtnSquareLarge.vue';
+import axios from 'axios'
+import { API_BASE_URL } from '@/config';
+const API_URL = API_BASE_URL;
+
+const instance = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Access-Control-Allow-Origin': '',
+    'Access-Control-Allow-Headers': '',
+    'Access-Control-Allow-Credentials': true,
+    'Content-Type': 'application/json',
+  }
+})
 
 export default {
   name: 'NewsFeedCard',
@@ -102,20 +121,77 @@ export default {
   props: {
     pillData: Object,
   },
-  methods: {},
+  methods: {
+    getUser() {
+      this.user = this.$store.getters.getUser;
+    },
+    getTime() {
+      const email = this.user.email
+      instance.post(
+        `user/time/${email}/`
+        ).then((res) => {
+          if (this.pillData.isDone === 'waiting') {
+            this.times.breakfast = res.data.breakfast
+            this.times.lunch = res.data.lunch
+            this.times.dinner = res.data.dinner
+            console.log('times :', this.times)
+            console.log('times lunch :', this.times.lunch)
+            console.log('times dinner :', this.times.dinner)
+            this.voiceAlarm();
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+    },
+    voiceAlarm: function () {
+      if (this.pillData.isDone === 'waiting') {
+        // 현재 시간 = sum
+        let nowTime = new Date()
+        let hours = nowTime.getHours()
+        let mins = nowTime.getMinutes()
+        let secs = nowTime.getSeconds()
+        let sum = hours*100+mins*10+secs
+        // 아침/점심/저녁 알람 시간 = sum_time
+        console.log('sum: ', sum)
+        let tmp = this.times.lunch.split(':')
+        let sum_time = 0;
+        for (let i=0; i<tmp.length ; i++) {
+          if (i == 0 ){ 
+            sum_time += tmp[i]*100
+          } else if ( i == 1) {
+            sum_time += tmp[i]*10
+          } else {
+            sum_time += tmp[i]*1
+          }
+        }
+        if (sum > sum_time) {
+          this.flag = true
+        }
+
+      }
+    }
+  },
   computed: {
     getVoice() {
+      console.log(this.$store.getters.getVoice)
       return this.$store.getters.getVoice;
-    },
-    getUser() {
-      return this.$store.getters.getUser;
     },
   },
   data: () => ({
     show: false,
     voice: '',
+    now: '',
+    times: {
+      'breakfast': '',
+      'lunch': '',
+      'dinner': '',
+    },
+    flag: false,
   }),
-  created: function () {},
+  created: function () {
+    this.getUser();
+    this.getTime();
+  },
 };
 </script>
 

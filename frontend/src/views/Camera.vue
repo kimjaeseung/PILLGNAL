@@ -4,18 +4,6 @@
       <v-row>
         <v-col>
           <div class="web-camera-container">
-            <!-- <div class="camera-button">
-              <v-btn
-                type="button"
-                class="button is-rounded"
-                :class="{ 'is-primary': !isCameraOpen, 'is-danger': isCameraOpen }"
-                @click="toggleCamera"
-              >
-                <span v-if="!isCameraOpen">Open Camera</span>
-                <span v-else>Close Camera</span>
-              </v-btn>
-            </div> -->
-
             <div v-show="isCameraOpen && isLoading" class="camera-loading">
               <ul class="loader-circle">
                 <li></li>
@@ -23,7 +11,6 @@
                 <li></li>
               </ul>
             </div>
-
             <v-col>
               <div
                 v-if="isCameraOpen"
@@ -167,7 +154,7 @@ export default {
 
       if (this.cameraMode == '처방전') {
         instance
-          .post('api/v1/prescription', formData)
+          .post('/prescription/ocr', formData)
           .then((res) => {
             console.log(res);
             this.data = res;
@@ -178,7 +165,7 @@ export default {
       }
       if (this.cameraMode == '알약') {
         instance
-          .post('api/v1/pill', formData)
+          .post('/pill/scan', formData)
           .then((res) => {
             console.log(res);
             this.data = res;

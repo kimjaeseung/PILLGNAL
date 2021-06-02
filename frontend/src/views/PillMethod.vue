@@ -1,17 +1,19 @@
 <template>
   <v-app id="back">
     <v-container>
-      <div class="text-h4 mt-5">복약 용법 설정</div>
-      <howto-eat-card />
+      <BackNav page-title="복약 용법 설정😎" />
+      <howto-eat-card :prescription="prescription" />
     </v-container>
   </v-app>
 </template>
 <script>
 import HowtoEatCard from '../components/HowtoEatCard.vue';
+import BackNav from '@/base_components/BackNav.vue';
 export default {
   data: () => ({}),
   components: {
     HowtoEatCard,
+    BackNav,
   },
   props: ['prescription'],
   methods: {},
