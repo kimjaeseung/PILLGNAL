@@ -85,6 +85,20 @@ public class PillService {
 
 
 		for(PillDetailRequestDto dto : createRequest.getPilllist()) {
+			Optional<Pill> pill = pillRepository.findByPname(dto.getPillname());
+			Pill pillObject = null;
+			if(pill.isPresent()) {
+				pillObject = pill.get();
+			} else {
+				pill = pillRepository.findByPname("지정되지 않은 약");
+				if(pill.isPresent())
+					pillObject = pill.get();
+				else
+					pillObject = Pill.builder()
+						.pname("지정되지 않은 약")
+						.build();
+					pillRepository.save(pillObject);
+			}
 			prescriptionPillRepository.save(PrescriptionPill.builder()
 					.volumn(dto.getVolumn())
 					.count(dto.getCount())
@@ -97,7 +111,7 @@ public class PillService {
 					.afternoontime(dto.getAfternoontime())
 					.night(dto.isNight())
 					.nighttime(dto.getNighttime())
-					.pid(pillRepository.findByPname(dto.getPillname()).get())
+					.pid(pillObject)
 					.prid(p)
 					.build());
 		}
