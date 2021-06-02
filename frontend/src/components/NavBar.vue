@@ -8,8 +8,14 @@
         <v-avatar
         @click="router(0)">
           <img
-            src="https://cdn.vuetifyjs.com/images/john.jpg"
-            alt="John"
+            v-if="getUser.imageUrl !== null"
+            :src="getUser.imageUrl"
+            alt="profileImage"
+          >
+          <img
+            v-else
+            src="https://firebasestorage.googleapis.com/v0/b/pillgnal.appspot.com/o/pillgu.png?alt=media"
+            alt="basicProfileImage"
           >
         </v-avatar>
       </v-btn>
@@ -25,7 +31,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            Name
+            {{ getUser.name }}
           </v-btn>
         </template>
 
@@ -87,11 +93,17 @@ export default {
         name: 'John Doe2',
         email: 'john2.doe@doe.com',
       },
-    ]
+    ],
+    // user: Object,
   }),
   methods: {
     router: function(n) {
         this.$router.push(this.path[n]);
+    }
+  },
+  computed: {
+    getUser() {
+      return this.$store.getters.getUser;
     }
   }
 }

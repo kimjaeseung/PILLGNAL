@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BackNav page-title="MyPage" />
+    <BackNav page-title="마이페이지" />
     <v-container class="max-container">
       <!-- Profile 설정 -->
       <v-row class="mb-2">
@@ -12,11 +12,11 @@
                 <v-avatar
                   width="75"
                   height="75"
-                  color="brown"
                   class="d-flex"
                   @click="toProfileImage()"
                 >
-                  <v-img :src="user.imageUrl"></v-img>
+                  <v-img v-if="user.imageUrl !== null" :src="user.imageUrl"></v-img>
+                  <v-img v-else src="https://firebasestorage.googleapis.com/v0/b/pillgnal.appspot.com/o/pillgu.png?alt=media"> </v-img>
                 </v-avatar>
               </v-btn>
             </v-btn-toggle>
